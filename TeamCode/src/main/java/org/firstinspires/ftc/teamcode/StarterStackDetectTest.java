@@ -38,24 +38,47 @@ public class StarterStackDetectTest extends OpMode {
     @Override
     public void loop() {
 
+        int activeZone;
+
         //Ensure tf detector is alive
         if(tfDetector != null) {
 
             //This function returns a null if there is no new detction info
             List<Recognition> updatedRecognitions = tfDetector.getUpdatedRecognitions();
-                if(updatedRecognitions != null) {
-                    telemetry.addData("Num Objects Detected:", updatedRecognitions.size());
 
-                    int i = 0;
-                    for (Recognition recognition : updatedRecognitions) {
-                        telemetry.addData(String.format("Label # (%d)", i), recognition.getLabel());
-                        telemetry.addData(String.format("Confidence of (%d)", i), recognition.getConfidence());
-                        telemetry.addData(String.format("Bottom of (%d)", i), recognition.getBottom());
-                        telemetry.addData(String.format("Top of (%d)", i), recognition.getTop());
-                        telemetry.addData(String.format("Left of (%d)", i), recognition.getLeft());
-                        telemetry.addData(String.format("Right of (%d)", i), recognition.getRight());
-                        telemetry.update();
-                        i++;
+            if(updatedRecognitions != null) {
+
+                //Check if there is a starter stack
+                if(updatedRecognitions.size() == 0) {
+                    activeZone = 0;
+                }
+                telemetry.addData("Num Objects Detected:", updatedRecognitions.size());
+
+                int i = 0;
+
+                // Loop through detections and display data (should only be one in starter stack)
+                 for (Recognition recognition : updatedRecognitions) {
+
+                     // Check active target zone
+                     if(recognition.getTop() > 239 && recognition.getTop() < 250) {
+                         activeZone = 4;
+                     }
+                     else if(recognition.getTop() > 310) {
+                         activeZone = 1;
+                     }
+                     else {
+                         activeZone = 1000;
+                     }
+
+                     telemetry.addData(String.format("Label # (%d)", i), recognition.getLabel());
+                     telemetry.addData(String.format("Confidence of (%d)", i), recognition.getConfidence());
+                     telemetry.addData(String.format("Bottom of (%d)", i), recognition.getBottom());
+                     telemetry.addData(String.format("Top of (%d)", i), recognition.getTop());
+                     telemetry.addData(String.format("Left of (%d)", i), recognition.getLeft());
+                     telemetry.addData(String.format("Right of (%d)", i), recognition.getRight());
+                     telemetry.addData("ActiveZone", activeZone);
+                     telemetry.update();
+                     i++;
                     }
                 }
         }
