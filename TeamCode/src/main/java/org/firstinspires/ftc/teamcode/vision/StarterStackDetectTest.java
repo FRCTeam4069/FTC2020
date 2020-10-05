@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.vision;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -51,7 +51,9 @@ public class StarterStackDetectTest extends OpMode {
                 //Check if there is a starter stack
                 if(updatedRecognitions.size() == 0) {
                     activeZone = 0;
+                    telemetry.addData("ActiveZone", activeZone);
                 }
+
                 telemetry.addData("Num Objects Detected:", updatedRecognitions.size());
 
                 int i = 0;
@@ -63,7 +65,7 @@ public class StarterStackDetectTest extends OpMode {
                      if(recognition.getTop() > 239 && recognition.getTop() < 250) {
                          activeZone = 4;
                      }
-                     else if(recognition.getTop() > 310) {
+                     else if(recognition.getTop() > 310 && recognition.getTop() < 320) {
                          activeZone = 1;
                      }
                      else {
