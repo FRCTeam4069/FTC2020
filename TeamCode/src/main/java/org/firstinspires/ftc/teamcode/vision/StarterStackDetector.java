@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
+import java.lang.ref.Reference;
 import java.util.List;
 
 public class StarterStackDetector {
@@ -24,6 +25,8 @@ public class StarterStackDetector {
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfDetector;
 
+    int counter;
+
     // Function to initialize vuforia detector (called in init)
     private void initVuforia(HardwareMap hardwareMap) {
 
@@ -34,6 +37,10 @@ public class StarterStackDetector {
 
         // Create vuforia
         vuforia = ClassFactory.getInstance().createVuforia(vuforiaParam);
+        telemetry.addData("Vuforia", "Initialized");
+        telemetry.update();
+
+        counter = 0;
     }
 
     // Function to initialize tensorFlow lite detector
@@ -48,19 +55,26 @@ public class StarterStackDetector {
         // Create tf detector and add model assets
         tfDetector = ClassFactory.getInstance().createTFObjectDetector(tfParam, vuforia);
         tfDetector.loadModelFromAsset(TF_DECTECTOR_MODEL_ASSETS, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+        telemetry.addData("TF Detector", "Initialized");
     }
 
     public StarterStackDetector(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
         initVuforia(hardwareMap);
         initTFDetector(hardwareMap);
+        tfDetector.activate();
+    }
+
+    public List<Recognition> getUpdatedRecognitions() {
+        return tfDetector.getUpdatedRecognitions();
     }
 
     public void printCurrentVals() {
-        List<Recognition> updatedRecognitions = tfDetector.getUpdatedRecognitions();
+        List<Recognition> updatedRecognitions = getUpdatedRecognitions();
 
         if(updatedRecognitions != null) {
             if(updatedRecognitions.size() != 0) {
+                telemetry.addData("Num Objects", updatedRecognitions.size());
                 Recognition starterStack = updatedRecognitions.get(0);
 
                 telemetry.addData("Confidence", starterStack.getConfidence());
@@ -70,12 +84,29 @@ public class StarterStackDetector {
                 telemetry.addData("Right", starterStack.getRight());
                 telemetry.addData("Height", starterStack.getHeight());
                 telemetry.addData("Width", starterStack.getWidth());
-                telemetry.update();
+
+                telemetry.addData("Current Starter Stack Size", getStarterStackSize());
             }
             else {
-                telemetry.addLine("No objects detected");
-                telemetry.update();
+                telemetry.addData("Num Objects Detected", updatedRecognitions.size());
             }
         }
+    }
+    public int getStarterStackSize() {
+        List<Recognition> updatedRecognitions = tfDetector.getUpdatedRecognitions();
+
+        if (updatedRecognitions != null) {
+            if (updatedRecognitions.size() != 0) {
+                Recognition starterStack = updatedRecognitions.get(0);
+                if (starterStack.getHeight() > 175 && starterStack.getHeight() < 195) {
+                    return 4;
+                }
+                else {
+                    return 1;
+                }
+            }
+            else return 0;
+        }
+        else return 1000;
     }
 }

@@ -10,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class TestOfStarterStackDetector extends OpMode {
 
     StarterStackDetector stackDetector;
-    Telemetry telemetry;
 
     @Override
     public void init() {
@@ -20,5 +19,6 @@ public class TestOfStarterStackDetector extends OpMode {
     @Override
     public void loop() {
         stackDetector.printCurrentVals();
+        telemetry.update();
     }
 }
