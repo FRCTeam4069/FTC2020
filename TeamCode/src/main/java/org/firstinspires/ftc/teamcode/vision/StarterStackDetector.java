@@ -9,7 +9,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-import java.lang.ref.Reference;
 import java.util.List;
 
 public class StarterStackDetector {
@@ -24,6 +23,7 @@ public class StarterStackDetector {
 
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfDetector;
+    private List<Recognition> updatedRecognitions;
 
     int counter;
 
@@ -65,15 +65,15 @@ public class StarterStackDetector {
         tfDetector.activate();
     }
 
-    public List<Recognition> getUpdatedRecognitions() {
-        return tfDetector.getUpdatedRecognitions();
+    private void updateRecognitions() {
+        updatedRecognitions = tfDetector.getUpdatedRecognitions();
     }
 
     public void printCurrentVals() {
-        List<Recognition> updatedRecognitions = getUpdatedRecognitions();
 
+        updateRecognitions();
         if(updatedRecognitions != null) {
-            if(updatedRecognitions.size() != 0) {
+            if(updatedRecognitions.get(0) != null) {
                 telemetry.addData("Num Objects", updatedRecognitions.size());
                 Recognition starterStack = updatedRecognitions.get(0);
 
@@ -85,7 +85,9 @@ public class StarterStackDetector {
                 telemetry.addData("Height", starterStack.getHeight());
                 telemetry.addData("Width", starterStack.getWidth());
 
-                telemetry.addData("Current Starter Stack Size", getStarterStackSize());
+
+                telemetry.addData("Starter Stack", getStarterStackSize());
+
             }
             else {
                 telemetry.addData("Num Objects Detected", updatedRecognitions.size());
@@ -93,8 +95,7 @@ public class StarterStackDetector {
         }
     }
     public int getStarterStackSize() {
-        List<Recognition> updatedRecognitions = tfDetector.getUpdatedRecognitions();
-
+        updateRecognitions();
         if (updatedRecognitions != null) {
             if (updatedRecognitions.size() != 0) {
                 Recognition starterStack = updatedRecognitions.get(0);
