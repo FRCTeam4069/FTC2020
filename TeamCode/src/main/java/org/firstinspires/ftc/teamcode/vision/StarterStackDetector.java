@@ -25,8 +25,6 @@ public class StarterStackDetector {
     private TFObjectDetector tfDetector;
     private List<Recognition> updatedRecognitions;
 
-    int counter;
-
     // Function to initialize vuforia detector (called in init)
     private void initVuforia(HardwareMap hardwareMap) {
 
@@ -39,8 +37,6 @@ public class StarterStackDetector {
         vuforia = ClassFactory.getInstance().createVuforia(vuforiaParam);
         telemetry.addData("Vuforia", "Initialized");
         telemetry.update();
-
-        counter = 0;
     }
 
     // Function to initialize tensorFlow lite detector
@@ -73,7 +69,7 @@ public class StarterStackDetector {
 
         updateRecognitions();
         if(updatedRecognitions != null) {
-            if(updatedRecognitions.get(0) != null) {
+            if(updatedRecognitions.size() != 0) {
                 telemetry.addData("Num Objects", updatedRecognitions.size());
                 Recognition starterStack = updatedRecognitions.get(0);
 
@@ -85,19 +81,19 @@ public class StarterStackDetector {
                 telemetry.addData("Height", starterStack.getHeight());
                 telemetry.addData("Width", starterStack.getWidth());
 
-
                 telemetry.addData("Starter Stack", getStarterStackSize());
-
             }
             else {
                 telemetry.addData("Num Objects Detected", updatedRecognitions.size());
             }
         }
     }
+
     public int getStarterStackSize() {
+
         updateRecognitions();
         if (updatedRecognitions != null) {
-            if (updatedRecognitions.size() != 0) {
+            if (updatedRecognitions.get(0) != null) {
                 Recognition starterStack = updatedRecognitions.get(0);
                 if (starterStack.getHeight() > 175 && starterStack.getHeight() < 195) {
                     return 4;
