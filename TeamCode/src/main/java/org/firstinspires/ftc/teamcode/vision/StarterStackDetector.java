@@ -80,8 +80,6 @@ public class StarterStackDetector {
                 telemetry.addData("Right", starterStack.getRight());
                 telemetry.addData("Height", starterStack.getHeight());
                 telemetry.addData("Width", starterStack.getWidth());
-
-                telemetry.addData("Starter Stack", getStarterStackSize());
             }
             else {
                 telemetry.addData("Num Objects Detected", updatedRecognitions.size());
@@ -89,21 +87,39 @@ public class StarterStackDetector {
         }
     }
 
+    private int lastReturn = 1000;
     public int getStarterStackSize() {
 
         updateRecognitions();
         if (updatedRecognitions != null) {
-            if (updatedRecognitions.get(0) != null) {
+            telemetry.addData("Num Objects", updatedRecognitions.size());
+            if (updatedRecognitions.size() != 0) {
                 Recognition starterStack = updatedRecognitions.get(0);
+
+                telemetry.addData("Confidence", starterStack.getConfidence());
+                telemetry.addData("Top", starterStack.getTop());
+                telemetry.addData("Bottom", starterStack.getBottom());
+                telemetry.addData("Left", starterStack.getLeft());
+                telemetry.addData("Right", starterStack.getRight());
+                telemetry.addData("Height", starterStack.getHeight());
+                telemetry.addData("Width", starterStack.getWidth());
+                
                 if (starterStack.getHeight() > 175 && starterStack.getHeight() < 195) {
+                    lastReturn = 4;
                     return 4;
                 }
                 else {
+                    lastReturn = 1;
                     return 1;
                 }
             }
-            else return 0;
+            else {
+                lastReturn = 0;
+                return 0;
+            }
         }
-        else return 1000;
+        else {
+            return lastReturn;
+        }
     }
 }

@@ -11,11 +11,13 @@ public class TestOfStarterStackDetector extends OpMode {
     @Override
     public void init() {
         stackDetector = new StarterStackDetector(hardwareMap, telemetry);
+
     }
 
     @Override
     public void loop() {
-        stackDetector.printCurrentVals();
+        stackDetector.getStarterStackSize();
+        telemetry.addData("starter stack size", stackDetector.getStarterStackSize());
         telemetry.update();
     }
 }
