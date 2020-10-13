@@ -104,7 +104,7 @@ public class StarterStackDetector {
                 telemetry.addData("Height", starterStack.getHeight());
                 telemetry.addData("Width", starterStack.getWidth());
                 
-                if (starterStack.getHeight() > 175 && starterStack.getHeight() < 195) {
+                if (starterStack.getHeight() > 100 && starterStack.getHeight() < 120) {
                     lastReturn = 4;
                     return 4;
                 }
