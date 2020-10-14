@@ -15,14 +15,18 @@ public class StarterStackDetector {
 
     Telemetry telemetry;
 
+    //TF Detector assets
     private static final String TF_DECTECTOR_MODEL_ASSETS = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
 
+    //Vuforia Asset
     private static final String VUFORIA_KEY = "AUdbl2P/////AAABmWYe3kyuhU8cm/rBVoVMzVotL3p0vfzGnir9dscLSA2K03xgWC6VBG08gzHvNXA4ac6axF+EINaVBUMwEcoY6tNQX8bSAY778bfzT6WQzilY8UNOo+Pa0oBZ6Ut5B0piq7wcLLUSMjXv2iX0yjcioMJ9Lqoo5tXAbaL2x3sn+zkioNVm1zl1a1fgzXmtxilRTrK4MN7kYFoO0yfIlq5YDKiNU5Hzrbr1wzdhSp2+FoQekvlCfMZzi0YjICtfooi5m70RuTJcn7aRNHHMyuKSSmqzxe4W4j0cLR+Kw4yFVxue75GDxMIh1Ot7zi1blRojFBZ1oY5s84aQvCZ5Xtsf+COCA0MP1GQwcw9utlH9Ln2o";
 
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfDetector;
+
+    //Global list of returned recogn
     private List<Recognition> updatedRecognitions;
 
     // Function to initialize vuforia detector (called in init)
@@ -55,6 +59,8 @@ public class StarterStackDetector {
     }
 
     public StarterStackDetector(HardwareMap hardwareMap, Telemetry telemetry) {
+
+        //Init vuforia and tfDetector, give access to telemetry
         this.telemetry = telemetry;
         initVuforia(hardwareMap);
         initTFDetector(hardwareMap);
@@ -62,13 +68,19 @@ public class StarterStackDetector {
     }
 
     private void updateRecognitions() {
+
+        //Update list of updated recognitions
         updatedRecognitions = tfDetector.getUpdatedRecognitions();
     }
 
     public void printCurrentVals() {
 
         updateRecognitions();
+
+        //Check if list is null or empty
         if(updatedRecognitions != null) {
+
+            //Add data on recognition
             if(updatedRecognitions.size() != 0) {
                 telemetry.addData("Num Objects", updatedRecognitions.size());
                 Recognition starterStack = updatedRecognitions.get(0);
@@ -82,6 +94,8 @@ public class StarterStackDetector {
                 telemetry.addData("Width", starterStack.getWidth());
             }
             else {
+
+                //If the list is empty return the number of recognitions
                 telemetry.addData("Num Objects Detected", updatedRecognitions.size());
             }
         }
@@ -91,11 +105,14 @@ public class StarterStackDetector {
     public int getStarterStackSize() {
 
         updateRecognitions();
+
+        //Check if list is null or empty
         if (updatedRecognitions != null) {
             telemetry.addData("Num Objects", updatedRecognitions.size());
             if (updatedRecognitions.size() != 0) {
                 Recognition starterStack = updatedRecognitions.get(0);
 
+                //Adding telemetry recognition data
                 telemetry.addData("Confidence", starterStack.getConfidence());
                 telemetry.addData("Top", starterStack.getTop());
                 telemetry.addData("Bottom", starterStack.getBottom());
@@ -103,7 +120,8 @@ public class StarterStackDetector {
                 telemetry.addData("Right", starterStack.getRight());
                 telemetry.addData("Height", starterStack.getHeight());
                 telemetry.addData("Width", starterStack.getWidth());
-                
+
+                //Returning starter stack based on hard-coded height values
                 if (starterStack.getHeight() > 100 && starterStack.getHeight() < 120) {
                     lastReturn = 4;
                     return 4;
