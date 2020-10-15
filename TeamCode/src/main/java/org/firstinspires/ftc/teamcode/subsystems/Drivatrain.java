@@ -146,12 +146,26 @@ public class Drivatrain {
 
         double P = 0.1;
 
-        double desiredFrontLeftOutput = flError * P;
-        double desiredFrontRightOutput = frError * P;
-        double desiredBackLeftOutput = blError * P;
-        double desiredBackRightOut = brError * P;
+        double frontLeftOutput = desiredFrontLeftSpeed + (flError * P);
+        double frontRightOutput = desiredFrontRightSpeed + (frError * P);
+        double backLeftOutput = desiredBackLeftSpeed + (blError * P);
+        double backRightOutput = desiredBackRightSpeed + (brError * P);
 
+        //Check for speed scaling factor to counteract greater than 1 outputs
+        double max1 = Math.max((Math.abs(frontLeftOutput)), (Math.abs(frontRightOutput)));
+        double max2 = Math.max((Math.abs(backLeftOutput)), (Math.abs(backRightOutput)));
+        double scalar = Math.max(max1, max2);
 
+        if(scalar > 1) {
+            frontLeftOutput /= scalar;
+            frontRightOutput /= scalar;
+            backLeftOutput /= scalar;
+            backRightOutput /= scalar;
+        }
+
+        frontLeft.setPower(frontLeftOutput);
+        frontRight.setPower(frontRightOutput);
+        backLeft.setPower(backLeftOutput);
+        backRight.setPower(backRightOutput);
     }
-
 }
