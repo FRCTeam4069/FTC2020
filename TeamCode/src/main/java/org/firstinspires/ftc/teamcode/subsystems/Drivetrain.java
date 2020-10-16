@@ -54,7 +54,7 @@ public class Drivetrain {
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
-        navx = hardwareMap.get(NavxMicroNavigationSensor.class, "navx");
+        //navx = hardwareMap.get(NavxMicroNavigationSensor.class, "navx");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -102,6 +102,9 @@ public class Drivetrain {
 
     public void update(double forward, double strafe, double turn) {
 
+        //FOR NOW
+        turnOutput = turn;
+
         //Calculate direction and speed
         double direction = Math.atan2(forward, strafe);
         double desiredSpeed = Math.hypot(forward, strafe);
@@ -144,22 +147,22 @@ public class Drivetrain {
         brLastPos = backRight.getCurrentPosition();
 
         //calculate change in direction (turn)
-        double currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
-        double turnChange = 0;
-        if(lastTurn == 0) {
-            turnChange = 0;
-        }
-        else {
-            turnChange = currentTurn - lastTurn;
-        }
-        lastTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
+        //double currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
+        //double turnChange = 0;
+        //if(lastTurn == 0) {
+         //   turnChange = 0;
+        //}
+        //else {
+          //  turnChange = currentTurn - lastTurn;
+        //}
+        //lastTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
 
         //PID turn
-        turnError = (turnChange / elapsedTime) - (turn);
+        //turnError = (turnChange / elapsedTime) - (turn);
         double turnP = 0.1;
         double turnD = 0.0;
 
-        turnOutput = (turnError * turnP) + (turnChange * turnD);
+        //turnOutput = (turnError * turnP) + (turnChange * turnD);
 
         //Calculate actual velocity of each motor
         double flActualVelocity = flPosChange / elapsedTime;
@@ -170,8 +173,8 @@ public class Drivetrain {
         //Calculate desired motor outputs
         desiredFrontLeftSpeed = (Math.sin(direction + Math.PI / 4) * desiredSpeed) + turnOutput;
         desiredFrontRightSpeed = (Math.sin(direction - Math.PI / 4) * desiredSpeed) - turnOutput;
-        desiredBackRightSpeed = (Math.sin(direction + Math.PI / 4) * desiredSpeed) + turnOutput;
-        desiredBackLeftSpeed = (Math.sin(direction - Math.PI/4) * desiredSpeed) - turnOutput;
+        desiredBackRightSpeed = (Math.sin(direction + Math.PI / 4) * desiredSpeed) - turnOutput;
+        desiredBackLeftSpeed = (Math.sin(direction - Math.PI/4) * desiredSpeed) + turnOutput;
 
         //PID Outputs
         double flError = desiredFrontLeftSpeed - flActualVelocity;
