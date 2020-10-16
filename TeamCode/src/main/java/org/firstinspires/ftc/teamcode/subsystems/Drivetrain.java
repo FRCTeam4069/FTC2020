@@ -7,11 +7,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
-public class Drivatrain {
+public class Drivetrain {
 
     private DcMotor frontLeft;
     private DcMotor backLeft;
@@ -30,9 +29,24 @@ public class Drivatrain {
     double frLastPos = 0;
     double brLastPos = 0;
 
-    double lastTurn;
+    double lastTurn = 0;
 
-    Drivatrain(HardwareMap hardwareMap, Telemetry telemetry) {
+    //Values to be read in telemetry
+    double turnError;
+    double turnOutput;
+
+    double desiredFrontLeftSpeed;
+    double desiredFrontRightSpeed;
+    double desiredBackRightSpeed;
+    double desiredBackLeftSpeed;
+
+    double frontLeftOutput;
+    double frontRightOutput;
+    double backLeftOutput;
+    double backRightOutput;
+
+    //Setup such as initializing motors, setting directions and run modes
+    public Drivetrain(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
 
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
@@ -54,6 +68,7 @@ public class Drivatrain {
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    //Reset encoders (for use mainly in auto)
     public void resetEncoders() {
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -63,6 +78,26 @@ public class Drivatrain {
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    //To add or add and update important drivetrain vals to telemetry
+    public void addTelemetry(boolean update) {
+        telemetry.addData("Desired Front Left Speed", desiredFrontLeftSpeed);
+        telemetry.addData("Desired Front Right Speed", desiredFrontRightSpeed);
+        telemetry.addData("Desired Back Left Speed", desiredBackLeftSpeed);
+        telemetry.addData("Desired Back Right Speed", desiredBackRightSpeed);
+
+        telemetry.addData("Front Left Output", frontLeftOutput);
+        telemetry.addData("Front Right Output", frontRightOutput);
+        telemetry.addData("Back Left Output", backLeftOutput);
+        telemetry.addData("Back Right Output", backRightOutput);
+
+        telemetry.addData("Turn Error", turnError);
+        telemetry.addData("Turn Output", turnOutput);
+
+        if(update) {
+            telemetry.update();
+        }
     }
 
     public void update(double forward, double strafe, double turn) {
@@ -120,11 +155,11 @@ public class Drivatrain {
         lastTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
 
         //PID turn
-        double turnError = (turnChange / elapsedTime) - (turn);
+        turnError = (turnChange / elapsedTime) - (turn);
         double turnP = 0.1;
         double turnD = 0.0;
 
-        double turnOutput = (turnError * turnP) + (turnChange * turnD);
+        turnOutput = (turnError * turnP) + (turnChange * turnD);
 
         //Calculate actual velocity of each motor
         double flActualVelocity = flPosChange / elapsedTime;
@@ -133,10 +168,10 @@ public class Drivatrain {
         double brActualVelocity = brPosChange / elapsedTime;
 
         //Calculate desired motor outputs
-        double desiredFrontLeftSpeed = (Math.sin(direction + Math.PI / 4) * desiredSpeed) + turnOutput;
-        double desiredFrontRightSpeed = (Math.sin(direction - Math.PI / 4) * desiredSpeed) - turnOutput;
-        double desiredBackRightSpeed = (Math.sin(direction + Math.PI / 4) * desiredSpeed) + turnOutput;
-        double desiredBackLeftSpeed = (Math.sin(direction - Math.PI/4) * desiredSpeed) - turnOutput;
+        desiredFrontLeftSpeed = (Math.sin(direction + Math.PI / 4) * desiredSpeed) + turnOutput;
+        desiredFrontRightSpeed = (Math.sin(direction - Math.PI / 4) * desiredSpeed) - turnOutput;
+        desiredBackRightSpeed = (Math.sin(direction + Math.PI / 4) * desiredSpeed) + turnOutput;
+        desiredBackLeftSpeed = (Math.sin(direction - Math.PI/4) * desiredSpeed) - turnOutput;
 
         //PID Outputs
         double flError = desiredFrontLeftSpeed - flActualVelocity;
@@ -146,10 +181,10 @@ public class Drivatrain {
 
         double P = 0.1;
 
-        double frontLeftOutput = desiredFrontLeftSpeed + (flError * P);
-        double frontRightOutput = desiredFrontRightSpeed + (frError * P);
-        double backLeftOutput = desiredBackLeftSpeed + (blError * P);
-        double backRightOutput = desiredBackRightSpeed + (brError * P);
+        frontLeftOutput = desiredFrontLeftSpeed + (flError * P);
+        frontRightOutput = desiredFrontRightSpeed + (frError * P);
+        backLeftOutput = desiredBackLeftSpeed + (blError * P);
+        backRightOutput = desiredBackRightSpeed + (brError * P);
 
         //Check for speed scaling factor to counteract greater than 1 outputs
         double max1 = Math.max((Math.abs(frontLeftOutput)), (Math.abs(frontRightOutput)));
@@ -163,6 +198,7 @@ public class Drivatrain {
             backRightOutput /= scalar;
         }
 
+        //Set motor speeds
         frontLeft.setPower(frontLeftOutput);
         frontRight.setPower(frontRightOutput);
         backLeft.setPower(backLeftOutput);
