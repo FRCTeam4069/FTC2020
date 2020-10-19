@@ -102,7 +102,7 @@ public class StarterStackDetector {
     }
 
     private int lastReturn = 1000;
-    public int getStarterStackSize() {
+    public int getStarterStackSize(int fourStackHeight) {
 
         updateRecognitions();
 
@@ -122,7 +122,7 @@ public class StarterStackDetector {
                 telemetry.addData("Width", starterStack.getWidth());
 
                 //Returning starter stack based on hard-coded height values
-                if (starterStack.getHeight() > 100 && starterStack.getHeight() < 120) {
+                if ((starterStack.getHeight() > (fourStackHeight - 5)) && (starterStack.getHeight() < (fourStackHeight + 5))) {
                     lastReturn = 4;
                     return 4;
                 }
