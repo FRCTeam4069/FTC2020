@@ -45,6 +45,8 @@ public class Drivetrain {
     double backLeftOutput;
     double backRightOutput;
 
+    private double currentAvgPos;
+
     //Setup such as initializing motors, setting directions and run modes
     public Drivetrain(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -78,6 +80,10 @@ public class Drivetrain {
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public double getCurrentPos() {
+        return currentAvgPos;
     }
 
     //To add or add and update important drivetrain vals to telemetry
@@ -147,22 +153,22 @@ public class Drivetrain {
         brLastPos = backRight.getCurrentPosition();
 
         //calculate change in direction (turn)
-        //double currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
-        //double turnChange = 0;
-        //if(lastTurn == 0) {
-         //   turnChange = 0;
-        //}
-        //else {
-          //  turnChange = currentTurn - lastTurn;
-        //}
-        //lastTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
+        double currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
+        double turnChange = 0;
+        if(lastTurn == 0) {
+            turnChange = 0;
+        }
+        else {
+            turnChange = currentTurn - lastTurn;
+        }
+        lastTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
 
         //PID turn
-        //turnError = (turnChange / elapsedTime) - (turn);
+        turnError = (turnChange / elapsedTime) - (turn);
         double turnP = 0.1;
         double turnD = 0.0;
 
-        //turnOutput = (turnError * turnP) + (turnChange * turnD);
+        turnOutput = (turnError * turnP) + (turnChange * turnD);
 
         //Calculate actual velocity of each motor
         double flActualVelocity = flPosChange / elapsedTime;
@@ -200,6 +206,9 @@ public class Drivetrain {
             backLeftOutput /= scalar;
             backRightOutput /= scalar;
         }
+
+        currentAvgPos = (((double)frontLeft.getCurrentPosition()) + ((double)frontRight.getCurrentPosition())
+                + ((double)backLeft.getCurrentPosition()) + ((double)backRight.getCurrentPosition())) / 4;
 
         //Set motor speeds
         frontLeft.setPower(frontLeftOutput);

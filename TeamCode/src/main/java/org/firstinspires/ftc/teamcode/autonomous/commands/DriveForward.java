@@ -6,10 +6,12 @@ public class DriveForward extends Command {
 
     double desiredPosition;
 
+    double error;
+
     public DriveForward(double desiredPosition) {
         this.desiredPosition = desiredPosition;
     }
-    
+
     @Override
     public void start() {
         drivetrain.resetEncoders();
@@ -17,11 +19,16 @@ public class DriveForward extends Command {
 
     @Override
     public void loop() {
+        double currentPos = drivetrain.getCurrentPos();
+        error = desiredPosition - currentPos;
+        double p = 0.1;
+        double output = error * p;
 
+        drivetrain.update(output, 0, 0);
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return error <= 5;
     }
 }
