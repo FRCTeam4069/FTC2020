@@ -18,6 +18,8 @@ public class Scheduler {
     List<Command> commandQueue = new ArrayList<>();
     Telemetry telemetry;
 
+    boolean started = false;
+
     //Take in subsystems and pass them to all commands
     public Scheduler(Telemetry telemetry, Drivetrain drivetrain, StarterStackDetector starterStackDetector) {
         this.telemetry = telemetry;
@@ -33,15 +35,19 @@ public class Scheduler {
 
     //Method takes first command in queue, when it is finished, remove it and access next in line
     public void run() {
-        if(commandQueue.size() == 0) {
-            telemetry.addData("Queue is empty", true);
+        Command nextCommand = commandQueue.get(0);
+
+        if(!started) {
+            nextCommand.start();
+            started = true;
         }
-        else {
-            commandQueue.get(0).start();
-            if (!commandQueue.get(0).isFinished()) {
-                commandQueue.get(0).loop();
+
+        nextCommand.loop();
+        if(nextCommand.isFinished()) {
+            commandQueue.remove(0);
+            if(commandQueue.size() != 0) {
+                commandQueue.get(0).start();
             }
-            else commandQueue.remove(0);
         }
     }
 }
