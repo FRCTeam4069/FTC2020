@@ -15,7 +15,7 @@ public abstract class Command {
         this. starterStackDetector = starterStackDetector;
     }
 
-
+    //Methods that need to be implemented by each command
     public abstract void start();
     public abstract void loop();
     public abstract boolean isFinished();

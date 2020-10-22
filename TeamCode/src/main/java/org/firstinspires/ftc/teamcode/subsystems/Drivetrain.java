@@ -56,7 +56,7 @@ public class Drivetrain {
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
-        //navx = hardwareMap.get(NavxMicroNavigationSensor.class, "navx");
+        navx = hardwareMap.get(NavxMicroNavigationSensor.class, "navx");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -207,6 +207,7 @@ public class Drivetrain {
             backRightOutput /= scalar;
         }
 
+        //Calculate average position for driveForwards and backwards commands
         currentAvgPos = (((double)frontLeft.getCurrentPosition()) + ((double)frontRight.getCurrentPosition())
                 + ((double)backLeft.getCurrentPosition()) + ((double)backRight.getCurrentPosition())) / 4;
 
