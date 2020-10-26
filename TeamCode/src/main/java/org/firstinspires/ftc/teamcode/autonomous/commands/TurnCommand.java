@@ -6,23 +6,32 @@ public class TurnCommand extends Command {
     double desiredTurn;
     double currentTurn = drivetrain.getCurrentTurn();
 
+    double speed;
+    double error;
+
     //Takes desired turn IN DEGREES
-    public TurnCommand(double desiredTurn) {
+    public TurnCommand(double desiredTurn, double speed) {
         this.desiredTurn = desiredTurn;
+        this.speed = speed;
     }
 
     @Override
-    public void start() {
-
-    }
+    public void start() {}
 
     @Override
     public void loop() {
-        
+        error = desiredTurn - currentTurn;
+
+        if(error > 0) {
+            drivetrain.update(0, 0, speed);
+        }
+        else {
+            drivetrain.update(0, 0, -speed);
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return Math.abs(error) < 5;
     }
 }
