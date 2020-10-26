@@ -7,10 +7,12 @@ public class DriveForward extends Command {
     //Values needed to PID accurate driving positions
     double desiredPosition;
     double error;
+    double speed;
 
     //Initializer ensures command has a desired position
-    public DriveForward(double desiredPosition) {
+    public DriveForward(double desiredPosition, double speed) {
         this.desiredPosition = desiredPosition;
+        this.speed = speed;
     }
 
     //Reset encoders for consistency
@@ -25,7 +27,7 @@ public class DriveForward extends Command {
         double currentPos = drivetrain.getCurrentPos();
         error = desiredPosition - currentPos;
         double p = 0.1;
-        double output = error * p;
+        double output = speed + error * p;
 
         drivetrain.update(output, 0, 0);
     }

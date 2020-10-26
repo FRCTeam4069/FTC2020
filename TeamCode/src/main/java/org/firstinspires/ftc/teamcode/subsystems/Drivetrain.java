@@ -88,6 +88,9 @@ public class Drivetrain {
     public double getCurrentPos() {
         return currentAvgPos;
     }
+    public double getCurrentTurn() {
+        return currentTurn;
+    }
 
     //To add or add and update important drivetrain vals to telemetry
     public void addTelemetry(boolean update) {

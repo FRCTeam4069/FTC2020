@@ -20,25 +20,25 @@ public class testAuto extends OpMode {
     //Subsystems
     StarterStackDetector stackDetector;
     Drivetrain drivetrain;
-    
+
     //Call to set commands to the scheduler called at the beginning of auto
     private void setStartingScheduler() {
-        startingScheduler.addCommand(new DriveForward(1000));
+        startingScheduler.addCommand(new DriveForward(1000, 0.5));
     }
 
     //Call to set commands to scheduler called if there are 4 rings in stack
     private void setFourRingScheduler() {
-        fourRingScheduler.addCommand(new DriveForward(5000));
+        fourRingScheduler.addCommand(new DriveForward(5000, 0.5));
     }
 
     //Call to set commands to scheduler called if there is 1 ring in stack
     private void setOneRingScheduler() {
-        oneRingScheduler.addCommand(new DriveForward(4000));
+        oneRingScheduler.addCommand(new DriveForward(4000, 0.5));
     }
 
     //Call to set commands to scheduler called if there are no rings
     private void setZeroRingScheduler() {
-        zeroRingScheduler.addCommand(new DriveForward(3000));
+        zeroRingScheduler.addCommand(new DriveForward(3000, 0.5));
     }
 
     //Ensure all subsystems and schedulers are initialized
