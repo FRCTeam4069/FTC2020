@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Scheduler {
-    Drivetrain drivetrain;
-    StarterStackDetector starterStackDetector;
+
     Command command;
     List<Command> commandQueue = new ArrayList<>();
     Telemetry telemetry;
@@ -23,14 +22,12 @@ public class Scheduler {
     //Take in subsystems and pass them to all commands
     public Scheduler(Telemetry telemetry, Drivetrain drivetrain, StarterStackDetector starterStackDetector) {
         this.telemetry = telemetry;
-        this.drivetrain = drivetrain;
-        this.starterStackDetector = starterStackDetector;
         command.setSubsystems(drivetrain, starterStackDetector);
     }
 
     //Add command to queue
     public void addCommand(Command command) {
-        commandQueue.add(command);
+        commandQueue.add(command); //Queue of type ArrayList
     }
 
     //Method takes first command in queue, when it is finished, remove it and access next in line

@@ -35,6 +35,7 @@ public class Drivetrain {
     double turnError;
     double turnOutput;
 
+    double desiredSpeed;
     double desiredFrontLeftSpeed;
     double desiredFrontRightSpeed;
     double desiredBackRightSpeed;
@@ -44,6 +45,8 @@ public class Drivetrain {
     double frontRightOutput;
     double backLeftOutput;
     double backRightOutput;
+
+    double currentTurn;
 
     private double currentAvgPos;
 
@@ -88,6 +91,7 @@ public class Drivetrain {
 
     //To add or add and update important drivetrain vals to telemetry
     public void addTelemetry(boolean update) {
+        telemetry.addData("Desired Speed", desiredSpeed);
         telemetry.addData("Desired Front Left Speed", desiredFrontLeftSpeed);
         telemetry.addData("Desired Front Right Speed", desiredFrontRightSpeed);
         telemetry.addData("Desired Back Left Speed", desiredBackLeftSpeed);
@@ -100,7 +104,7 @@ public class Drivetrain {
 
         telemetry.addData("Turn Error", turnError);
         telemetry.addData("Turn Output", turnOutput);
-
+        telemetry.addData("Current Turn", currentTurn);
         if(update) {
             telemetry.update();
         }
@@ -108,12 +112,9 @@ public class Drivetrain {
 
     public void update(double forward, double strafe, double turn) {
 
-        //FOR NOW
-        turnOutput = turn;
-
         //Calculate direction and speed
         double direction = Math.atan2(forward, strafe);
-        double desiredSpeed = Math.hypot(forward, strafe);
+        desiredSpeed = Math.hypot(forward, strafe);
 
         //Calculate change in time
         double currentTime = System.currentTimeMillis();
@@ -153,22 +154,22 @@ public class Drivetrain {
         brLastPos = backRight.getCurrentPosition();
 
         //calculate change in direction (turn)
-        double currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
-        double turnChange = 0;
+        currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+        double turnChange;
         if(lastTurn == 0) {
             turnChange = 0;
         }
         else {
             turnChange = currentTurn - lastTurn;
         }
-        lastTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
+        lastTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
 
         //PID turn
-        turnError = (turnChange / elapsedTime) - (turn);
+        turnError = ((turnChange) - (turn));
         double turnP = 0.1;
         double turnD = 0.0;
 
-        turnOutput = (turnError * turnP) + (turnChange * turnD);
+        turnOutput = turn + (turnError * turnP) + (turnChange * turnD);
 
         //Calculate actual velocity of each motor
         double flActualVelocity = flPosChange / elapsedTime;
