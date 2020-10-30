@@ -16,7 +16,9 @@ public class TurnCommand extends Command {
     }
 
     @Override
-    public void start() {}
+    public void start() {
+        drivetrain.resetEncoders();
+    }
 
     @Override
     public void loop() {

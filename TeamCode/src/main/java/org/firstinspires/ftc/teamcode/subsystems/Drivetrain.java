@@ -115,6 +115,11 @@ public class Drivetrain {
 
     public void update(double forward, double strafe, double turn) {
 
+        while(navx.isCalibrating()) {
+            telemetry.log().add("NavX Calibrating");
+            telemetry.update();
+        }
+
         //Calculate direction and speed
         double direction = Math.atan2(forward, strafe);
         desiredSpeed = Math.hypot(forward, strafe);
