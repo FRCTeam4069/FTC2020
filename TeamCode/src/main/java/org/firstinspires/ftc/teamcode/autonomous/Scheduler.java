@@ -6,6 +6,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.autonomous.commands.Command;
 import org.firstinspires.ftc.teamcode.autonomous.commands.DriveForward;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 
 import java.util.ArrayList;
@@ -20,9 +21,9 @@ public class Scheduler {
     boolean started = false;
 
     //Take in subsystems and pass them to all commands
-    public Scheduler(Telemetry telemetry, Drivetrain drivetrain, StarterStackDetector starterStackDetector) {
+    public Scheduler(Telemetry telemetry, Drivetrain drivetrain, StarterStackDetector starterStackDetector, Intake intake) {
         this.telemetry = telemetry;
-        command.setSubsystems(drivetrain, starterStackDetector);
+        command.setSubsystems(drivetrain, starterStackDetector, intake);
     }
 
     //Add command to queue

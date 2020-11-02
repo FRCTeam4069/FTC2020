@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
 import org.firstinspires.ftc.teamcode.autonomous.commands.DriveForward;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 
 @Autonomous
@@ -20,6 +21,7 @@ public class testAuto extends OpMode {
     //Subsystems
     StarterStackDetector stackDetector;
     Drivetrain drivetrain;
+    Intake intake;
 
     //Call to set commands to the scheduler called at the beginning of auto
     private void setStartingScheduler() {
@@ -46,10 +48,12 @@ public class testAuto extends OpMode {
     public void init() {
         stackDetector = new StarterStackDetector(hardwareMap, telemetry);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
-        startingScheduler = new Scheduler(telemetry, drivetrain, stackDetector);
-        fourRingScheduler = new Scheduler(telemetry, drivetrain, stackDetector);
-        oneRingScheduler = new Scheduler(telemetry, drivetrain, stackDetector);
-        zeroRingScheduler = new Scheduler(telemetry, drivetrain, stackDetector);
+        intake = new Intake(hardwareMap, telemetry);
+
+        startingScheduler = new Scheduler(telemetry, drivetrain, stackDetector, intake);
+        fourRingScheduler = new Scheduler(telemetry, drivetrain, stackDetector, intake);
+        oneRingScheduler = new Scheduler(telemetry, drivetrain, stackDetector, intake);
+        zeroRingScheduler = new Scheduler(telemetry, drivetrain, stackDetector, intake);
 
         setStartingScheduler();
     }
