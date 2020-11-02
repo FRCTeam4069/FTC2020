@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.tutorials.showingAuto;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 
+@Disabled
 @Autonomous
 public class SimpleAuto extends OpMode {
 
@@ -20,7 +22,6 @@ public class SimpleAuto extends OpMode {
         drivetrain = new Drivetrain(hardwareMap, telemetry);
         detector = new StarterStackDetector(hardwareMap, telemetry);
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.
 
         scheduler = new SchedulerPractice(telemetry, drivetrain, detector);
         scheduler.addCommand(new DriveForwardTest(1000));

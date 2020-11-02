@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.tutorials;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.tutorials.MecanumDrive;
 
+@Disabled
 @TeleOp
 public class MecanumTest extends OpMode {
 
