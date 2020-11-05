@@ -14,37 +14,46 @@ import java.util.List;
 
 public class Scheduler {
 
-    Command command;
     List<Command> commandQueue = new ArrayList<>();
     Telemetry telemetry;
+    private Drivetrain drivetrain;
+    private StarterStackDetector starterStackDetector;
+    private Intake intake;
+
 
     boolean started = false;
 
     //Take in subsystems and pass them to all commands
     public Scheduler(Telemetry telemetry, Drivetrain drivetrain, StarterStackDetector starterStackDetector, Intake intake) {
         this.telemetry = telemetry;
-        command.setSubsystems(drivetrain, starterStackDetector, intake);
+        this.drivetrain = drivetrain;
+        this.starterStackDetector = starterStackDetector;
+        this.intake = intake;
     }
 
     //Add command to queue
     public void addCommand(Command command) {
         commandQueue.add(command); //Queue of type ArrayList
+        command.setSubsystems(drivetrain, starterStackDetector, intake);
     }
 
     //Method takes first command in queue, when it is finished, remove it and access next in line
-    public void run() {
-        Command nextCommand = commandQueue.get(0);
+    public void run(boolean cont) {
 
-        if(!started) {
-            nextCommand.start();
-            started = true;
-        }
+        while (commandQueue.size() != 0 && cont) {
+            Command nextCommand = commandQueue.get(0);
 
-        nextCommand.loop();
-        if(nextCommand.isFinished()) {
-            commandQueue.remove(0);
-            if(commandQueue.size() != 0) {
-                commandQueue.get(0).start();
+            if (!started) {
+                nextCommand.start();
+                started = true;
+            }
+
+            nextCommand.loop();
+            if (nextCommand.isFinished()) {
+                commandQueue.remove(0);
+                if (commandQueue.size() != 0) {
+                    commandQueue.get(0).start();
+                }
             }
         }
     }

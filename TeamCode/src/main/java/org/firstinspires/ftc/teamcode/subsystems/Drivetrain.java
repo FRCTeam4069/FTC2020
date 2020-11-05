@@ -174,7 +174,7 @@ public class Drivetrain {
 
         //PID turn
         turnError = ((turnChange) - (turn));
-        double turnP = 0.1;
+        double turnP = 0.015;
         double turnD = 0.0;
 
         turnOutput = turn + (turnError * turnP) + (turnChange * turnD);
