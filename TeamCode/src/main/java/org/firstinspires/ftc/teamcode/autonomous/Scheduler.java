@@ -37,21 +37,29 @@ public class Scheduler {
         command.setSubsystems(drivetrain, starterStackDetector, intake);
     }
 
-    //Method takes first command in queue, when it is finished, remove it and access next in line
-    public void run(boolean cont) {
+    public int getQueueSize() {
+        return commandQueue.size();
+    }
 
-        while (commandQueue.size() != 0 && cont) {
+    //Method takes first command in queue, when it is finished, remove it and access next in line
+    public void run() {
+
+        telemetry.addData("command queue size", commandQueue.size());
+        telemetry.update();
+        if(commandQueue.size() != 0) {
             Command nextCommand = commandQueue.get(0);
 
-            if (!started) {
+            if(!started) {
                 nextCommand.start();
                 started = true;
             }
 
             nextCommand.loop();
-            if (nextCommand.isFinished()) {
+            if(nextCommand.isFinished()) {
                 commandQueue.remove(0);
-                if (commandQueue.size() != 0) {
+                telemetry.addData("Command", "removed");
+                telemetry.update();
+                if(commandQueue.size() != 0) {
                     commandQueue.get(0).start();
                 }
             }

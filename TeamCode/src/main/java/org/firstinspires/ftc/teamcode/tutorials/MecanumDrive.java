@@ -18,10 +18,10 @@ public class MecanumDrive {
     public MecanumDrive(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
 
-        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        leftBack = hardwareMap.get(DcMotor.class, "leftBack");
-        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+        leftFront = hardwareMap.get(DcMotor.class, "frontLeft");
+        rightFront = hardwareMap.get(DcMotor.class, "frontRight");
+        leftBack = hardwareMap.get(DcMotor.class, "backLeft");
+        rightBack = hardwareMap.get(DcMotor.class, "backRight");
 
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

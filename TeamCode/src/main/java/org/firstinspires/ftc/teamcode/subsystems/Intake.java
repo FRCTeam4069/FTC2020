@@ -11,25 +11,25 @@ public class Intake {
     //Hardware
     Telemetry telemetry;
     DcMotor intakeMotor;
-    Servo flop;
+    //Servo flop;
 
     //Initializer initializes hardware and telemetry
     public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
 
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-        flop = hardwareMap.get(Servo.class, "flop");
+        //flop = hardwareMap.get(Servo.class, "flop");
     }
 
     //Set flop servo closed
-    public void lockIntake() {
-        flop.setPosition(0);
-    }
+//    public void lockIntake() {
+//        flop.setPosition(0);
+//    }
 
     //Set flop servo open
-    public void releaseIntake() {
-        flop.setPosition(1);
-    }
+//    public void releaseIntake() {
+//        flop.setPosition(1);
+//    }
 
     //Set intake full power out or in based on boolean (buttons)
     public void setIntake(boolean in, boolean out) {
