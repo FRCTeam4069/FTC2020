@@ -19,12 +19,13 @@ public class TestAuto extends LinearOpMode {
 
         Scheduler scheduler = new Scheduler(telemetry, drivetrain, detector, null);
         scheduler.addCommand(new DriveForward(1000, 0.5));
-        scheduler.addCommand(new DriveForward(-500, -0.5));
+        //scheduler.addCommand(new DriveForward(-500, -0.5));
 
         waitForStart();
 
         while(opModeIsActive()) {
             scheduler.run();
+            telemetry.addData("position", drivetrain.getCurrentPos());
             if(scheduler.getQueueSize() == 0) {
                 drivetrain.update(0,0,0);
             }

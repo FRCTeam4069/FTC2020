@@ -16,7 +16,7 @@ public class StaffenTestIntake extends OpMode {
     @Override
     public void init() {
         drivetrain = new MecanumDrive(hardwareMap, telemetry);
-        intake = new Intake(hardwareMap, telemetry);
+        //intake = new Intake(hardwareMap, telemetry);
 
         //intake.lockIntake();
     }
@@ -29,6 +29,6 @@ public class StaffenTestIntake extends OpMode {
     @Override
     public void loop() {
         drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-        intake.setIntake(gamepad1.a, gamepad1.b);
+        //intake.setIntake(gamepad1.a, gamepad1.b);
     }
 }

@@ -19,7 +19,6 @@ public class TestOfStarterStackDetector extends OpMode {
     @Override
     public void loop() {
         stackDetector.getStarterStackSize(170);
-        telemetry.addData("starter stack size", stackDetector.getStarterStackSize(170));
         telemetry.update();
     }
 }

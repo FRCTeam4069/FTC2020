@@ -10,12 +10,12 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 public class DrivetrainTeleOpTest extends OpMode {
 
     Drivetrain drivetrain;
-    Intake intake;
+    //Intake intake;
 
     @Override
     public void init() {
         drivetrain = new Drivetrain(hardwareMap, telemetry);
-        intake = new Intake(hardwareMap, telemetry);
+        //intake = new Intake(hardwareMap, telemetry);
 
         //intake.lockIntake();
     }
@@ -29,6 +29,6 @@ public class DrivetrainTeleOpTest extends OpMode {
     public void loop() {
         drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         drivetrain.addTelemetry(true);
-        intake.setIntake(gamepad1.a, gamepad1.b);
+        //intake.setIntake(gamepad1.a, gamepad1.b);
     }
 }
