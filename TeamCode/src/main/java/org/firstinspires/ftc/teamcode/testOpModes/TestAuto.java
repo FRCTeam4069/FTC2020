@@ -19,7 +19,7 @@ public class TestAuto extends LinearOpMode {
 
         Scheduler scheduler = new Scheduler(telemetry, drivetrain, detector, null);
         scheduler.addCommand(new DriveForward(1000, 0.5));
-        //scheduler.addCommand(new DriveForward(-500, -0.5));
+        scheduler.addCommand(new DriveForward(-500, -0.5));
 
         waitForStart();
 

@@ -69,5 +69,6 @@ public class Scheduler {
     public void disableSubsystems() {
         drivetrain.update(0,0, 0);
         intake.setIntake(false, false);
+        starterStackDetector.shutDown();
     }
 }

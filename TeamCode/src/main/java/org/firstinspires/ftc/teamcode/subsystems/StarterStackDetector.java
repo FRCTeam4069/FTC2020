@@ -143,4 +143,9 @@ public class StarterStackDetector {
             return lastReturn;
         }
     }
+    public void shutDown() {
+        if(tfDetector != null) {
+            tfDetector.shutdown();
+        }
+    }
 }
