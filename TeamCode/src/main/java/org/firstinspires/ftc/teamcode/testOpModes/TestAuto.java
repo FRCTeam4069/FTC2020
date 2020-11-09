@@ -26,9 +26,6 @@ public class TestAuto extends LinearOpMode {
         while(opModeIsActive()) {
             scheduler.run();
             telemetry.addData("position", drivetrain.getCurrentPos());
-            if(scheduler.getQueueSize() == 0) {
-                drivetrain.update(0,0,0);
-            }
             idle();
         }
     }
