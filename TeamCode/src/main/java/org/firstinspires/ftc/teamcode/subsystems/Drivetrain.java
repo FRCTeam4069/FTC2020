@@ -198,7 +198,7 @@ public class Drivetrain {
         double blError = desiredBackLeftSpeed - blActualVelocity;
         double brError = desiredBackRightSpeed - brActualVelocity;
 
-        double P = 0.1;
+        double P = 0.2;
 
         frontLeftOutput = desiredFrontLeftSpeed + (flError * P);
         frontRightOutput = desiredFrontRightSpeed + (frError * P);
