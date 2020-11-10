@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@TeleOp
+@TeleOp(name = "MecanumZero", group = "Mecanum tutorials")
 public class MecanumZero extends OpMode {
 
     //Raw Motor control with D Pad

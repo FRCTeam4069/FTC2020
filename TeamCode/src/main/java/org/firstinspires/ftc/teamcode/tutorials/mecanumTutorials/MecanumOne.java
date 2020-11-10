@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous
+@Autonomous(name = "MecanumOne", group = "Mecanum tutorials")
 public class MecanumOne extends LinearOpMode {
 
     //Autonomously driving on a diagonal and turning

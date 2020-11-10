@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@TeleOp
+@TeleOp(name = "MecanumTwo", group = "Mecanum tutorials")
 public class MecanumTwo extends OpMode {
 
     //Controlling mecanum using joystick
@@ -45,7 +45,7 @@ public class MecanumTwo extends OpMode {
     public void loop() {
 
         //Calculating direction and magnitude from game controller
-        double direction = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x);
+        double direction = Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x);
         double magnitude = Math.hypot(gamepad1.left_stick_y, gamepad1.left_stick_x);
 
         //Calculate motor outputs

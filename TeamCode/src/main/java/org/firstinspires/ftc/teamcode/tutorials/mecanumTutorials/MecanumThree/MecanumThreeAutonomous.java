@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.tutorials.mecanumTutorials.MecanumThree;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous
+@Autonomous(name = "MecanumThreeAutonomous", group = "Mecanum tutorials")
 public class MecanumThreeAutonomous extends LinearOpMode {
 
     //Autonomously control our subsystem
@@ -32,6 +32,13 @@ public class MecanumThreeAutonomous extends LinearOpMode {
 
         //Drive backLeft(sw)
         drivetrain.update(-0.5, -0.5, 0);
+        sleep(1000);
+
+        drivetrain.update(0,0,0);
+        sleep(500);
+
+        //Drive forwardLeft
+        drivetrain.update(0.5, -0.5, 0);
         sleep(1000);
 
         drivetrain.update(0,0,0);
