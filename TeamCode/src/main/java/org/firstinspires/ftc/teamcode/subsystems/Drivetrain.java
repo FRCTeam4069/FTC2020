@@ -35,6 +35,10 @@ public class Drivetrain {
     //Values to be read in telemetry
     double turnError;
     double turnOutput;
+    double currentTurn;
+    double turnChange;
+    double turnErrorSum;
+    double turn;
 
     double desiredSpeed;
     double desiredFrontLeftSpeed;
@@ -47,7 +51,15 @@ public class Drivetrain {
     double backLeftOutput;
     double backRightOutput;
 
-    double currentTurn;
+    double flSum;
+    double frSum;
+    double blSum;
+    double brSum;
+
+    double flError;
+    double frError;
+    double blError;
+    double brError;
 
     private double currentAvgPos;
 
@@ -101,7 +113,7 @@ public class Drivetrain {
     }
 
     //To add or add and update important drivetrain vals to telemetry
-    public void addTelemetry(boolean update) {
+    public void addBaseTelemetry(boolean update) {
         telemetry.addData("Desired Speed", desiredSpeed);
         telemetry.addData("Desired Front Left Speed", desiredFrontLeftSpeed);
         telemetry.addData("Desired Front Right Speed", desiredFrontRightSpeed);
@@ -121,7 +133,44 @@ public class Drivetrain {
         }
     }
 
+    public void addTurnTelemetry(boolean update) {
+        telemetry.addData("Desired turn", turn);
+        telemetry.addData("Current turn", currentTurn);
+        telemetry.addData("Turn error", turnError);
+        telemetry.addData("Turn change", turnChange);
+        telemetry.addData("Turn integral", turnErrorSum);
+        telemetry.addData("Turn output", turnOutput);
+        if(update) {
+            telemetry.update();
+        }
+    }
+
+    public void pidTelemetry(boolean update) {
+        telemetry.addData("Desired Speed", desiredSpeed);
+        telemetry.addData("Desired Front Left Speed", desiredFrontLeftSpeed);
+        telemetry.addData("Desired Front Right Speed", desiredFrontRightSpeed);
+        telemetry.addData("Desired Back Left Speed", desiredBackLeftSpeed);
+        telemetry.addData("Desired Back Right Speed", desiredBackRightSpeed);
+
+        telemetry.addData("Front Left Output", frontLeftOutput);
+        telemetry.addData("Front Right Output", frontRightOutput);
+        telemetry.addData("Back Left Output", backLeftOutput);
+        telemetry.addData("Back Right Output", backRightOutput);
+
+        telemetry.addData("Front Left Error", flError);
+        telemetry.addData("Front Right Error", frError);
+        telemetry.addData("Back Left Error", blError);
+        telemetry.addData("Back Right Error", brError);
+
+        telemetry.addData("Front Left Sum", flSum);
+        telemetry.addData("Back Left Sum", blSum);
+        telemetry.addData("Front Right Sum", frSum);
+        telemetry.addData("Back Right Sum", brSum);
+    }
+
     public void update(double forward, double strafe, double turn) {
+
+        this.turn = turn;
 
         while(navx.isCalibrating()) {
             telemetry.log().add("NavX Calibrating");
@@ -176,7 +225,6 @@ public class Drivetrain {
 
         //calculate change in direction (turn)
         currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
-        double turnChange;
         if(lastTurn == 0) {
             turnChange = 0;
         }
@@ -186,7 +234,7 @@ public class Drivetrain {
         lastTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
 
         //PID turn
-        double turnErrorSum = 0;
+        turnErrorSum = 0;
         turnError = ((turnChange) - (turn));
         turnErrorSum += turnError;
 
@@ -209,22 +257,22 @@ public class Drivetrain {
         desiredBackLeftSpeed = (Math.sin(direction - Math.PI/4) * desiredSpeed) + turnOutput;
 
         //PID Outputs
-        double flSum = 0;
-        double frSum = 0;
-        double blSum = 0;
-        double brSum = 0;
+        flSum = 0;
+        frSum = 0;
+        blSum = 0;
+        brSum = 0;
 
-        double flError = desiredFrontLeftSpeed - flActualVelocity;
-        double frError = desiredFrontRightSpeed - frActualVelocity;
-        double blError = desiredBackLeftSpeed - blActualVelocity;
-        double brError = desiredBackRightSpeed - brActualVelocity;
+        flError = desiredFrontLeftSpeed - flActualVelocity;
+        frError = desiredFrontRightSpeed - frActualVelocity;
+        blError = desiredBackLeftSpeed - blActualVelocity;
+        brError = desiredBackRightSpeed - brActualVelocity;
 
         flSum += flError;
         frSum += frError;
         blSum += blError;
         brSum += brError;
 
-        double kP = 0.2;
+        double kP = 0.1;
         double kI = 0.0;
 
         frontLeftOutput = desiredFrontLeftSpeed + (flError * kP) + (kI * flSum);
