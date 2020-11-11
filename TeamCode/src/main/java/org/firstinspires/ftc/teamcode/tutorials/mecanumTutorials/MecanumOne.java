@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.tutorials.mecanumTutorials;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+@Disabled
 @Autonomous(name = "MecanumOne", group = "Mecanum tutorials")
 public class MecanumOne extends LinearOpMode {
 

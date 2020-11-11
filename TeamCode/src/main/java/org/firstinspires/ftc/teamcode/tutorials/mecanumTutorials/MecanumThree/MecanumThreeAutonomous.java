@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.tutorials.mecanumTutorials.MecanumThree;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+@Disabled
 @Autonomous(name = "MecanumThreeAutonomous", group = "Mecanum tutorials")
 public class MecanumThreeAutonomous extends LinearOpMode {
 

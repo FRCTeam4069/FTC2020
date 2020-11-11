@@ -26,8 +26,8 @@ public class DriveForward extends Command {
     public void loop() {
         double currentPos = drivetrain.getCurrentPos();
         error = desiredPosition - currentPos;
-        double p = 0.08;
-        double output = speed + error * p;
+        double p = 0.09;
+        double output = error * p;
 
         drivetrain.update(output, 0, 0);
     }

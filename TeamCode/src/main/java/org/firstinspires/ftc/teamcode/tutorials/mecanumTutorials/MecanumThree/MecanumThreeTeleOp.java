@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.tutorials.mecanumTutorials.MecanumThree;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+@Disabled
 @TeleOp(name = "MecanumThreeTeleOp", group = "Mecanum tutorials")
 public class MecanumThreeTeleOp extends OpMode {
 

@@ -64,14 +64,21 @@ public class Drivetrain {
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     //Reset encoders (for use mainly in auto)
@@ -134,7 +141,10 @@ public class Drivetrain {
         else {
             elapsedTime = currentTime - lastTime;
         }
+        double totalTimeElapsed = 0;
+        totalTimeElapsed += elapsedTime;
         lastTime = System.currentTimeMillis();
+
 
         //Calculate change in position for each motor
         double flCurrentPos = frontLeft.getCurrentPosition();
@@ -145,6 +155,7 @@ public class Drivetrain {
         double frPosChange;
         double blPosChange;
         double brPosChange;
+
         if(flLastPos == 0) {
             flPosChange = flCurrentPos;
             blPosChange = blCurrentPos;
@@ -157,6 +168,7 @@ public class Drivetrain {
             brPosChange = brCurrentPos - brLastPos;
             frPosChange = frCurrentPos - frLastPos;
         }
+
         flLastPos = frontLeft.getCurrentPosition();
         blLastPos = backLeft.getCurrentPosition();
         frLastPos = frontRight.getCurrentPosition();
@@ -174,11 +186,15 @@ public class Drivetrain {
         lastTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
 
         //PID turn
+        double turnErrorSum = 0;
         turnError = ((turnChange) - (turn));
+        turnErrorSum += turnError;
+
         double turnP = 0.015;
+        double turnI = 0.0;
         double turnD = 0.0;
 
-        turnOutput = turn + (turnError * turnP) + (turnChange * turnD);
+        turnOutput = turn + (turnError * turnP) + (turnErrorSum * turnI) + (turnChange * turnD);
 
         //Calculate actual velocity of each motor
         double flActualVelocity = flPosChange / elapsedTime;
@@ -193,17 +209,28 @@ public class Drivetrain {
         desiredBackLeftSpeed = (Math.sin(direction - Math.PI/4) * desiredSpeed) + turnOutput;
 
         //PID Outputs
+        double flSum = 0;
+        double frSum = 0;
+        double blSum = 0;
+        double brSum = 0;
+
         double flError = desiredFrontLeftSpeed - flActualVelocity;
         double frError = desiredFrontRightSpeed - frActualVelocity;
         double blError = desiredBackLeftSpeed - blActualVelocity;
         double brError = desiredBackRightSpeed - brActualVelocity;
 
-        double P = 0.2;
+        flSum += flError;
+        frSum += frError;
+        blSum += blError;
+        brSum += brError;
 
-        frontLeftOutput = desiredFrontLeftSpeed + (flError * P);
-        frontRightOutput = desiredFrontRightSpeed + (frError * P);
-        backLeftOutput = desiredBackLeftSpeed + (blError * P);
-        backRightOutput = desiredBackRightSpeed + (brError * P);
+        double kP = 0.2;
+        double kI = 0.0;
+
+        frontLeftOutput = desiredFrontLeftSpeed + (flError * kP) + (kI * flSum);
+        frontRightOutput = desiredFrontRightSpeed + (frError * kP) + (kI * frSum);
+        backLeftOutput = desiredBackLeftSpeed + (blError * kP) + (kI * blSum);
+        backRightOutput = desiredBackRightSpeed + (brError * kP) + (kI * brSum);
 
         //Check for speed scaling factor to counteract greater than 1 outputs
         double max1 = Math.max((Math.abs(frontLeftOutput)), (Math.abs(frontRightOutput)));

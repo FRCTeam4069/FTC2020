@@ -62,13 +62,12 @@ public class Scheduler {
                 if(commandQueue.size() != 0) {
                     commandQueue.get(0).start();
                 }
-                else disableSubsystems();
             }
         }
     }
     public void disableSubsystems() {
         drivetrain.update(0,0, 0);
-        intake.setIntake(false, false);
+        //intake.setIntake(false, false);
         starterStackDetector.shutDown();
     }
 }
