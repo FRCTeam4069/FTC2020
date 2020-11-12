@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-public class StarterStackDetector {
+public class StarterStackDetector extends RobotHardware {
 
     Telemetry telemetry;
 
@@ -59,7 +59,7 @@ public class StarterStackDetector {
     }
 
     public StarterStackDetector(HardwareMap hardwareMap, Telemetry telemetry) {
-
+        super(hardwareMap);
         //Init vuforia and tfDetector, give access to telemetry
         this.telemetry = telemetry;
         initVuforia(hardwareMap);
@@ -126,24 +126,23 @@ public class StarterStackDetector {
                     lastReturn = 4;
                     telemetry.addData("Starter stack", 4);
                     return 4;
-                }
-                else {
+                } else {
                     lastReturn = 1;
                     telemetry.addData("Starter stack", 1);
                     return 1;
                 }
-            }
-            else {
+            } else {
                 lastReturn = 0;
                 telemetry.addData("Starter stack", 0);
                 return 0;
             }
-        }
-        else {
+        } else {
             return lastReturn;
         }
     }
-    public void shutDown() {
+
+    @Override
+    public void disable() {
         if(tfDetector != null) {
             tfDetector.shutdown();
         }

@@ -2,20 +2,16 @@ package org.firstinspires.ftc.teamcode.autonomous.commands;
 
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 
 public abstract class Command {
 
     //Subsystems to be accessed by commands
-    protected Drivetrain drivetrain;
-    protected StarterStackDetector starterStackDetector;
-    protected Intake intake;
-
+    protected Robot robot;
     //MUST be called by a command scheduler and runner
-    public void setSubsystems(Drivetrain drivetrain, StarterStackDetector starterStackDetector, Intake intake) {
-        this.drivetrain = drivetrain;
-        this.starterStackDetector = starterStackDetector;
-        this.intake = intake;
+    public void setSubsystems(Robot robot) {
+        this.robot = robot;
     }
 
     //Methods that need to be implemented by each command

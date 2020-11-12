@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.autonomous.commands.Command;
 import org.firstinspires.ftc.teamcode.autonomous.commands.DriveForward;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 
 import java.util.ArrayList;
@@ -16,25 +17,21 @@ public class Scheduler {
 
     List<Command> commandQueue = new ArrayList<>();
     Telemetry telemetry;
-    private Drivetrain drivetrain;
-    private StarterStackDetector starterStackDetector;
-    private Intake intake;
+    private Robot robot;
 
 
     boolean started = false;
 
     //Take in subsystems and pass them to all commands
-    public Scheduler(Telemetry telemetry, Drivetrain drivetrain, StarterStackDetector starterStackDetector, Intake intake) {
+    public Scheduler(Telemetry telemetry, Robot robot) {
         this.telemetry = telemetry;
-        this.drivetrain = drivetrain;
-        this.starterStackDetector = starterStackDetector;
-        this.intake = intake;
+        this.robot = robot;
     }
 
     //Add command to queue
     public void addCommand(Command command) {
         commandQueue.add(command); //Queue of type ArrayList
-        command.setSubsystems(drivetrain, starterStackDetector, intake);
+        command.setSubsystems(robot);
     }
 
     public int getQueueSize() {
@@ -66,8 +63,6 @@ public class Scheduler {
         }
     }
     public void disableSubsystems() {
-        drivetrain.update(0,0, 0);
-        //intake.setIntake(false, false);
-        starterStackDetector.shutDown();
+        robot.deactivate();
     }
 }

@@ -1,23 +1,19 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class Intake {
+public class Intake extends RobotHardware {
 
     //Hardware
     Telemetry telemetry;
-    DcMotor intakeMotor;
     //Servo flop;
 
     //Initializer initializes hardware and telemetry
     public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
+        super(hardwareMap);
         this.telemetry = telemetry;
-
-        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
         //flop = hardwareMap.get(Servo.class, "flop");
     }
 
@@ -42,5 +38,10 @@ public class Intake {
         else {
             intakeMotor.setPower(0);
         }
+    }
+
+    @Override
+    public void disable() {
+        intakeMotor.setPower(0);
     }
 }

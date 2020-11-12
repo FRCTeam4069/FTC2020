@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -10,14 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
-public class Drivetrain {
-
-    private DcMotor frontLeft;
-    private DcMotor backLeft;
-    private DcMotor frontRight;
-    private  DcMotor backRight;
-
-    private NavxMicroNavigationSensor navx;
+public class Drivetrain extends RobotHardware {
 
     Telemetry telemetry;
 
@@ -65,14 +57,9 @@ public class Drivetrain {
 
     //Setup such as initializing motors, setting directions and run modes
     public Drivetrain(HardwareMap hardwareMap, Telemetry telemetry) {
+        super(hardwareMap);
+
         this.telemetry = telemetry;
-
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        backRight = hardwareMap.get(DcMotor.class, "backRight");
-
-        navx = hardwareMap.get(NavxMicroNavigationSensor.class, "navx");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -304,5 +291,13 @@ public class Drivetrain {
         frontRight.setPower(frontRightOutput);
         backLeft.setPower(backLeftOutput);
         backRight.setPower(backRightOutput);
+    }
+
+    @Override
+    public void disable() {
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
     }
 }

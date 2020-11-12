@@ -3,21 +3,23 @@ package org.firstinspires.ftc.teamcode.testOpModes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.R;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 @TeleOp
 public class DrivetrainTeleOpTest extends OpMode {
 
-    Drivetrain drivetrain;
+    Robot robot;
 
     @Override
     public void init() {
-        drivetrain = new Drivetrain(hardwareMap, telemetry);
+        robot = new Robot(hardwareMap, telemetry);
     }
 
     @Override
     public void loop() {
-        drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-        drivetrain.addBaseTelemetry(true);
+        robot.drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        robot.drivetrain.addBaseTelemetry(true);
     }
 }
