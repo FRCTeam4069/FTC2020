@@ -166,6 +166,9 @@ public class Drivetrain {
         telemetry.addData("Back Left Sum", blSum);
         telemetry.addData("Front Right Sum", frSum);
         telemetry.addData("Back Right Sum", brSum);
+        if(update) {
+            telemetry.update();
+        }
     }
 
     public void update(double forward, double strafe, double turn) {

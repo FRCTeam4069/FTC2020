@@ -19,11 +19,11 @@ public class WobbleGoalClamp {
     }
 
     public void update(boolean clamp, boolean open) {
-        if(clamp) {
-            master.setPower(0.5);
+        if(clamp && !open) {
+            master.setPower(1);
         }
-        else if(open) {
-            master.setPower(-0.5);
+        else if(open && !clamp) {
+            master.setPower(-1);
         }
         else {
             master.setPower(0);
