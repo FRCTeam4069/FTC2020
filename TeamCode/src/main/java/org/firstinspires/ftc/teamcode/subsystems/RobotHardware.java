@@ -36,8 +36,8 @@ public abstract class RobotHardware {
 //        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
 
         //WobbleGoalClamp
-        master = hardwareMap.get(CRServo.class, "master");
-        slave = hardwareMap.get(CRServo.class, "slave");
+        //master = hardwareMap.get(CRServo.class, "master");
+        //slave = hardwareMap.get(CRServo.class, "slave");
     }
 
 

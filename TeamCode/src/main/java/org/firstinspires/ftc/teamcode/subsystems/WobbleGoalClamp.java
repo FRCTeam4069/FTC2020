@@ -8,8 +8,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class WobbleGoalClamp extends RobotHardware {
 
     Telemetry telemetry;
-    private CRServo master;
-    private CRServo slave;
 
     public WobbleGoalClamp(HardwareMap hardwareMap, Telemetry telemetry) {
         super(hardwareMap);

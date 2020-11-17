@@ -6,15 +6,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp
-public class DPadMecanum extends OpMode {
+public class MecanumTele extends OpMode {
 
-    // TeleOp mode controlling mecanum with DPad
-
-
-    //Declare motors
     DcMotor frontLeft;
-    DcMotor frontRight;
     DcMotor backLeft;
+    DcMotor frontRight;
     DcMotor backRight;
 
     @Override
@@ -31,51 +27,38 @@ public class DPadMecanum extends OpMode {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     @Override
     public void loop() {
+        double direction = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x);
+        double speed = Math.hypot(gamepad1.left_stick_y, gamepad1.left_stick_x);
 
-        //Drive forward
-        if(gamepad1.dpad_up) {
-            frontLeft.setPower(0.5);
-            frontRight.setPower(0.5);
-            backLeft.setPower(0.5);
-            backRight.setPower(0.5);
-        }
+        double frontLeftOutput = Math.sin(direction + Math.PI / 4) * speed;
+        double frontRightOutput = Math.sin(direction - Math.PI / 4) * speed;
+        double backLeftOutput = Math.sin(direction - Math.PI / 4) * speed;
+        double backRightOutput = Math.sin(direction + Math.PI / 4) * speed;
 
-        //Drive backwards
-        else if(gamepad1.dpad_down) {
-            frontLeft.setPower(-0.5);
-            frontRight.setPower(-0.5);
-            backLeft.setPower(-0.5);
-            backRight.setPower(-0.5);
-        }
+        frontLeft.setPower(frontLeftOutput);
+        frontRight.setPower(frontRightOutput);
+        backLeft.setPower(backLeftOutput);
+        backRight.setPower(backRightOutput);
 
-        //Drive right
-        else if(gamepad1.dpad_right) {
-            frontLeft.setPower(0.5);
-            frontRight.setPower(-0.5);
-            backLeft.setPower(-0.5);
-            backRight.setPower(0.5);
-        }
+        telemetry.addData("Direction", direction); // Direction: directionValue
+        telemetry.addData("Speed", speed);
+        telemetry.addData("Front Left Output", frontLeftOutput);
+        telemetry.addData("Front Right Output", frontRightOutput);
 
-        //Drive left
-        else if(gamepad1.dpad_left) {
-            frontLeft.setPower(-0.5);
-            frontRight.setPower(0.5);
-            backLeft.setPower(0.5);
-            backRight.setPower(-0.5);
-        }
-        else {
-            frontLeft.setPower(0);
-            frontRight.setPower(0);
-            backLeft.setPower(0);
-            backRight.setPower(0);
-        }
+        telemetry.update();
     }
 }
