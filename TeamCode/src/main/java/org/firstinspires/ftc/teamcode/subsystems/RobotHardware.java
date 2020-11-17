@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -10,10 +11,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public abstract class RobotHardware {
 
     //Drivetrain
-    protected DcMotor frontLeft;
-    protected DcMotor backLeft;
-    protected DcMotor frontRight;
-    protected DcMotor backRight;
+    protected DcMotorEx frontLeft;
+    protected DcMotorEx backLeft;
+    protected DcMotorEx frontRight;
+    protected DcMotorEx backRight;
     protected NavxMicroNavigationSensor navx;
 
     //Intake
@@ -26,10 +27,10 @@ public abstract class RobotHardware {
     public RobotHardware(HardwareMap hardwareMap) {
 
         //Drivetrain
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        backRight = hardwareMap.get(DcMotor.class, "backRight");
+        frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
+        backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
+        frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
+        backRight = hardwareMap.get(DcMotorEx.class, "backRight");
         navx = hardwareMap.get(NavxMicroNavigationSensor.class, "navx");
 
         //Intake

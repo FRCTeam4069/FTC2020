@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -12,7 +13,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 public class Drivetrain extends RobotHardware {
 
     Telemetry telemetry;
-
 
     //Values for calculating changes over time
     double lastTime = 0;
@@ -156,6 +156,25 @@ public class Drivetrain extends RobotHardware {
         if(update) {
             telemetry.update();
         }
+    }
+
+    public double getAvgVelocity(boolean addTelemetry, boolean update) {
+        double avgVelocity = (frontLeft.getVelocity() + backLeft.getVelocity() +  backRight.getVelocity()
+                + frontRight.getVelocity()) / 4;
+        if(addTelemetry) {
+            telemetry.addData("Avg Vel", avgVelocity);
+            if(update) telemetry.update();
+        }
+        return avgVelocity;
+    }
+
+    public void displayPIDCoeffs(boolean update) {
+        telemetry.addData("Pid Coefficients w/o encoder",
+                frontLeft.getPIDFCoefficients(DcMotor.RunMode.RUN_WITHOUT_ENCODER));
+        telemetry.addData("Pid Coefficients w/ encoder",
+                frontLeft.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+
+        if(update) telemetry.update();
     }
 
     public void update(double forward, double strafe, double turn) {
