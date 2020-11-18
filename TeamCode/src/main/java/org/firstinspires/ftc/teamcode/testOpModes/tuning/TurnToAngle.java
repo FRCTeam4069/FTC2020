@@ -18,7 +18,7 @@ public class TurnToAngle extends LinearOpMode {
         Scheduler scheduler = new Scheduler(telemetry, robot);
 
         waitForStart();
-        
+
         for(double angle : angles) {
             scheduler.addCommand(new TurnCommand(angle));
             scheduler.run();
