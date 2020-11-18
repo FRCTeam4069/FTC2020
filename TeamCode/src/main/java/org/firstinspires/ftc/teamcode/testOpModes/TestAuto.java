@@ -5,9 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
 import org.firstinspires.ftc.teamcode.autonomous.commands.DriveForward;
-import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 
 
 @Autonomous

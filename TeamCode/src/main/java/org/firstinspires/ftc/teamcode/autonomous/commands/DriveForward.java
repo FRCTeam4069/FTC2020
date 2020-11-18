@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.autonomous.commands;
 
-import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-
 public class DriveForward extends Command {
 
     //Values needed to PID accurate driving positions

@@ -26,12 +26,13 @@ public class TurnCommand extends Command {
     @Override
     public void loop() {
         error = desiredTurn - currentTurn;
+        double kP = 0.1;
 
         if(error < 180) {
-            robot.drivetrain.update(0, 0, speed);
+            robot.drivetrain.update(0, 0, error * kP);
         }
         else {
-            robot.drivetrain.update(0, 0, -speed);
+            robot.drivetrain.update(0, 0, -error * kP);
         }
         currentTurn = robot.drivetrain.getCurrentTurn();
     }
@@ -39,6 +40,6 @@ public class TurnCommand extends Command {
     //If less than 5 degrees off the action is complete
     @Override
     public boolean isFinished() {
-        return Math.abs(error) < 5;
+        return Math.abs(error) < 2;
     }
 }

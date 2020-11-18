@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.tuning;
+package org.firstinspires.ftc.teamcode.testOpModes.tuning;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -31,7 +31,7 @@ public class DriveConstVel extends LinearOpMode {
             }
             if(elapsedRunTime > 3000) robot.drivetrain.update(0,0,0);
 
-            robot.drivetrain.getAvgVelocity(true, false);
+            telemetry.addData("Velocity",robot.drivetrain.getAvgVelocity());
             telemetry.addData("Runtime", elapsedRunTime);
             robot.drivetrain.pidTelemetry(false);
             robot.drivetrain.displayPIDCoeffs(true);

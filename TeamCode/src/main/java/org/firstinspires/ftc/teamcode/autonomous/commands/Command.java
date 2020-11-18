@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.commands;
 
-import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 
 public abstract class Command {
 

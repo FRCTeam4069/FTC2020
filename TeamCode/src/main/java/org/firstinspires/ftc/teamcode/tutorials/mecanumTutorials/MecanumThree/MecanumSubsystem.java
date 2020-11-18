@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.tutorials.mecanumTutorials.MecanumThree;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -16,7 +16,6 @@ public class MecanumSubsystem {
     Telemetry telemetry;
 
     public MecanumSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
-
         this.telemetry = telemetry;
 
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
@@ -44,6 +43,7 @@ public class MecanumSubsystem {
     }
 
     public void update(double forward, double strafe, double turn) {
+
         double direction = Math.atan2(forward, strafe);
         double speed = Math.hypot(forward, strafe);
 
@@ -54,13 +54,13 @@ public class MecanumSubsystem {
 
         double max1 = Math.max(Math.abs(frontLeftOutput), Math.abs(backLeftOutput));
         double max2 = Math.max(Math.abs(frontRightOutput), Math.abs(backRightOutput));
-        double scalingFactor = Math.max(max1, max2);
+        double speedScalar = Math.max(max1, max2);
 
-        if(scalingFactor > 1) {
-            frontLeftOutput /= scalingFactor;
-            frontRightOutput /= scalingFactor;
-            backLeftOutput /= scalingFactor;
-            backRightOutput /= scalingFactor;
+        if(speedScalar > 1) {
+            frontLeftOutput /= speedScalar;
+            backLeftOutput /= speedScalar;
+            frontRightOutput /= speedScalar;
+            backRightOutput /= speedScalar;
         }
 
         frontLeft.setPower(frontLeftOutput);

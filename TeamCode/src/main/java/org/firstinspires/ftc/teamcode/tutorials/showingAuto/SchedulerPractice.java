@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.tutorials.showingAuto;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.autonomous.commands.Command;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 

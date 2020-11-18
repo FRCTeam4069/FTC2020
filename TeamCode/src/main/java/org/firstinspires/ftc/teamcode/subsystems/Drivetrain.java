@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.teamcode.subsystems.RobotHardware;
 
 public class Drivetrain extends RobotHardware {
 
@@ -92,91 +93,7 @@ public class Drivetrain extends RobotHardware {
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public double getCurrentPos() {
-        return currentAvgPos;
-    }
-    public double getCurrentTurn() {
-        return currentTurn;
-    }
-
-    //To add or add and update important drivetrain vals to telemetry
-    public void addBaseTelemetry(boolean update) {
-        telemetry.addData("Desired Speed", desiredSpeed);
-        telemetry.addData("Desired Front Left Speed", desiredFrontLeftSpeed);
-        telemetry.addData("Desired Front Right Speed", desiredFrontRightSpeed);
-        telemetry.addData("Desired Back Left Speed", desiredBackLeftSpeed);
-        telemetry.addData("Desired Back Right Speed", desiredBackRightSpeed);
-
-        telemetry.addData("Front Left Output", frontLeftOutput);
-        telemetry.addData("Front Right Output", frontRightOutput);
-        telemetry.addData("Back Left Output", backLeftOutput);
-        telemetry.addData("Back Right Output", backRightOutput);
-
-        telemetry.addData("Turn Error", turnError);
-        telemetry.addData("Turn Output", turnOutput);
-        telemetry.addData("Current Turn", currentTurn);
-        if(update) {
-            telemetry.update();
-        }
-    }
-
-    public void addTurnTelemetry(boolean update) {
-        telemetry.addData("Desired turn", turn);
-        telemetry.addData("Current turn", currentTurn);
-        telemetry.addData("Turn error", turnError);
-        telemetry.addData("Turn change", turnChange);
-        telemetry.addData("Turn integral", turnErrorSum);
-        telemetry.addData("Turn output", turnOutput);
-        if(update) {
-            telemetry.update();
-        }
-    }
-
-    public void pidTelemetry(boolean update) {
-        telemetry.addData("Desired Speed", desiredSpeed);
-        telemetry.addData("Desired Front Left Speed", desiredFrontLeftSpeed);
-        telemetry.addData("Desired Front Right Speed", desiredFrontRightSpeed);
-        telemetry.addData("Desired Back Left Speed", desiredBackLeftSpeed);
-        telemetry.addData("Desired Back Right Speed", desiredBackRightSpeed);
-
-        telemetry.addData("Front Left Output", frontLeftOutput);
-        telemetry.addData("Front Right Output", frontRightOutput);
-        telemetry.addData("Back Left Output", backLeftOutput);
-        telemetry.addData("Back Right Output", backRightOutput);
-
-        telemetry.addData("Front Left Error", flError);
-        telemetry.addData("Front Right Error", frError);
-        telemetry.addData("Back Left Error", blError);
-        telemetry.addData("Back Right Error", brError);
-
-        telemetry.addData("Front Left Sum", flSum);
-        telemetry.addData("Back Left Sum", blSum);
-        telemetry.addData("Front Right Sum", frSum);
-        telemetry.addData("Back Right Sum", brSum);
-        if(update) {
-            telemetry.update();
-        }
-    }
-
-    public double getAvgVelocity(boolean addTelemetry, boolean update) {
-        double avgVelocity = (frontLeft.getVelocity() + backLeft.getVelocity() +  backRight.getVelocity()
-                + frontRight.getVelocity()) / 4;
-        if(addTelemetry) {
-            telemetry.addData("Avg Vel", avgVelocity);
-            if(update) telemetry.update();
-        }
-        return avgVelocity;
-    }
-
-    public void displayPIDCoeffs(boolean update) {
-        telemetry.addData("Pid Coefficients w/o encoder",
-                frontLeft.getPIDFCoefficients(DcMotor.RunMode.RUN_WITHOUT_ENCODER));
-        telemetry.addData("Pid Coefficients w/ encoder",
-                frontLeft.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
-
-        if(update) telemetry.update();
-    }
-
+    //Update motors after calculating proper outputs
     public void update(double forward, double strafe, double turn) {
 
         this.turn = turn;
@@ -319,4 +236,87 @@ public class Drivetrain extends RobotHardware {
         backLeft.setPower(0);
         backRight.setPower(0);
     }
+
+    //GETTERS AND TELEMETRY/////////////////////////////////////////////////////////////////////////
+
+    public double getCurrentPos() {
+        return currentAvgPos;
+    }
+    public double getCurrentTurn() {
+        return currentTurn;
+    }
+
+    //To add or add and update important drivetrain vals to telemetry
+    public void addBaseTelemetry(boolean update) {
+        telemetry.addData("Desired Speed", desiredSpeed);
+        telemetry.addData("Desired Front Left Speed", desiredFrontLeftSpeed);
+        telemetry.addData("Desired Front Right Speed", desiredFrontRightSpeed);
+        telemetry.addData("Desired Back Left Speed", desiredBackLeftSpeed);
+        telemetry.addData("Desired Back Right Speed", desiredBackRightSpeed);
+
+        telemetry.addData("Front Left Output", frontLeftOutput);
+        telemetry.addData("Front Right Output", frontRightOutput);
+        telemetry.addData("Back Left Output", backLeftOutput);
+        telemetry.addData("Back Right Output", backRightOutput);
+
+        telemetry.addData("Turn Error", turnError);
+        telemetry.addData("Turn Output", turnOutput);
+        telemetry.addData("Current Turn", currentTurn);
+        if(update) {
+            telemetry.update();
+        }
+    }
+
+    public void addTurnTelemetry(boolean update) {
+        telemetry.addData("Desired turn", turn);
+        telemetry.addData("Current turn", currentTurn);
+        telemetry.addData("Turn error", turnError);
+        telemetry.addData("Turn change", turnChange);
+        telemetry.addData("Turn integral", turnErrorSum);
+        telemetry.addData("Turn output", turnOutput);
+        if(update) {
+            telemetry.update();
+        }
+    }
+
+    public void pidTelemetry(boolean update) {
+        telemetry.addData("Desired Speed", desiredSpeed);
+        telemetry.addData("Desired Front Left Speed", desiredFrontLeftSpeed);
+        telemetry.addData("Desired Front Right Speed", desiredFrontRightSpeed);
+        telemetry.addData("Desired Back Left Speed", desiredBackLeftSpeed);
+        telemetry.addData("Desired Back Right Speed", desiredBackRightSpeed);
+
+        telemetry.addData("Front Left Output", frontLeftOutput);
+        telemetry.addData("Front Right Output", frontRightOutput);
+        telemetry.addData("Back Left Output", backLeftOutput);
+        telemetry.addData("Back Right Output", backRightOutput);
+
+        telemetry.addData("Front Left Error", flError);
+        telemetry.addData("Front Right Error", frError);
+        telemetry.addData("Back Left Error", blError);
+        telemetry.addData("Back Right Error", brError);
+
+        telemetry.addData("Front Left Sum", flSum);
+        telemetry.addData("Back Left Sum", blSum);
+        telemetry.addData("Front Right Sum", frSum);
+        telemetry.addData("Back Right Sum", brSum);
+        if(update) {
+            telemetry.update();
+        }
+    }
+
+    public double getAvgVelocity() {
+        return (frontLeft.getVelocity() + backLeft.getVelocity() +  backRight.getVelocity()
+                + frontRight.getVelocity()) / 4;
+    }
+
+    public void displayPIDCoeffs(boolean update) {
+        telemetry.addData("Pid Coefficients w/o encoder",
+                frontLeft.getPIDFCoefficients(DcMotor.RunMode.RUN_WITHOUT_ENCODER));
+        telemetry.addData("Pid Coefficients w/ encoder",
+                frontLeft.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+
+        if(update) telemetry.update();
+    }
+
 }
