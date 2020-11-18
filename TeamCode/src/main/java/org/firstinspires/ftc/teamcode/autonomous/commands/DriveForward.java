@@ -5,12 +5,10 @@ public class DriveForward extends Command {
     //Values needed to PID accurate driving positions
     double desiredPosition;
     double error;
-    double speed;
 
     //Initializer ensures command has a desired position
-    public DriveForward(double desiredPosition, double speed) {
+    public DriveForward(double desiredPosition) {
         this.desiredPosition = desiredPosition;
-        this.speed = speed;
     }
 
     //Reset encoders for consistency
