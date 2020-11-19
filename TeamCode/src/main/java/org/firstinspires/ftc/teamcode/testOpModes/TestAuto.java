@@ -16,7 +16,7 @@ public class TestAuto extends LinearOpMode {
         Robot robot = new Robot(hardwareMap, telemetry);
 
         Scheduler scheduler = new Scheduler(telemetry, robot);
-        scheduler.addCommand(new DriveForward(1000, 0.75));
+        scheduler.addCommand(new DriveForward(1000));
 
         waitForStart();
 

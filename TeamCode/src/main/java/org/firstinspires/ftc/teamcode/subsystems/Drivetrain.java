@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.MotorControlAlgorithm;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -14,6 +15,10 @@ import org.firstinspires.ftc.teamcode.subsystems.RobotHardware;
 public class Drivetrain extends RobotHardware {
 
     Telemetry telemetry;
+
+    //Just in case
+    public final double TICKS_PER_REV = 432;
+    public final double WHEEL_CIRCUMFERENCE = 2 * Math.PI * 0.035; //METERS
 
     //Values for calculating changes over time
     double lastTime = 0;
@@ -311,10 +316,12 @@ public class Drivetrain extends RobotHardware {
     }
 
     public void displayPIDCoeffs(boolean update) {
-        telemetry.addData("Pid Coefficients w/o encoder",
-                frontLeft.getPIDFCoefficients(DcMotor.RunMode.RUN_WITHOUT_ENCODER));
         telemetry.addData("Pid Coefficients w/ encoder",
                 frontLeft.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+
+        PIDFCoefficients pidCoeffs = frontLeft.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorControlAlgorithm algorithm = pidCoeffs.algorithm;
+        telemetry.addData("Algorithm", algorithm);
 
         if(update) telemetry.update();
     }

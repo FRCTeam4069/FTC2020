@@ -8,30 +8,40 @@ import org.firstinspires.ftc.teamcode.subsystems.Robot;
 @Autonomous
 public class DriveConstVel extends LinearOpMode {
 
-    Robot robot = new Robot(hardwareMap, telemetry);
-
     @Override
     public void runOpMode() throws InterruptedException {
 
+        Robot robot = new Robot(hardwareMap, telemetry);
         double desiredSpeed = 0.5;
+
+        boolean isStarted = false;
 
         waitForStart();
 
         double startTime = getRuntime();
-
-        boolean isStarted = false;
+        double totalVelocity = 0;
+        int itertations = 0;
 
         while(opModeIsActive()) {
 
             double elapsedRunTime = getRuntime() - startTime;
 
             if(!isStarted) {
-                robot.drivetrain.update(desiredSpeed, 0, 0);
-                isStarted = true;
+                while(elapsedRunTime < 3 && opModeIsActive()) {
+                    totalVelocity += robot.drivetrain.getAvgVelocity();
+                    itertations += 1;
+                    elapsedRunTime = getRuntime() - startTime;
+                    robot.drivetrain.update(desiredSpeed, 0, 0);
+                    isStarted = true;
+                }
             }
-            if(elapsedRunTime > 3000) robot.drivetrain.update(0,0,0);
 
-            telemetry.addData("Velocity",robot.drivetrain.getAvgVelocity());
+            if(elapsedRunTime > 3) {
+                robot.drivetrain.update(0,0,0);
+                telemetry.addData("Time up", true);
+            }
+
+            telemetry.addData("Velocity", totalVelocity / itertations);
             telemetry.addData("Runtime", elapsedRunTime);
             robot.drivetrain.pidTelemetry(false);
             robot.drivetrain.displayPIDCoeffs(true);

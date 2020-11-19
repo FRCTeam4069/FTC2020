@@ -17,7 +17,9 @@ public class Robot {
         clamp = new WobbleGoalClamp(hardwareMap, telemetry);
         intake = new Intake(hardwareMap, telemetry);
     }
-
+    public void disableMotors() {
+        drivetrain.update(0, 0, 0);
+    }
     public void deactivate() {
         drivetrain.disable();
         detector.disable();
