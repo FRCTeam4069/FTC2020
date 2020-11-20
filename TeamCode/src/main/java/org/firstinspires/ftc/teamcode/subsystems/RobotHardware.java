@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -21,8 +22,14 @@ public abstract class RobotHardware {
     protected DcMotor intakeMotor;
 
     //WobbleGoalClamp
-    protected CRServo master;
-    protected CRServo slave;
+    protected CRServo wobbleMaster;
+    protected CRServo wobbleSlave;
+
+    //Shooter
+    protected DcMotorEx shooterMaster;
+    protected DcMotorEx shooterSlave;
+
+
 
     public RobotHardware(HardwareMap hardwareMap) {
 
@@ -39,6 +46,10 @@ public abstract class RobotHardware {
         //WobbleGoalClamp
         //master = hardwareMap.get(CRServo.class, "master");
         //slave = hardwareMap.get(CRServo.class, "slave");
+
+        //Shooter
+        shooterMaster = hardwareMap.get(DcMotorEx.class, "shooterMaster");
+        shooterSlave = hardwareMap.get(DcMotorEx.class, "shooterSlave");
     }
 
 

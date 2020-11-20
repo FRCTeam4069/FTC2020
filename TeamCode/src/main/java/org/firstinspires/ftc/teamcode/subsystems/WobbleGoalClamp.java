@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -16,20 +15,20 @@ public class WobbleGoalClamp extends RobotHardware {
 
     public void update(boolean clamp, boolean open) {
         if(clamp && !open) {
-            master.setPower(1);
+            wobbleMaster.setPower(1);
         }
         else if(open && !clamp) {
-            master.setPower(-1);
+            wobbleMaster.setPower(-1);
         }
         else {
-            master.setPower(0);
+            wobbleMaster.setPower(0);
         }
-        slave.setPower(master.getPower());
+        wobbleSlave.setPower(wobbleMaster.getPower());
     }
 
     @Override
     public void disable() {
-        slave.setPower(0);
-        master.setPower(0);
+        wobbleSlave.setPower(0);
+        wobbleMaster.setPower(0);
     }
 }
