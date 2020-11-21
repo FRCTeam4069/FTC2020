@@ -18,8 +18,10 @@ public class DrivetrainTeleOpTest extends OpMode {
     @Override
     public void loop() {
         robot.drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-        robot.drivetrain.displayPIDCoeffs(false);
-        telemetry.addData("Average Velocity", robot.drivetrain.getAvgVelocity());
-        robot.drivetrain.pidTelemetry(true);
+//        robot.drivetrain.displayPIDCoeffs(false);
+//        telemetry.addData("Average Velocity", robot.drivetrain.getAvgVelocity());
+//        robot.drivetrain.pidTelemetry(true);
+        robot.intake.update(gamepad1.a, gamepad1.b);
+
     }
 }

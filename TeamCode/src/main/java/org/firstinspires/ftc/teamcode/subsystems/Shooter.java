@@ -26,11 +26,11 @@ public class Shooter extends RobotHardware {
 
         this.telemetry = telemetry;
 
-        shooterMaster.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        shooterSlave.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //shooterMaster.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      //  shooterSlave.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        shooterMaster.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        shooterSlave.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+       // shooterMaster.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+       // shooterSlave.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void update(double power) {
@@ -62,9 +62,9 @@ public class Shooter extends RobotHardware {
         error = power - actualSpeed;
         errorSum += error;
 
-        kP = 0.0;
-        kI = 0.0;
-        kD = 0.0;
+        kP = 0.1;
+        kI = 0.05;
+        kD = 0.01;
 
         output = (error * kP) + (errorSum * kI) + (deltaV * kD);
 

@@ -29,8 +29,6 @@ public abstract class RobotHardware {
     protected DcMotorEx shooterMaster;
     protected DcMotorEx shooterSlave;
 
-
-
     public RobotHardware(HardwareMap hardwareMap) {
 
         //Drivetrain
@@ -41,15 +39,15 @@ public abstract class RobotHardware {
         navx = hardwareMap.get(NavxMicroNavigationSensor.class, "navx");
 
         //Intake
-//        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
+        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
 
         //WobbleGoalClamp
         //master = hardwareMap.get(CRServo.class, "master");
         //slave = hardwareMap.get(CRServo.class, "slave");
 
         //Shooter
-        shooterMaster = hardwareMap.get(DcMotorEx.class, "shooterMaster");
-        shooterSlave = hardwareMap.get(DcMotorEx.class, "shooterSlave");
+//        shooterMaster = hardwareMap.get(DcMotorEx.class, "shooterMaster");
+//        shooterSlave = hardwareMap.get(DcMotorEx.class, "shooterSlave");
     }
 
 

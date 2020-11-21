@@ -27,7 +27,7 @@ public class Robot {
         drivetrain.disable();
         detector.disable();
         clamp.disable();
-        //intake.disable();'
+        intake.disable();
         shooter.disable();
     }
 }
