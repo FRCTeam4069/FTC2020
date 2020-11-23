@@ -29,6 +29,9 @@ public abstract class RobotHardware {
     protected DcMotorEx shooterMaster;
     protected DcMotorEx shooterSlave;
 
+    //Passthrough
+    protected CRServo passthroughMotor;
+
     public RobotHardware(HardwareMap hardwareMap) {
 
         //Drivetrain
