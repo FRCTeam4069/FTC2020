@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Passthrough;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalClamp;
+import org.firstinspires.ftc.teamcode.subsystems.odometry.Odometry;
 
 public class Robot {
 
@@ -18,6 +19,7 @@ public class Robot {
     public Intake intake;
     public Shooter shooter;
     public Passthrough passthrough;
+    public Odometry odometry;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
         drivetrain = new Drivetrain(hardwareMap, telemetry);
@@ -26,6 +28,7 @@ public class Robot {
         intake = new Intake(hardwareMap, telemetry);
         shooter = new Shooter(hardwareMap, telemetry);
         passthrough = new Passthrough(hardwareMap, telemetry);
+        odometry = new Odometry(hardwareMap, telemetry);
     }
     public void disableMotors() {
         drivetrain.update(0, 0, 0);
@@ -39,5 +42,6 @@ public class Robot {
         clamp.disable();
         intake.disable();
         shooter.disable();
+        odometry.disable();
     }
 }

@@ -20,9 +20,9 @@ public class Odometry extends RobotHardware {
         super(hardwareMap);
 
         this.telemetry = telemetry;
-        yLeft = new Encoder(telemetry, shooterSlave);
-        yRight = new Encoder(telemetry, yEncoderRight);
-        x = new Encoder(telemetry, intakeMotor);
+        yLeft = new Encoder(telemetry, shooterSlave, Encoder.State.NEGATIVE);
+        yRight = new Encoder(telemetry, yEncoderRight, Encoder.State.POSITIVE);
+        x = new Encoder(telemetry, intakeMotor, Encoder.State.POSITIVE);
     }
 
     public double getYAvgPos() {
