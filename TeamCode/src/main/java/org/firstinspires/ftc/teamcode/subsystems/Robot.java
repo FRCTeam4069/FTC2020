@@ -11,6 +11,7 @@ public class Robot {
     public WobbleGoalClamp clamp;
     public Intake intake;
     public Shooter shooter;
+    public Passthrough passthrough;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
         drivetrain = new Drivetrain(hardwareMap, telemetry);
@@ -18,10 +19,13 @@ public class Robot {
         clamp = new WobbleGoalClamp(hardwareMap, telemetry);
         intake = new Intake(hardwareMap, telemetry);
         shooter = new Shooter(hardwareMap, telemetry);
+        passthrough = new Passthrough(hardwareMap, telemetry);
     }
     public void disableMotors() {
         drivetrain.update(0, 0, 0);
         shooter.update(0);
+        passthrough.update(false, false);
+        intake.update(false, false);
     }
     public void deactivate() {
         drivetrain.disable();
