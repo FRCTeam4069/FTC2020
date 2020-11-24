@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.teamcode.subsystems.RobotHardware;
+import org.firstinspires.ftc.teamcode.subsystems.robot.RobotHardware;
 
 public class Drivetrain extends RobotHardware {
 

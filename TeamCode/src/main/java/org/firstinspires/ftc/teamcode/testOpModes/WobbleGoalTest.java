@@ -3,8 +3,7 @@ package org.firstinspires.ftc.teamcode.testOpModes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.subsystems.Robot;
-import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalClamp;
+import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 @TeleOp
 public class WobbleGoalTest extends OpMode {

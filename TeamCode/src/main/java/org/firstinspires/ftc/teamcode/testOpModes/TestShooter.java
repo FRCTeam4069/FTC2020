@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.testOpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 public class TestShooter extends OpMode {
 

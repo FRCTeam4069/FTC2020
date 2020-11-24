@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.commands;
 
-import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 public abstract class Command {
 

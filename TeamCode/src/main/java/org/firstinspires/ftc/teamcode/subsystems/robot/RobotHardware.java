@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems.robot;
 
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -19,7 +19,7 @@ public abstract class RobotHardware {
     protected NavxMicroNavigationSensor navx;
 
     //Intake
-    protected DcMotor intakeMotor;
+    protected DcMotorEx intakeMotor;
 
     //WobbleGoalClamp
     protected CRServo wobbleMaster;
@@ -32,6 +32,9 @@ public abstract class RobotHardware {
     //Passthrough
     protected CRServo passthroughMotor;
 
+    //Odometry
+    protected DcMotorEx yEncoderRight;
+
     public RobotHardware(HardwareMap hardwareMap) {
 
         //Drivetrain
@@ -42,7 +45,7 @@ public abstract class RobotHardware {
         navx = hardwareMap.get(NavxMicroNavigationSensor.class, "navx");
 
         //Intake
-        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
+        intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
 
         //Passthrough
         passthroughMotor = hardwareMap.get(CRServo.class, "passthroughMotor");
@@ -52,8 +55,11 @@ public abstract class RobotHardware {
         //slave = hardwareMap.get(CRServo.class, "slave");
 
         //Shooter
-//        shooterMaster = hardwareMap.get(DcMotorEx.class, "shooterMaster");
-//        shooterSlave = hardwareMap.get(DcMotorEx.class, "shooterSlave");
+        shooterMaster = hardwareMap.get(DcMotorEx.class, "shooterMaster");
+        shooterSlave = hardwareMap.get(DcMotorEx.class, "shooterSlave");
+
+        //Odometry
+        yEncoderRight = hardwareMap.get(DcMotorEx.class, "yEncoderRight");
     }
 
 

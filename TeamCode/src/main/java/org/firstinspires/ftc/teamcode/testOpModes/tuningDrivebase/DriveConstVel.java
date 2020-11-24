@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.testOpModes.tuningDrivebase;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 @Autonomous
 public class DriveConstVel extends LinearOpMode {
