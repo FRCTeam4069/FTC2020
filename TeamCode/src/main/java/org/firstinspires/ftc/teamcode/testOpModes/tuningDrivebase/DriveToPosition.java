@@ -14,7 +14,7 @@ public class DriveToPosition extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot(hardwareMap, telemetry);
         Scheduler scheduler = new Scheduler(telemetry, robot);
-        double[] positions = {10000};
+        double[] positions = {50000, 2500, 100000};
 
         waitForStart();
 

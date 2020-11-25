@@ -37,18 +37,18 @@ public class DriveForward extends Command {
         }
         lastError = error;
 
-        double kP = 0.00006;
-        double kI = 0.0;
-        double kD = 0.0;
+        double kP = 0.00003;
+        double kI = 0.00000607;
+        double kD = 0.00000078;
         double output = error * kP + errorSum * kI + changeInError * kD;
-
+        if(output > 0.8) output = 0.8;
         robot.drivetrain.update(output, 0, 0);
     }
 
     //Command is complete if robot is within 5 ticks or less of accurate position
     @Override
     public boolean isFinished() {
-        if(currentPos < desiredPosition + 5 && currentPos > desiredPosition - 5) {
+        if(currentPos < desiredPosition + 1500 && currentPos > desiredPosition - 1500) {
             return true;
         }
         else return false;
