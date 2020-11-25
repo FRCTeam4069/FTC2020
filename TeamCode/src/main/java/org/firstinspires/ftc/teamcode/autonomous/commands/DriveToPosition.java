@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.autonomous.commands;
 
-import org.firstinspires.ftc.teamcode.subsystems.Passthrough;
-
 public class DriveToPosition extends Command {
 
     double xSetPoint;
