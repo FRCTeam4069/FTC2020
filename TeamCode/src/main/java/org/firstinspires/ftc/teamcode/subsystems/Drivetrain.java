@@ -103,7 +103,7 @@ public class Drivetrain extends RobotHardware {
 
         this.turn = turn;
 
-        while(navx.isCalibrating()) {
+        if (navx.isCalibrating()) {
             telemetry.log().add("NavX Calibrating");
             telemetry.update();
         }

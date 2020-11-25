@@ -14,18 +14,24 @@ public class DriveToPosition extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot(hardwareMap, telemetry);
         Scheduler scheduler = new Scheduler(telemetry, robot);
-        double[] positions = {1000, -500, 100, 2000};
+        double[] positions = {10000};
 
         waitForStart();
 
-        for(double position : positions) {
-            scheduler.addCommand(new DriveForward(position));
-            while(scheduler.getQueueSize() != 0) {
-                scheduler.run();
+        while (opModeIsActive()) {
+            for (double position : positions) {
+                if(!opModeIsActive()) break;
+                scheduler.addCommand(new DriveForward(position));
+                while (scheduler.getQueueSize() != 0) {
+                    if(!opModeIsActive()) break;
+                    scheduler.run();
+                    telemetry.addData("Position", robot.odometry.getYAvgPos());
+                    idle();
+                }
+                sleep(2000);
                 idle();
             }
-            telemetry.addData("Position", robot.drivetrain.getCurrentPos());
-            sleep(2000);
+            idle();
         }
     }
 }

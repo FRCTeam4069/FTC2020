@@ -23,6 +23,9 @@ public class Encoder {
             else {
                 motor.setDirection(DcMotorSimple.Direction.REVERSE);
             }
+
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
         else {
             telemetry.addData("Motor passed to encoder", null);

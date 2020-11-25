@@ -17,7 +17,7 @@ public class TurnCommand extends Command {
     @Override
     public void start() {
         robot.drivetrain.resetEncoders();
-        currentTurn = robot.drivetrain.getCurrentTurn();
+        currentTurn = robot.odometry.getCurrentHeading();
     }
 
     //Calculate error in turn, if greater than 180 turn counter clockwise
@@ -36,7 +36,7 @@ public class TurnCommand extends Command {
         else {
             robot.drivetrain.update(0, 0, -output);
         }
-        currentTurn = robot.drivetrain.getCurrentTurn();
+        currentTurn = robot.odometry.getCurrentHeading();
     }
 
     //If less than 5 degrees off the action is complete

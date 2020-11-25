@@ -6,6 +6,7 @@ public class DriveForward extends Command {
     double desiredPosition;
     double error;
     boolean started = false;
+    double currentPos;
 
     //Initializer ensures command has a desired position
     public DriveForward(double desiredPosition) {
@@ -22,7 +23,7 @@ public class DriveForward extends Command {
     @Override
     public void loop() {
         double errorSum = 0;
-        double currentPos = robot.odometry.getYAvgPos();
+        currentPos = robot.odometry.getYAvgPos();
         error = desiredPosition - currentPos;
         errorSum += error;
         double lastError = 0;
@@ -36,7 +37,7 @@ public class DriveForward extends Command {
         }
         lastError = error;
 
-        double kP = 0.09;
+        double kP = 0.00006;
         double kI = 0.0;
         double kD = 0.0;
         double output = error * kP + errorSum * kI + changeInError * kD;
@@ -47,9 +48,9 @@ public class DriveForward extends Command {
     //Command is complete if robot is within 5 ticks or less of accurate position
     @Override
     public boolean isFinished() {
-        if(desiredPosition < 0) {
-            return error >= -5;
+        if(currentPos < desiredPosition + 5 && currentPos > desiredPosition - 5) {
+            return true;
         }
-        return error <= 5;
+        else return false;
     }
 }
