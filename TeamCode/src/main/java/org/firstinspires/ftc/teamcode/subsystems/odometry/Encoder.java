@@ -10,7 +10,10 @@ public class Encoder {
 
     DcMotorEx motor;
 
+    //Initializer takes in the motor associated with the encoder port, and direction
     public Encoder(Telemetry telemetry, DcMotorEx motor, State state) {
+
+        //Ensure motor is not null
         if(motor != null) {
             this.motor = motor;
 
@@ -35,10 +38,13 @@ public class Encoder {
         return motor.getVelocity();
     }
 
+    //Reset encoder
     public void reset() {
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
+    //Directional state
     enum State {
         POSITIVE,
         NEGATIVE

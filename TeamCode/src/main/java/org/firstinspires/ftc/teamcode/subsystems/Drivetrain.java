@@ -204,7 +204,7 @@ public class Drivetrain extends RobotHardware {
         brSum += brError;
 
         double kP = 0.1;
-        double kI = 0.0;
+        double kI = 0.01;
 
         frontLeftOutput = desiredFrontLeftSpeed + (flError * kP) + (kI * flSum);
         frontRightOutput = desiredFrontRightSpeed + (frError * kP) + (kI * frSum);

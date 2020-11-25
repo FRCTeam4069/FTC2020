@@ -22,7 +22,7 @@ public class DriveForward extends Command {
     @Override
     public void loop() {
         double errorSum = 0;
-        double currentPos = robot.drivetrain.getCurrentPos();
+        double currentPos = robot.odometry.getYAvgPos();
         error = desiredPosition - currentPos;
         errorSum += error;
         double lastError = 0;

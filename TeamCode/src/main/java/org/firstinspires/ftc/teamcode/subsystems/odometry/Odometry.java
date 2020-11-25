@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.subsystems.robot.RobotHardware;
 
 public class Odometry extends RobotHardware {
 
+    //Create encoders
     Telemetry telemetry;
     public Encoder yLeft;
     public Encoder yRight;
@@ -19,24 +20,35 @@ public class Odometry extends RobotHardware {
     public Odometry(HardwareMap hardwareMap, Telemetry telemetry) {
         super(hardwareMap);
 
+        //Initialize motors by passing in motors from RobotHardware
         this.telemetry = telemetry;
         yLeft = new Encoder(telemetry, shooterSlave, Encoder.State.NEGATIVE);
         yRight = new Encoder(telemetry, yEncoderRight, Encoder.State.POSITIVE);
         x = new Encoder(telemetry, intakeMotor, Encoder.State.POSITIVE);
     }
 
+    //Return forward/backward position
     public double getYAvgPos() {
         return (yRight.getPosition() + yLeft.getPosition()) / 2.0;
     }
 
+    //Return heading
     public double getCurrentHeading() {
-        return navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+        if(!navx.isCalibrating()) {
+            return navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+        }
+        else {
+            telemetry.addData("Navx is calibrating?", navx.isCalibrating());
+            return 0;
+        }
     }
 
+    //Return instance of navx
     public NavxMicroNavigationSensor getNavx() {
         return navx;
     }
 
+    //Add odometry telemetry
     public void addTelemetry(boolean update) {
         telemetry.addData("yLeft Pos", yLeft.getPosition());
         telemetry.addData("yRight Pos", yRight.getPosition());
