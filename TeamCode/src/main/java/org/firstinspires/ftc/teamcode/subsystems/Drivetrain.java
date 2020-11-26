@@ -156,6 +156,9 @@ public class Drivetrain extends RobotHardware {
 
         //calculate change in direction (turn)
         currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+        if(currentTurn < 0) {
+            currentTurn = 180 + (180 - Math.abs(currentTurn));
+        }
         if(lastTurn == 0) {
             turnChange = 0;
         }
@@ -163,15 +166,18 @@ public class Drivetrain extends RobotHardware {
             turnChange = currentTurn - lastTurn;
         }
         lastTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+        if(lastTurn < 0) {
+            lastTurn = 180 + (180 - Math.abs(lastTurn));
+        }
 
         //PID turn
         turnErrorSum = 0;
         turnError = ((turnChange) - (turn));
         turnErrorSum += turnError;
 
-        double turnP = 0.015;
-        double turnI = 0.0;
-        double turnD = 0.0;
+        double turnP = 0.0015;
+        double turnI = 0.001;
+        double turnD = 0.00001;
 
         turnOutput = turn + (turnError * turnP) + (turnErrorSum * turnI) + (turnChange * turnD);
 

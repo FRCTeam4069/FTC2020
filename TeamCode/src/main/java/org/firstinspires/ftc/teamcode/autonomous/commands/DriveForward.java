@@ -42,6 +42,7 @@ public class DriveForward extends Command {
         double kD = 0.00000078;
         double output = error * kP + errorSum * kI + changeInError * kD;
         if(output > 0.8) output = 0.8;
+        else if(output < -0.8) output = -0.8;
         robot.drivetrain.update(output, 0, 0);
     }
 

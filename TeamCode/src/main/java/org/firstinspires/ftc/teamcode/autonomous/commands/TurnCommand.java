@@ -26,7 +26,7 @@ public class TurnCommand extends Command {
         double errorSum = 0;
         error = desiredTurn - currentTurn;
         errorSum += error;
-        double kP = 0.1;
+        double kP = 0.006;
         double kI = 0.0;
         double output = error * kP + errorSum * kI;
 

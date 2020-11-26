@@ -35,7 +35,11 @@ public class Odometry extends RobotHardware {
     //Return heading
     public double getCurrentHeading() {
         if(!navx.isCalibrating()) {
-            return navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+            double heading = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+            if(heading < 0) {
+                heading = 180 + (180 + heading);
+            }
+            return heading;
         }
         else {
             telemetry.addData("Navx is calibrating?", navx.isCalibrating());

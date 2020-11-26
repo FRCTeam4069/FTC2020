@@ -14,7 +14,7 @@ public class TurnToAngle extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         Robot robot = new Robot(hardwareMap, telemetry);
-        double[] angles = {90, 270, 45, 180};
+        double[] angles = {90};
         Scheduler scheduler = new Scheduler(telemetry, robot);
 
         waitForStart();
