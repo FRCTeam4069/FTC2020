@@ -12,20 +12,17 @@ public class StrafeTest extends LinearOpMode {
         Robot robot = new Robot(hardwareMap, telemetry);
         Scheduler scheduler = new Scheduler(telemetry, robot);
 
-        double[] positions = {5000, -9000, -200, 6000};
+        double[] positions = {50000};
 
         waitForStart();
-
-        while(opModeIsActive()) {
-            for (double position : positions) {
-                scheduler.addCommand(new StrafeCommand(position));
-                while (scheduler.getQueueSize() != 0) {
-                    scheduler.run();
-                    idle();
-                }
-                telemetry.addData("Position", robot.odometry.x.getPosition());
-                sleep(2000);
+        for (double position : positions) {
+            scheduler.addCommand(new StrafeCommand(position));
+            while (scheduler.getQueueSize() != 0) {
+                scheduler.run();
+                idle();
             }
+            telemetry.addData("Position", robot.odometry.x.getPosition());
+            sleep(2000);
         }
     }
 }

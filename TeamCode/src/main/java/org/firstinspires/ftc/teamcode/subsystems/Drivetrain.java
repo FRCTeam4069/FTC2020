@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
 import org.firstinspires.ftc.teamcode.subsystems.robot.RobotHardware;
 
 public class Drivetrain extends RobotHardware {
@@ -29,6 +30,8 @@ public class Drivetrain extends RobotHardware {
     double brLastPos = 0;
 
     double lastTurn = 0;
+
+    boolean turnIsZero;
 
     //Values to be read in telemetry
     double turnError;
@@ -170,16 +173,19 @@ public class Drivetrain extends RobotHardware {
             lastTurn = 180 + (180 - Math.abs(lastTurn));
         }
 
-        //PID turn
-        turnErrorSum = 0;
-        turnError = ((turnChange) - (turn));
-        turnErrorSum += turnError;
+        if(!(turnChange > 180)) {
+            //PID turn
+            turnErrorSum = 0;
+            turnError = ((turnChange) - (turn));
+            turnErrorSum += turnError;
 
-        double turnP = 0.0015;
-        double turnI = 0.001;
-        double turnD = 0.00001;
+            double turnP = 0.0015;
+            double turnI = 0.0;
+            double turnD = 0.00001;
 
-        turnOutput = turn + (turnError * turnP) + (turnErrorSum * turnI) + (turnChange * turnD);
+            turnOutput = turn + (turnError * turnP) + (turnErrorSum * turnI) + (turnChange * turnD);
+        }
+        else turnOutput = turn;
 
         //Calculate actual velocity of each motor
         double flActualVelocity = flPosChange / elapsedTime;

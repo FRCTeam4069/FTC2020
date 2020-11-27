@@ -8,6 +8,8 @@ public class DriveForward extends Command {
     boolean started = false;
     double currentPos;
 
+    double errorSum = 0;
+
     //Initializer ensures command has a desired position
     public DriveForward(double desiredPosition) {
         this.desiredPosition = desiredPosition;
@@ -22,7 +24,6 @@ public class DriveForward extends Command {
     //PID output to stop accurately at desired position
     @Override
     public void loop() {
-        double errorSum = 0;
         currentPos = robot.odometry.getYAvgPos();
         error = desiredPosition - currentPos;
         errorSum += error;

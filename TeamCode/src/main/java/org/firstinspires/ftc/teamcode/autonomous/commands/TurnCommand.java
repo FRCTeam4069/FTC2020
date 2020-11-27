@@ -8,6 +8,8 @@ public class TurnCommand extends Command {
 
     double error;
 
+    double errorSum = 0;
+
     //Takes desired turn IN DEGREES
     public TurnCommand(double desiredTurn) {
         this.desiredTurn = desiredTurn;
@@ -23,18 +25,17 @@ public class TurnCommand extends Command {
     //Calculate error in turn, if greater than 180 turn counter clockwise
     @Override
     public void loop() {
-        double errorSum = 0;
         error = desiredTurn - currentTurn;
         errorSum += error;
-        double kP = 0.006;
-        double kI = 0.0;
+        double kP = 0.011013;
+        double kI = 0.000019;
         double output = error * kP + errorSum * kI;
 
-        if(error < 180) {
-            robot.drivetrain.update(0, 0, output);
+        if(Math.abs(error) < 180) {
+            robot.drivetrain.update(0, 0, -output);
         }
         else {
-            robot.drivetrain.update(0, 0, -output);
+            robot.drivetrain.update(0, 0, output);
         }
         currentTurn = robot.odometry.getCurrentHeading();
     }

@@ -14,20 +14,20 @@ public class TurnToAngle extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         Robot robot = new Robot(hardwareMap, telemetry);
-        double[] angles = {90};
+        double[] angles = {90, 180, 5, 270};
         Scheduler scheduler = new Scheduler(telemetry, robot);
 
         waitForStart();
-        while (opModeIsActive()) {
-            for (double angle : angles) {
-                scheduler.addCommand(new TurnCommand(angle));
-                while (scheduler.getQueueSize() != 0) {
-                    scheduler.run();
-                    idle();
-                }
-                telemetry.addData("Current Turn", robot.drivetrain.getCurrentTurn());
-                sleep(2000);
+        for (double angle : angles) {
+            if(!opModeIsActive()) break;
+            scheduler.addCommand(new TurnCommand(angle));
+            while (scheduler.getQueueSize() != 0 && opModeIsActive()) {
+                scheduler.run();
+                telemetry.addData("Current Turn", robot.odometry.getCurrentHeading());
+                idle();
             }
+            sleep(2000);
+            idle();
         }
     }
 }
