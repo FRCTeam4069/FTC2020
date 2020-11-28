@@ -35,7 +35,7 @@ public class StrafeCommand extends Command {
         }
         lastError = error;
 
-        double kP = 0.09;
+        double kP = 0.0001;
         double kI = 0.0;
         double kD = 0.0;
         double output = error * kP + errorSum * kI + changeInError * kD;
