@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.autonomous.commands.DriveForward;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 @Autonomous
-public class DriveToPosition extends LinearOpMode {
+public class DriveForwardTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
