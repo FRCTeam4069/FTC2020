@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Passthrough;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalClamp;
@@ -18,7 +17,6 @@ public class Robot {
     public WobbleGoalClamp clamp;
     public Intake intake;
     public Shooter shooter;
-    public Passthrough passthrough;
     public Odometry odometry;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -27,13 +25,11 @@ public class Robot {
         clamp = new WobbleGoalClamp(hardwareMap, telemetry);
         intake = new Intake(hardwareMap, telemetry);
         shooter = new Shooter(hardwareMap, telemetry);
-        passthrough = new Passthrough(hardwareMap, telemetry);
         odometry = new Odometry(hardwareMap, telemetry);
     }
     public void disableMotors() {
         drivetrain.update(0, 0, 0);
         shooter.update(0);
-        passthrough.update(false, false);
         intake.update(false, false);
     }
     public void deactivate() {

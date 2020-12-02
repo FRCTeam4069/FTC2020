@@ -23,7 +23,7 @@ public class Odometry extends RobotHardware {
         //Initialize motors by passing in motors from RobotHardware
         this.telemetry = telemetry;
         yLeft = new Encoder(telemetry, shooterSlave, Encoder.State.NEGATIVE);
-        yRight = new Encoder(telemetry, yEncoderRight, Encoder.State.POSITIVE);
+        yRight = new Encoder(telemetry, passthroughMotor, Encoder.State.POSITIVE);
         x = new Encoder(telemetry, intakeMotor, Encoder.State.POSITIVE);
     }
 

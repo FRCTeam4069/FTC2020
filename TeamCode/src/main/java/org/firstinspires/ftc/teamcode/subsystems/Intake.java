@@ -19,12 +19,15 @@ public class Intake extends RobotHardware {
     public void update(boolean in, boolean out) {
         if(in && !out) {
             intakeMotor.setPower(1);
+            passthroughMotor.setPower(-1);
         }
         else if(out && !in) {
             intakeMotor.setPower(-1);
+            passthroughMotor.setPower(1);
         }
         else {
             intakeMotor.setPower(0);
+            passthroughMotor.setPower(0);
         }
     }
 

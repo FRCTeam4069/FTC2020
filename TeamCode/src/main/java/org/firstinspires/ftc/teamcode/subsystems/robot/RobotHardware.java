@@ -20,6 +20,7 @@ public abstract class RobotHardware {
 
     //Intake
     protected DcMotorEx intakeMotor;
+    protected DcMotorEx passthroughMotor;
 
     //WobbleGoalClamp
     protected CRServo wobbleMaster;
@@ -28,12 +29,6 @@ public abstract class RobotHardware {
     //Shooter
     protected DcMotorEx shooterMaster;
     protected DcMotorEx shooterSlave;
-
-    //Passthrough
-    protected CRServo passthroughMotor;
-
-    //Odometry
-    protected DcMotorEx yEncoderRight;
 
     public RobotHardware(HardwareMap hardwareMap) {
 
@@ -46,9 +41,7 @@ public abstract class RobotHardware {
 
         //Intake
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
-
-        //Passthrough
-        passthroughMotor = hardwareMap.get(CRServo.class, "passthroughMotor");
+        passthroughMotor = hardwareMap.get(DcMotorEx.class, "passthroughMotor");
 
         //WobbleGoalClamp
         //master = hardwareMap.get(CRServo.class, "master");
@@ -58,8 +51,6 @@ public abstract class RobotHardware {
         shooterMaster = hardwareMap.get(DcMotorEx.class, "shooterMaster");
         shooterSlave = hardwareMap.get(DcMotorEx.class, "shooterSlave");
 
-        //Odometry
-        yEncoderRight = hardwareMap.get(DcMotorEx.class, "yEncoderRight");
     }
 
 
