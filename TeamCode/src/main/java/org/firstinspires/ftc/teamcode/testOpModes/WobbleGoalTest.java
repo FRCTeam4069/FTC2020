@@ -17,6 +17,6 @@ public class WobbleGoalTest extends OpMode {
 
     @Override
     public void loop() {
-        robot.clamp.update(gamepad1.left_bumper, gamepad1.right_bumper);
+        robot.clamp.update(gamepad1.left_bumper, gamepad1.right_bumper, gamepad1.dpad_up, gamepad1.dpad_down);
     }
 }

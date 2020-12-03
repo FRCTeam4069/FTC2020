@@ -18,7 +18,7 @@ public class DrivetrainTeleOpTest extends OpMode {
     @Override
     public void init() {
         robot = new Robot(hardwareMap, telemetry);
-        scheduler= new Scheduler(telemetry, robot);
+        scheduler = new Scheduler(telemetry, robot);
     }
 
     @Override
@@ -26,5 +26,6 @@ public class DrivetrainTeleOpTest extends OpMode {
         robot.drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         robot.odometry.addTelemetry(true);
         robot.intake.update(gamepad1.a, gamepad1.b);
+        robot.clamp.update(gamepad1.left_bumper, gamepad1.right_bumper, gamepad1.dpad_up, gamepad1.dpad_down);
     }
 }
