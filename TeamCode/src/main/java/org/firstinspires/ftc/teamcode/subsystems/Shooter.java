@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -21,16 +22,18 @@ public class Shooter extends RobotHardware {
     double error;
     double output;
 
+    boolean started;
+
     public Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
         super(hardwareMap);
 
         this.telemetry = telemetry;
 
-        //shooterMaster.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-      //  shooterSlave.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shooterMaster.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-       // shooterMaster.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-       // shooterSlave.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooterMaster.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooterSlave.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     }
 
     public void update(double power) {
@@ -58,15 +61,13 @@ public class Shooter extends RobotHardware {
         else deltaV = lastSpeed - actualSpeed;
         lastSpeed = changePos / totalTimeElapsed;
 
-        errorSum = 0;
+
         error = power - actualSpeed;
         errorSum += error;
+        kP = 1.62;
+        kD = 0.2;
 
-        kP = 0.1;
-        kI = 0.05;
-        kD = 0.01;
-
-        output = (error * kP) + (errorSum * kI) + (deltaV * kD);
+        output = power + (error * kP) + (deltaV * kD);
 
         shooterMaster.setPower(output);
         shooterSlave.setPower(output);
@@ -86,6 +87,7 @@ public class Shooter extends RobotHardware {
         telemetry.addData("Error Sum", errorSum);
         telemetry.addData("Change in V", deltaV);
         telemetry.addData("Output", output);
+        if(Math.abs(error) < 0.05) telemetry.addData("Ready", true);
         if(update) telemetry.update();
     }
 }
