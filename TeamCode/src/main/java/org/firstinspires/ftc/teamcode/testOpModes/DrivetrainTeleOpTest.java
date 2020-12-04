@@ -13,7 +13,6 @@ public class DrivetrainTeleOpTest extends OpMode {
 
     Robot robot;
     Scheduler scheduler;
-    boolean turnIsZero = false;
 
     @Override
     public void init() {

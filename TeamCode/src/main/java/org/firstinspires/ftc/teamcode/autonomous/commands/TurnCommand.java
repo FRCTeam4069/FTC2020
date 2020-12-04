@@ -27,8 +27,8 @@ public class TurnCommand extends Command {
     public void loop() {
         error = desiredTurn - currentTurn;
         errorSum += error;
-        double kP = 0.011013;
-        double kI = 0.000019;
+        double kP = 0.01205;
+        double kI = 0.000025;
         double output = error * kP + errorSum * kI;
 
         if(Math.abs(error) < 180) {

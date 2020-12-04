@@ -5,7 +5,7 @@ public class DriveToPosition extends Command {
     //Initial values to be read/collected
     double xSetPoint;
     double ySetPoint;
-    double startingTurn;
+    public double startingTurn;
 
     //Values needed for PID control
     double yError = 0;
@@ -61,14 +61,15 @@ public class DriveToPosition extends Command {
         yLastError = yError;
 
         //PID gains
-        double xKP = 0.0;
-        double yKP = 0.00003;
+        double xKP = 0.000033;
+        double yKP = 0.000026;
 
-        double xKI = 0.0;
-        double yKI = 0.00000607;
+
+        double xKI = 0.0000001;
+        double yKI = 0.00000015;
 
         double xKD = 0.0;
-        double yKD = 0.00000078;
+        double yKD = 0.0;
 
         //Outputs for directional movements
         double yOutput = (yError * yKP) + (yErrorSum * yKI) + (yChangeError * yKD);
@@ -81,21 +82,23 @@ public class DriveToPosition extends Command {
         turnErrorSum += turnError;
 
         //Turning PID gains
-        double turnKP = 0.011013;
-        double turnKI = 0.000019;
+        double turnKP = 0.05;
+        double turnKI = 0.000015;
 
         //Turn output
         double turnOutput = (turnError * turnKP) + (turnErrorSum * turnKI);
 
+        if(Math.abs(turnError) < 180) turnOutput *= -1;
+
         //Setting outputs to be executed by the drivetrain
-        robot.drivetrain.update(yOutput, xOutput, turnOutput);
+        robot.drivetrain.update(yOutput, -xOutput,0);
     }
 
 
     @Override
     public boolean isFinished() {
         //If close enough to accurate return isFinished as true
-        if((Math.abs(yError) < 1500) && (Math.abs(xError) < 1500) && (Math.abs(turnError) < 2)) {
+        if((Math.abs(yError) < 1500) && (Math.abs(xError) < 1500) && (Math.abs(turnError) < 3)) {
             return true;
         }
         else return false;
