@@ -91,7 +91,7 @@ public class DriveToPosition extends Command {
         if(Math.abs(turnError) < 180) turnOutput *= -1;
 
         //Setting outputs to be executed by the drivetrain
-        robot.drivetrain.update(yOutput, -xOutput,0);
+        robot.drivetrain.update(yOutput, -xOutput, turnOutput);
     }
 
 
