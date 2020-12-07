@@ -68,10 +68,12 @@ public class StarterStackDetector extends RobotHardware {
         tfDetector.activate();
     }
 
-    private void updateRecognitions() {
+    public void updateRecognitions() {
+
+        if(tfDetector.getUpdatedRecognitions() == null) updatedRecognitions = tfDetector.getRecognitions();
 
         //Update list of updated recognitions
-        updatedRecognitions = tfDetector.getUpdatedRecognitions();
+        else updatedRecognitions = tfDetector.getUpdatedRecognitions();
     }
 
     public void printCurrentVals() {
@@ -140,6 +142,12 @@ public class StarterStackDetector extends RobotHardware {
         } else {
             return lastReturn;
         }
+    }
+
+    public enum DropZone {
+        A,
+        B,
+        C
     }
 
     @Override

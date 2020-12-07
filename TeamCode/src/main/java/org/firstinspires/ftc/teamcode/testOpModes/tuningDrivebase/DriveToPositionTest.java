@@ -15,8 +15,8 @@ public class DriveToPositionTest extends LinearOpMode {
         Robot robot = new Robot(hardwareMap, telemetry);
         Scheduler scheduler = new Scheduler(telemetry, robot);
 
-        double[] xPositions = {50000};
-        double[] yPositions = {50000};
+        double[] xPositions = {50000, 75000, 75000, 30000, -10000};
+        double[] yPositions = {50000, 75000, 50000, 70000, 0};
 
         waitForStart();
 

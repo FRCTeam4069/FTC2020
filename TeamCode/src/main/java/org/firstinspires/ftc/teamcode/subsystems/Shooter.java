@@ -22,6 +22,8 @@ public class Shooter extends RobotHardware {
     double error;
     double output;
 
+    public double speed;
+
     boolean started;
 
     public Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -71,6 +73,8 @@ public class Shooter extends RobotHardware {
 
         shooterMaster.setPower(output);
         shooterSlave.setPower(output);
+
+        speed = shooterMaster.getVelocity();
     }
 
     @Override

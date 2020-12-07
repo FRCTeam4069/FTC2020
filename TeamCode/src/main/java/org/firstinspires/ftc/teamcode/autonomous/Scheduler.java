@@ -47,7 +47,7 @@ public class Scheduler {
 
             nextCommand.loop();
             if(nextCommand.isFinished()) {
-                robot.disableMotors();
+                robot.drivetrain.disable();
                 commandQueue.remove(0);
                 telemetry.addData("Command", "removed");
                 telemetry.update();
