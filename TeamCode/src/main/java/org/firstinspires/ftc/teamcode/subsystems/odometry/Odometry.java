@@ -13,7 +13,7 @@ public class Odometry extends RobotHardware {
 
     //Create encoders
     Telemetry telemetry;
-    public Encoder yLeft;
+//    public Encoder yLeft;
     public Encoder yRight;
     public Encoder x;
 
@@ -22,14 +22,14 @@ public class Odometry extends RobotHardware {
 
         //Initialize motors by passing in motors from RobotHardware
         this.telemetry = telemetry;
-        yLeft = new Encoder(telemetry, shooterSlave, Encoder.State.NEGATIVE);
+//        yLeft = new Encoder(telemetry, shooterSlave, Encoder.State.NEGATIVE);
         yRight = new Encoder(telemetry, passthroughMotor, Encoder.State.POSITIVE);
         x = new Encoder(telemetry, intakeMotor, Encoder.State.POSITIVE);
     }
 
     //Return forward/backward position
     public double getYAvgPos() {
-        return (yRight.getPosition() + yLeft.getPosition()) / 2.0;
+        return (yRight.getPosition()); //+ yLeft.getPosition()) / 2.0;
     }
 
     //Return heading
@@ -54,7 +54,7 @@ public class Odometry extends RobotHardware {
 
     //Add odometry telemetry
     public void addTelemetry(boolean update) {
-        telemetry.addData("yLeft Pos", yLeft.getPosition());
+        //telemetry.addData("yLeft Pos", yLeft.getPosition());
         telemetry.addData("yRight Pos", yRight.getPosition());
         telemetry.addData("x pos", x.getPosition());
         telemetry.addData("Avg Pos y", getYAvgPos());
@@ -64,7 +64,7 @@ public class Odometry extends RobotHardware {
 
     @Override
     public void disable() {
-        yLeft.reset();
+     //   yLeft.reset();
         yRight.reset();
         x.reset();
     }

@@ -31,6 +31,7 @@ public class DriveToPositionTest extends LinearOpMode {
                 telemetry.addData("Y position", robot.odometry.getYAvgPos());
                 telemetry.addData("Turn", robot.odometry.getCurrentHeading());
                 telemetry.addData("Starting turn", driveToPosition.startingTurn);
+                telemetry.addData("Turn Error", driveToPosition.turnError);
                 idle();
             }
             sleep(2000);

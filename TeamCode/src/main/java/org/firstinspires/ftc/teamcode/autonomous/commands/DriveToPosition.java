@@ -18,7 +18,10 @@ public class DriveToPosition extends Command {
     double yLastError = 0;
 
     double turnErrorSum = 0;
-    double turnError = 0;
+    public double turnError = 0;
+
+    double turnOutputChange = 0;
+    double lastTurnOutput = 0;
 
     //Get desired location
     public DriveToPosition(double xSetPoint, double ySetPoint) {
@@ -78,27 +81,34 @@ public class DriveToPosition extends Command {
         //Calculate error and integral of error for turn
         double currentTurn = robot.odometry.getCurrentHeading();
 
-        turnError = startingTurn - currentTurn;
+        if(currentTurn > 180) turnError = -currentTurn + 360;
+        else turnError = 0 - currentTurn;
         turnErrorSum += turnError;
 
         //Turning PID gains
-        double turnKP = 0.05;
-        double turnKI = 0.000015;
+        double turnKP = 0.012;
+        double turnKI = 0.0003;
 
         //Turn output
         double turnOutput = (turnError * turnKP) + (turnErrorSum * turnKI);
 
+        turnOutputChange = turnOutput - lastTurnOutput;
+        if(Math.abs(turnOutputChange) > 0.3) turnOutput = 0;
+
         if(Math.abs(turnError) < 180) turnOutput *= -1;
+
+
 
         //Setting outputs to be executed by the drivetrain
         robot.drivetrain.update(yOutput, -xOutput, turnOutput);
+        lastTurnOutput = turnOutput;
     }
 
 
     @Override
     public boolean isFinished() {
         //If close enough to accurate return isFinished as true
-        if((Math.abs(yError) < 1500) && (Math.abs(xError) < 1500) && (Math.abs(turnError) < 3)) {
+        if((Math.abs(yError) < 5000) && (Math.abs(xError) < 5000) && (Math.abs(turnError) < 3)) {
             return true;
         }
         else return false;
