@@ -18,6 +18,6 @@ public class ShooterOn extends Command{
 
     @Override
     public boolean isFinished() {
-        return (Math.abs(desiredSpeed - robot.shooter.speed)) < 0.075;
+        return (Math.abs(desiredSpeed - robot.shooter.speed)) < 0.2;
     }
 }

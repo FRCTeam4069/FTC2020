@@ -104,7 +104,7 @@ public class Shooter extends RobotHardware {
         shooterMaster.setPower(output1);
         shooterSlave.setPower(output2);
 
-        speed = shooterMaster.getVelocity();
+        speed = (actualSpeed1 + actualSpeed2) / 2;
     }
 
     @Override
