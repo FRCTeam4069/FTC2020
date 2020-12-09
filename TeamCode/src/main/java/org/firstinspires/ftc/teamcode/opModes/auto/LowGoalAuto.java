@@ -18,12 +18,12 @@ public class LowGoalAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot(hardwareMap, telemetry);
         Scheduler scheduler = new Scheduler(telemetry, robot);
-        scheduler.addCommand(new DriveToPosition(18000, 190000));
+        scheduler.addCommand(new DriveToPosition(18000, 170000));
         scheduler.addCommand(new ShooterOn(1));
         scheduler.addCommand(new IntakeFeed(5000));
         scheduler.addCommand(new IntakeOff());
         scheduler.addCommand(new ShooterOff());
-        scheduler.addCommand(new DriveToPosition(0, 120000));
+        scheduler.addCommand(new DriveToPosition(0, 110000));
 
         waitForStart();
 

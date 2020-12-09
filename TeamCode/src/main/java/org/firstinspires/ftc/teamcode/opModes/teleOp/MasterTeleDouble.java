@@ -20,16 +20,14 @@ public class MasterTeleDouble extends OpMode {
         robot.drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         if(gamepad2.right_trigger > 0.5) {
             robot.shooter.update(1);
-            robot.intake.update(true, false);
         }
         else if(gamepad2.left_trigger > 0.5) {
             robot.shooter.update(-1);
-            robot.intake.update(false, true);
         }
         else {
             robot.shooter.update(0);
-            robot.intake.update(gamepad2.a, gamepad2.b);
         }
+        robot.intake.update(gamepad2.a, gamepad2.b);
         robot.clamp.update(gamepad2.left_bumper, gamepad2.right_bumper, gamepad2.dpad_up, gamepad2.dpad_down);
     }
 }

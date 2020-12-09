@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.testOpModes.tuningDrivebase;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
 import org.firstinspires.ftc.teamcode.autonomous.commands.DriveForward;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
+@Disabled
 @Autonomous
 public class DriveForwardTest extends LinearOpMode {
 
