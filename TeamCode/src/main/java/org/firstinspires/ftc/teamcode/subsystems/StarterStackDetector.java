@@ -147,7 +147,8 @@ public class StarterStackDetector extends RobotHardware {
     public enum DropZone {
         A,
         B,
-        C
+        C,
+        BAD
     }
 
     @Override

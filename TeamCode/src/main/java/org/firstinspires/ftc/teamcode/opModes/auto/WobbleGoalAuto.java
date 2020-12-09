@@ -29,24 +29,36 @@ public class WobbleGoalAuto extends LinearOpMode {
         Scheduler initialScheduler = new Scheduler(telemetry, robot);
         scheduler = new Scheduler(telemetry, robot);
 
-        initialScheduler.addCommand(new DriveToPosition(10000, 10000));
+        initialScheduler.addCommand(new DriveToPosition(20000, 30000));
 
         waitForStart();
 
         while(initialScheduler.getQueueSize() != 0 && opModeIsActive()) {
             initialScheduler.run();
+            idle();
+        }
+
+        double startingTime = System.currentTimeMillis();
+        while(System.currentTimeMillis() < (startingTime + 3000)) {
+            robot.detector.updateRecognitions();
+            telemetry.addData("Updating recognitions", true);
+            idle();
         }
 
         int starterStack = robot.detector.getStarterStackSize(100);
         StarterStackDetector.DropZone dropZone;
         if(starterStack == 0) dropZone = StarterStackDetector.DropZone.A;
         else if(starterStack == 1) dropZone = StarterStackDetector.DropZone.B;
-        else dropZone = StarterStackDetector.DropZone.C;
+        else if(starterStack == 4) dropZone = StarterStackDetector.DropZone.C;
+        else dropZone = StarterStackDetector.DropZone.BAD;
 
         setScheduler(dropZone);
 
         while(opModeIsActive()) {
             scheduler.run();
+            telemetry.addData("Drop Zone", dropZone);
+            telemetry.update();
+            idle();
         }
     }
 }

@@ -25,7 +25,7 @@ public class Scheduler {
     //Add command to queue
     public void addCommand(Command command) {
         commandQueue.add(command); //Queue of type ArrayList
-        command.setSubsystems(robot);
+        command.setSubsystems(robot, telemetry);
     }
 
     public int getQueueSize() {
