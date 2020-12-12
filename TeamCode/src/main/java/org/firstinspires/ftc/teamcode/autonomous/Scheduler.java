@@ -36,7 +36,6 @@ public class Scheduler {
     public void run() {
 
         telemetry.addData("command queue size", commandQueue.size());
-        telemetry.update();
         if(commandQueue.size() != 0) {
             Command nextCommand = commandQueue.get(0);
 

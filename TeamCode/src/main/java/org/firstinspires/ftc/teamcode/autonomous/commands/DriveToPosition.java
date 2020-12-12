@@ -81,8 +81,8 @@ public class DriveToPosition extends Command {
         //Calculate error and integral of error for turn
         double currentTurn = robot.odometry.getCurrentHeading();
 
-        if(currentTurn > 180) turnError = -currentTurn + 360;
-        else turnError = 0 - currentTurn;
+        if(currentTurn > 180 + startingTurn) turnError = -currentTurn + (360 + startingTurn);
+        else turnError = (0 + startingTurn) - currentTurn;
         turnErrorSum += turnError;
 
         //Turning PID gains
@@ -102,6 +102,13 @@ public class DriveToPosition extends Command {
         //Setting outputs to be executed by the drivetrain
         robot.drivetrain.update(yOutput, -xOutput, turnOutput);
         lastTurnOutput = turnOutput;
+
+        /////TELEMETRY
+
+        telemetry.addData("Starting turn", startingTurn);
+        telemetry.addData("Heading", robot.odometry.getCurrentHeading());
+        telemetry.addData("XPos", robot.odometry.x.getPosition());
+        telemetry.addData("YPos", robot.odometry.yRight.getPosition());
     }
 
 

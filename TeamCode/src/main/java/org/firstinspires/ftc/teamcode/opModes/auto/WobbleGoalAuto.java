@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
 import org.firstinspires.ftc.teamcode.autonomous.commands.DriveToPosition;
+import org.firstinspires.ftc.teamcode.autonomous.commands.TurnCommand;
 import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
@@ -27,21 +28,30 @@ public class WobbleGoalAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
         Scheduler initialScheduler = new Scheduler(telemetry, robot);
+        Scheduler secondScheduler = new Scheduler(telemetry, robot);
         scheduler = new Scheduler(telemetry, robot);
 
-        initialScheduler.addCommand(new DriveToPosition(20000, 30000));
+        initialScheduler.addCommand(new DriveToPosition(100000, 0));
+        secondScheduler.addCommand(new DriveToPosition(50000, 100000));
+        secondScheduler.addCommand(new TurnCommand(90));
 
         waitForStart();
 
         while(initialScheduler.getQueueSize() != 0 && opModeIsActive()) {
             initialScheduler.run();
+            telemetry.update();
             idle();
         }
 
         double startingTime = System.currentTimeMillis();
-        while(System.currentTimeMillis() < (startingTime + 3000)) {
+        while(System.currentTimeMillis() < (startingTime + 1000) && opModeIsActive()) {
             robot.detector.updateRecognitions();
             telemetry.addData("Updating recognitions", true);
+            idle();
+        }
+
+        while(secondScheduler.getQueueSize() != 0 && opModeIsActive()) {
+            secondScheduler.run();
             idle();
         }
 
