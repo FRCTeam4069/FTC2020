@@ -22,7 +22,7 @@ public class Shooter extends RobotHardware {
     double kP1;
     double kI1;
     double kD1;
-    double errorSum1;
+    private double errorSum1 = 0;
     double error1;
     double output1;
 
@@ -30,13 +30,11 @@ public class Shooter extends RobotHardware {
     double kP2;
     double kI2;
     double kD2;
-    double errorSum2;
+    private double errorSum2 = 0;
     double error2;
     double output2;
 
     public double speed;
-
-    boolean started;
 
     public Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
         super(hardwareMap);
@@ -53,7 +51,7 @@ public class Shooter extends RobotHardware {
 
     }
 
-    public void update(double power) {
+    public void update(double rpm) {
 
         //Calculate change in time
         double currentTime = System.currentTimeMillis();
@@ -68,38 +66,49 @@ public class Shooter extends RobotHardware {
         totalTimeElapsed += elapsedTime;
         lastTime = System.currentTimeMillis();
 
+        //Change in position on first wheel
         double changePos1;
         if(lastPos1 == 0) changePos1 = 0;
         else changePos1 = shooterMaster.getCurrentPosition() - lastPos1;
         lastPos1 = shooterMaster.getCurrentPosition();
 
-        double actualSpeed1 = changePos1 / totalTimeElapsed;
+        //Calculate velocity, and change in velocity for first wheel
+        //Velocity in ticks/second
+        double actualSpeed1 = (changePos1 / elapsedTime) * 1000;
+        //Velocity in rpm
+        actualSpeed1 *= (60.0 / 28.0);
         if(lastSpeed1 == 0) deltaV1 = 0;
         else deltaV1 = lastSpeed1 - actualSpeed1;
         lastSpeed1 = changePos1 / totalTimeElapsed;
 
+        //Change in position for second wheel
         double changePos2;
         if(lastPos2 == 0) changePos2 = 0;
         else changePos2 = shooterSlave.getCurrentPosition() - lastPos2;
         lastPos2 = shooterSlave.getCurrentPosition();
 
-        double actualSpeed2 = changePos2 / totalTimeElapsed;
+        //Calculate velocity, and change in velocity for second wheel
+        //Velocity in ticks/second
+        double actualSpeed2 = (changePos2 / elapsedTime) * 1000;
+        //Velocity in rpm
+        actualSpeed2 *= (60.0 / 28.0);
         if(lastSpeed2 == 0) deltaV2 = 0;
         else deltaV2 = lastSpeed2 - actualSpeed2;
         lastSpeed2 = changePos1 / totalTimeElapsed;
 
-        error1 = power - actualSpeed1;
+
+        error1 = rpm - actualSpeed1;
         errorSum1 += error1;
-        kP1 = 0.4;
+        kP1 = 5;
         kD1 = 0;
 
-        error2 = power - actualSpeed2;
+        error2 = rpm - actualSpeed2;
         errorSum2 += error2;
-        kP2 = 0.4;
+        kP2 = 5;
         kD2 = 0;
 
-        output1 = power + (error1 * kP1) + (deltaV1 * kD1);
-        output2 = power + (error2 * kP2) + (deltaV2 * kD2);
+        output1 = (error1 * kP1) + (deltaV1 * kD1);
+        output2 = (error2 * kP2) + (deltaV2 * kD2);
 
         shooterMaster.setPower(output1);
         shooterSlave.setPower(output2);
@@ -114,23 +123,18 @@ public class Shooter extends RobotHardware {
     }
 
     public void getTelemetry(boolean update) {
-        telemetry.addData("kP", kP1);
-        telemetry.addData("kI", kI1);
-        telemetry.addData("kD", kD1);
         telemetry.addData("Error", error1);
         telemetry.addData("Error Sum", errorSum1);
         telemetry.addData("Change in V", deltaV1);
         telemetry.addData("Output", output1);
-        if(Math.abs(error1) < 0.05) telemetry.addData("Ready", true);
+        telemetry.addData("vel", speed);
+        if(Math.abs(error1) < 100) telemetry.addData("Ready", true);
 
-        telemetry.addData("kP", kP2);
-        telemetry.addData("kI", kI2);
-        telemetry.addData("kD", kD2);
         telemetry.addData("Error", error2);
         telemetry.addData("Error Sum", errorSum2);
         telemetry.addData("Change in V", deltaV2);
         telemetry.addData("Output", output2);
-        if(Math.abs(error2) < 0.05) telemetry.addData("Ready", true);
+        if(Math.abs(error2) < 100) telemetry.addData("Ready", true);
 
         if(update) telemetry.update();
     }

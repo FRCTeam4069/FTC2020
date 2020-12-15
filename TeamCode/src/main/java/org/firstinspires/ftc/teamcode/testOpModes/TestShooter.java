@@ -19,17 +19,17 @@ public class TestShooter extends OpMode {
 
     @Override
     public void loop() {
-        if(gamepad1.a) setPoint = 0.5;
-        else if(gamepad1.b) setPoint = 0.55;
-        else if(gamepad1.y) setPoint = 0.6;
-        else if(gamepad1.x) setPoint = 0.65;
-        else if(gamepad1.dpad_down) setPoint = 0.7;
-        else if(gamepad1.dpad_right) setPoint = 0.75;
-        else if(gamepad1.dpad_up) setPoint = 0.8;
-        else if(gamepad1.dpad_left) setPoint = 0.85;
-        else if(gamepad1.left_bumper) setPoint = 0.9;
-        else if(gamepad1.right_bumper) setPoint = 0.95;
-        else setPoint = 0.0;
+        if(gamepad1.a) setPoint = 3000;
+        else if(gamepad1.b) setPoint = 3250;
+        else if(gamepad1.y) setPoint = 3500;
+        else if(gamepad1.x) setPoint = 3750;
+        else if(gamepad1.dpad_down) setPoint = 4000;
+        else if(gamepad1.dpad_right) setPoint = 4250;
+        else if(gamepad1.dpad_up) setPoint = 4500;
+        else if(gamepad1.dpad_left) setPoint = 4750;
+        else if(gamepad1.left_bumper) setPoint = 5000;
+        else if(gamepad1.right_bumper) setPoint = 5250;
+        else setPoint = 0;
 
         robot.shooter.update(setPoint);
         robot.shooter.getTelemetry(true);
