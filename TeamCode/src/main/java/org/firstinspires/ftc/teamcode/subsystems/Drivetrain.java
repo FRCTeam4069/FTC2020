@@ -246,6 +246,65 @@ public class Drivetrain extends RobotHardware {
         backRight.setPower(backRightOutput);
     }
 
+    public enum Direction {
+        FORWARD,
+        BACKWARD,
+        LEFT,
+        RIGHT
+    }
+
+    public void directDrive(Direction desiredDirection) {
+
+        double direction = 0;
+        if(desiredDirection == Direction.FORWARD) direction = Math.atan2(1, 0);
+        else if(desiredDirection == Direction.BACKWARD) direction = Math.atan2(-1, 0);
+        else if(desiredDirection == Direction.LEFT) direction = Math.atan2(0, -1);
+        else if(desiredDirection == Direction.RIGHT) direction = Math.atan2(0, 1);
+
+        //Calculate change in time
+        double currentTime = System.currentTimeMillis();
+        double elapsedTime = 0;
+        if(lastTime == 0) {
+            elapsedTime = 0;
+        }
+        else {
+            elapsedTime = currentTime - lastTime;
+        }
+        double totalTimeElapsed = 0;
+        totalTimeElapsed += elapsedTime;
+        lastTime = System.currentTimeMillis();
+
+        //Calculate change in position for each motor
+        double flCurrentPos = frontLeft.getCurrentPosition();
+        double blCurrentPos = backLeft.getCurrentPosition();
+        double frCurrentPos = frontRight.getCurrentPosition();
+        double brCurrentPos = backRight.getCurrentPosition();
+        double flPosChange;
+        double frPosChange;
+        double blPosChange;
+        double brPosChange;
+
+        if(flLastPos == 0) {
+            flPosChange = flCurrentPos;
+            blPosChange = blCurrentPos;
+            frPosChange = frCurrentPos;
+            brPosChange = brCurrentPos;
+        }
+        else {
+            flPosChange = flCurrentPos - flLastPos;
+            blPosChange = blCurrentPos - blLastPos;
+            brPosChange = brCurrentPos - brLastPos;
+            frPosChange = frCurrentPos - frLastPos;
+        }
+
+        flLastPos = frontLeft.getCurrentPosition();
+        blLastPos = backLeft.getCurrentPosition();
+        frLastPos = frontRight.getCurrentPosition();
+        brLastPos = backRight.getCurrentPosition();
+
+
+    }
+
     @Override
     public void disable() {
         frontLeft.setPower(0);
