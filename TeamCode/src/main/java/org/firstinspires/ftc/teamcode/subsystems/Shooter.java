@@ -22,7 +22,7 @@ public class Shooter extends RobotHardware {
     double kP1;
     double kI1;
     double kD1;
-    private double errorSum1 = 0;
+    double errorSum1 = 0;
     double error1;
     double output1;
 
@@ -30,7 +30,7 @@ public class Shooter extends RobotHardware {
     double kP2;
     double kI2;
     double kD2;
-    private double errorSum2 = 0;
+    double errorSum2 = 0;
     double error2;
     double output2;
 
@@ -99,12 +99,12 @@ public class Shooter extends RobotHardware {
 
         error1 = rpm - actualSpeed1;
         errorSum1 += error1;
-        kP1 = 5;
+        kP1 = 0.001;
         kD1 = 0;
 
         error2 = rpm - actualSpeed2;
         errorSum2 += error2;
-        kP2 = 5;
+        kP2 = 0.001;
         kD2 = 0;
 
         output1 = (error1 * kP1) + (deltaV1 * kD1);
@@ -112,6 +112,56 @@ public class Shooter extends RobotHardware {
 
         shooterMaster.setPower(output1);
         shooterSlave.setPower(output2);
+
+        speed = (actualSpeed1 + actualSpeed2) / 2;
+    }
+
+    public void rawControl(double power) {
+        shooterMaster.setPower(power);
+        shooterSlave.setPower(power);
+
+        //Calculate change in time
+        double currentTime = System.currentTimeMillis();
+        double elapsedTime = 0;
+        if(lastTime == 0) {
+            elapsedTime = 0;
+        }
+        else {
+            elapsedTime = currentTime - lastTime;
+        }
+        totalTimeElapsed = 0;
+        totalTimeElapsed += elapsedTime;
+        lastTime = System.currentTimeMillis();
+
+        //Change in position on first wheel
+        double changePos1;
+        if(lastPos1 == 0) changePos1 = 0;
+        else changePos1 = shooterMaster.getCurrentPosition() - lastPos1;
+        lastPos1 = shooterMaster.getCurrentPosition();
+
+        //Calculate velocity, and change in velocity for first wheel
+        //Velocity in ticks/second
+        double actualSpeed1 = (changePos1 / elapsedTime) * 1000;
+        //Velocity in rpm
+        actualSpeed1 *= (60.0 / 28.0);
+        if(lastSpeed1 == 0) deltaV1 = 0;
+        else deltaV1 = lastSpeed1 - actualSpeed1;
+        lastSpeed1 = changePos1 / totalTimeElapsed;
+
+        //Change in position for second wheel
+        double changePos2;
+        if(lastPos2 == 0) changePos2 = 0;
+        else changePos2 = shooterSlave.getCurrentPosition() - lastPos2;
+        lastPos2 = shooterSlave.getCurrentPosition();
+
+        //Calculate velocity, and change in velocity for second wheel
+        //Velocity in ticks/second
+        double actualSpeed2 = (changePos2 / elapsedTime) * 1000;
+        //Velocity in rpm
+        actualSpeed2 *= (60.0 / 28.0);
+        if(lastSpeed2 == 0) deltaV2 = 0;
+        else deltaV2 = lastSpeed2 - actualSpeed2;
+        lastSpeed2 = changePos1 / totalTimeElapsed;
 
         speed = (actualSpeed1 + actualSpeed2) / 2;
     }
