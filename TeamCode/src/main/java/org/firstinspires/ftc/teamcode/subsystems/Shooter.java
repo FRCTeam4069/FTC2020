@@ -50,7 +50,7 @@ public class Shooter extends RobotHardware {
         shooterSlave.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
-
+//////////////Shooter
     public void update(double rpm) {
 
         //Calculate change in time
@@ -169,6 +169,16 @@ public class Shooter extends RobotHardware {
         lastSpeed2 = changePos1 / totalTimeElapsed;
 
         speed = (actualSpeed1 + actualSpeed2) / 2;
+    }
+
+    /////////////Colour sensor
+
+    public void sensorTelemetry(boolean update) {
+        telemetry.addData("R", colourSensor.red());
+        telemetry.addData("G", colourSensor.green());
+        telemetry.addData("B", colourSensor.blue());
+        telemetry.addData("A", colourSensor.alpha());
+        if(update) telemetry.update();
     }
 
     @Override

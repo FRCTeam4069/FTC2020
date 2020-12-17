@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.robot;
 
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
@@ -32,6 +33,7 @@ public abstract class RobotHardware {
     //Shooter
     protected DcMotorEx shooterMaster;
     protected DcMotorEx shooterSlave;
+    protected RevColorSensorV3 colourSensor;
 
     public RobotHardware(HardwareMap hardwareMap) {
 
@@ -56,7 +58,7 @@ public abstract class RobotHardware {
         //Shooter
         shooterMaster = hardwareMap.get(DcMotorEx.class, "shooterMaster");
         shooterSlave = hardwareMap.get(DcMotorEx.class, "shooterSlave");
-
+        colourSensor = hardwareMap.get(RevColorSensorV3.class, "colourSensor");
     }
 
 
