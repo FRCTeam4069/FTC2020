@@ -38,7 +38,6 @@ public class TestShooter extends OpMode {
             else setPoint = 0;
 
             robot.shooter.update(setPoint);
-            robot.shooter.getTelemetry(true);
             robot.intake.update(gamepad1.start, gamepad1.back);
         }
     }

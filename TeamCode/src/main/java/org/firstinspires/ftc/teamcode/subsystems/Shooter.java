@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.robot.RobotHardware;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Shooter extends RobotHardware {
 
     Telemetry telemetry;
@@ -48,6 +51,7 @@ public class Shooter extends RobotHardware {
 
         shooterMaster.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         shooterSlave.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
 
     }
 //////////////Shooter
@@ -99,13 +103,13 @@ public class Shooter extends RobotHardware {
         error1 = rpm - actualSpeed1;
         if(errorSum1 == Double.NaN) errorSum1 = error1;
         else errorSum1 += error1;
-        kP1 = 0.004;
+        kP1 = 0.0032;
         kD1 = 0;
 
         error2 = rpm - actualSpeed2;
         if(errorSum2 == Double.NaN) errorSum2 = error2;
         else errorSum2 += error2;
-        kP2 = 0.004;
+        kP2 = 0.0032;
         kD2 = 0;
 
         output1 = (error1 * kP1) + (deltaV1 * kD1);
@@ -179,6 +183,17 @@ public class Shooter extends RobotHardware {
         telemetry.addData("B", colourSensor.blue());
         telemetry.addData("A", colourSensor.alpha());
         if(update) telemetry.update();
+    }
+
+    public Map<String, Integer> sensorValues() {
+        HashMap<String, Integer> vals = new HashMap<>();
+
+        vals.put("Red", colourSensor.red());
+        vals.put("Blue", colourSensor.blue());
+        vals.put("Green", colourSensor.green());
+        vals.put("Alpha", colourSensor.alpha());
+
+        return vals;
     }
 
     @Override

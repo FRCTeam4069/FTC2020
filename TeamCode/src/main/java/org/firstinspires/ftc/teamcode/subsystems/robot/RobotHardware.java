@@ -58,6 +58,8 @@ public abstract class RobotHardware {
         //Shooter
         shooterMaster = hardwareMap.get(DcMotorEx.class, "shooterMaster");
         shooterSlave = hardwareMap.get(DcMotorEx.class, "shooterSlave");
+        shooterMaster.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        shooterSlave.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         colourSensor = hardwareMap.get(RevColorSensorV3.class, "colourSensor");
     }
 
