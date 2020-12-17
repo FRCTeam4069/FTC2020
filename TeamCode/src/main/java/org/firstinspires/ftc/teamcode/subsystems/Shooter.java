@@ -96,15 +96,16 @@ public class Shooter extends RobotHardware {
         else deltaV2 = lastSpeed2 - actualSpeed2;
         lastSpeed2 = changePos1 / totalTimeElapsed;
 
-
         error1 = rpm - actualSpeed1;
-        errorSum1 += error1;
-        kP1 = 0.001;
+        if(errorSum1 == Double.NaN) errorSum1 = error1;
+        else errorSum1 += error1;
+        kP1 = 0.004;
         kD1 = 0;
 
         error2 = rpm - actualSpeed2;
-        errorSum2 += error2;
-        kP2 = 0.001;
+        if(errorSum2 == Double.NaN) errorSum2 = error2;
+        else errorSum2 += error2;
+        kP2 = 0.004;
         kD2 = 0;
 
         output1 = (error1 * kP1) + (deltaV1 * kD1);
@@ -114,6 +115,10 @@ public class Shooter extends RobotHardware {
         shooterSlave.setPower(output2);
 
         speed = (actualSpeed1 + actualSpeed2) / 2;
+
+        telemetry.addData("RPM", speed);
+        telemetry.addData("Sum1", errorSum1);
+        telemetry.addData("Sum 2", errorSum2);
     }
 
     public void rawControl(double power) {
