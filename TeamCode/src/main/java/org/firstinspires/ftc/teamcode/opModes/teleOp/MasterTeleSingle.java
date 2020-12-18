@@ -11,12 +11,14 @@ import java.util.HashMap;
 public class MasterTeleSingle extends OpMode {
 
     Robot robot;
-    double shooterSetpoint;
+    double shooterSetpoint = 0.0;
     boolean in;
     boolean out;
     HashMap<String, Integer> colourVals;
     double startingTime = 0;
     boolean isIndexing;
+
+    boolean shooterRunning = false;
 
     @Override
     public void init() {
@@ -33,7 +35,7 @@ public class MasterTeleSingle extends OpMode {
 
         //Indexing Routine (NO JAMS!!!)
         if(!isIndexing) {
-            if (colourVals.get("Red") > 25 && colourVals.get("Green") > 25) {
+            if (colourVals.get("Red") < 20 && colourVals.get("Green") < 20) {
                 telemetry.addData("Indexing", true);
 
                 startingTime = System.currentTimeMillis();
@@ -42,8 +44,8 @@ public class MasterTeleSingle extends OpMode {
             }
         }
         else {
-            if((startingTime < startingTime + 2000) && (colourVals.get("Red") < 25 &&
-                    colourVals.get("Green") < 25) && !gamepad1.left_stick_button) {
+            if((System.currentTimeMillis() < startingTime + 2000) && (colourVals.get("Red") < 20 &&
+                    colourVals.get("Green") < 20) && !gamepad1.left_stick_button && !shooterRunning) {
                 robot.intake.updatePassthrough(false, true);
                 robot.shooter.rawControl(-0.25);
                 robot.intake.updateIntake(false, false);
@@ -70,16 +72,27 @@ public class MasterTeleSingle extends OpMode {
         if(!isIndexing) robot.intake.update(in, out);
 
         //Control shooter
-        if (gamepad1.y) shooterSetpoint = 2000;
-        else if (gamepad1.x) shooterSetpoint = 2250;
+        if (gamepad1.y) {
+            shooterSetpoint = 2000;
+            shooterRunning = true;
+        }
+        else if (gamepad1.x) {
+            shooterSetpoint = 2250;
+            shooterRunning = true;
+        }
         else if (gamepad1.left_bumper) {
             shooterSetpoint = -500;
             in = false;
             out = true;
-        } else {
+        }
+        else {
             shooterSetpoint = 0;
             robot.shooter.rawControl(0);
+            shooterRunning = false;
         }
+
+        telemetry.addData("Shooter setpoint", shooterSetpoint);
+        robot.shooter.getTelemetry(false);
         if(!isIndexing) robot.shooter.update(shooterSetpoint);
 
         //robot.clamp.update(gamepad1.left_bumper, gamepad1.right_bumper, gamepad1.dpad_up, gamepad1.dpad_down);
