@@ -42,7 +42,7 @@ public class MasterTeleDouble extends OpMode {
 
         //Control shooter
         if(gamepad2.y) shooterSetpoint = 2000;
-        else if(gamepad2.x) shooterSetpoint = 2500;
+        else if(gamepad2.x) shooterSetpoint = 2250;
         else if(gamepad2.left_bumper) {
             shooterSetpoint = -500;
             in = false;

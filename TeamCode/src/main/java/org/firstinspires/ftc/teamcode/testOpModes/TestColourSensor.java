@@ -17,6 +17,6 @@ public class TestColourSensor extends OpMode {
 
     @Override
     public void loop() {
-        robot.shooter.sensorTelemetry(true);
+        robot.odometry.sensorTelemetry(true);
     }
 }

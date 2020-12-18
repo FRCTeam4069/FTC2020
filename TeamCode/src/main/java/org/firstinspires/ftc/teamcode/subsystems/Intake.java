@@ -31,6 +31,18 @@ public class Intake extends RobotHardware {
         }
     }
 
+    public void updateIntake(boolean in, boolean out) {
+        if(in && !out) intakeMotor.setPower(1);
+        else if(out && !in) intakeMotor.setPower(-1);
+        else intakeMotor.setPower(0);
+    }
+
+    public void updatePassthrough(boolean in, boolean out) {
+        if(in && !out) passthroughMotor.setPower(-1);
+        else if(out && !in) passthroughMotor.setPower(1);
+        else passthroughMotor.setPower(0);
+    }
+
     @Override
     public void disable() {
         intakeMotor.setPower(0);

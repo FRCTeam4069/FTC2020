@@ -175,27 +175,6 @@ public class Shooter extends RobotHardware {
         speed = (actualSpeed1 + actualSpeed2) / 2;
     }
 
-    /////////////Colour sensor
-
-    public void sensorTelemetry(boolean update) {
-        telemetry.addData("R", colourSensor.red());
-        telemetry.addData("G", colourSensor.green());
-        telemetry.addData("B", colourSensor.blue());
-        telemetry.addData("A", colourSensor.alpha());
-        if(update) telemetry.update();
-    }
-
-    public Map<String, Integer> sensorValues() {
-        HashMap<String, Integer> vals = new HashMap<>();
-
-        vals.put("Red", colourSensor.red());
-        vals.put("Blue", colourSensor.blue());
-        vals.put("Green", colourSensor.green());
-        vals.put("Alpha", colourSensor.alpha());
-
-        return vals;
-    }
-
     @Override
     public void disable() {
         shooterMaster.setPower(0);

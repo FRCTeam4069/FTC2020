@@ -9,6 +9,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.subsystems.robot.RobotHardware;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Odometry extends RobotHardware {
 
     //Create encoders
@@ -60,6 +63,27 @@ public class Odometry extends RobotHardware {
         telemetry.addData("Avg Pos y", getYAvgPos());
         telemetry.addData("Heading", getCurrentHeading());
         if(update) telemetry.update();
+    }
+
+    /////////////Colour sensor
+
+    public void sensorTelemetry(boolean update) {
+        telemetry.addData("R", colourSensor.red());
+        telemetry.addData("G", colourSensor.green());
+        telemetry.addData("B", colourSensor.blue());
+        telemetry.addData("A", colourSensor.alpha());
+        if(update) telemetry.update();
+    }
+
+    public HashMap<String, Integer> sensorValues() {
+        HashMap<String, Integer> vals = new HashMap<>();
+
+        vals.put("Red", colourSensor.red());
+        vals.put("Blue", colourSensor.blue());
+        vals.put("Green", colourSensor.green());
+        vals.put("Alpha", colourSensor.alpha());
+
+        return vals;
     }
 
     @Override
