@@ -101,13 +101,13 @@ public class Shooter extends RobotHardware {
         lastSpeed2 = changePos1 / totalTimeElapsed;
 
         error1 = rpm - actualSpeed1;
-        if(errorSum1 == Double.NaN) errorSum1 = error1;
+        if(Double.isNaN(errorSum1)) errorSum1 = error1;
         else errorSum1 += error1;
         kP1 = 0.0032;
         kD1 = 0;
 
         error2 = rpm - actualSpeed2;
-        if(errorSum2 == Double.NaN) errorSum2 = error2;
+        if(Double.isNaN(errorSum2)) errorSum2 = error2;
         else errorSum2 += error2;
         kP2 = 0.0032;
         kD2 = 0;

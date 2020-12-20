@@ -87,7 +87,6 @@ public class MasterTeleSingle extends OpMode {
         }
         else {
             shooterSetpoint = 0;
-            robot.shooter.rawControl(0);
             shooterRunning = false;
         }
 
