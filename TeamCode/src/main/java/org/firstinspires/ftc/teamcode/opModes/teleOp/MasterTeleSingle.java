@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class MasterTeleSingle extends OpMode {
 
     Robot robot;
-    double shooterSetpoint = 0.0;
+    double shooterSetpoint;
     boolean in;
     boolean out;
     HashMap<String, Integer> colourVals;
@@ -23,7 +23,7 @@ public class MasterTeleSingle extends OpMode {
     @Override
     public void init() {
         robot = new Robot(hardwareMap, telemetry);
-        shooterSetpoint = 0;
+        shooterSetpoint = 0.0;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class MasterTeleSingle extends OpMode {
 
         //Indexing Routine (NO JAMS!!!)
         if(!isIndexing) {
-            if (colourVals.get("Red") < 20 && colourVals.get("Green") < 20) {
+            if (colourVals.get("Red") > 300 && colourVals.get("Green") > 300) {
                 telemetry.addData("Indexing", true);
 
                 startingTime = System.currentTimeMillis();
@@ -44,8 +44,8 @@ public class MasterTeleSingle extends OpMode {
             }
         }
         else {
-            if((System.currentTimeMillis() < startingTime + 2000) && (colourVals.get("Red") < 20 &&
-                    colourVals.get("Green") < 20) && !gamepad1.left_stick_button && !shooterRunning) {
+            if((System.currentTimeMillis() < startingTime + 2000) && (colourVals.get("Red") > 300 &&
+                    colourVals.get("Green") > 300) && !gamepad1.left_stick_button && !shooterRunning) {
                 robot.intake.updatePassthrough(false, true);
                 robot.shooter.rawControl(-0.25);
                 robot.intake.updateIntake(false, false);
