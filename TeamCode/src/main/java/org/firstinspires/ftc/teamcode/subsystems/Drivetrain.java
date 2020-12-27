@@ -13,6 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
 import org.firstinspires.ftc.teamcode.subsystems.robot.RobotHardware;
 
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
+
 public class Drivetrain extends RobotHardware {
 
     Telemetry telemetry;
@@ -63,9 +65,11 @@ public class Drivetrain extends RobotHardware {
     double brError;
 
     private double currentAvgPos;
-    double direction;
-
     double totalTimeElapsed = 0;
+
+    boolean directDriveStarted = false;
+    double startingAngle;
+    double lastTurnOutput = 0;
 
     //Save drivetrain state
     Drivetrain.DriveState state = DriveState.NOT_DRIVING;
@@ -93,6 +97,8 @@ public class Drivetrain extends RobotHardware {
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        startingAngle = navx.getAngularOrientation(AxesReference.EXTRINSIC, XYZ, AngleUnit.DEGREES).thirdAngle;
     }
 
     //Reset encoders (for use mainly in auto)
@@ -167,7 +173,7 @@ public class Drivetrain extends RobotHardware {
             brLastPos = backRight.getCurrentPosition();
 
             //calculate change in direction (turn)
-            currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+            currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, XYZ, AngleUnit.DEGREES).thirdAngle;
             if (currentTurn < 0) {
                 currentTurn = 180 + (180 - Math.abs(currentTurn));
             }
@@ -176,7 +182,7 @@ public class Drivetrain extends RobotHardware {
             } else {
                 turnChange = currentTurn - lastTurn;
             }
-            lastTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+            lastTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, XYZ, AngleUnit.DEGREES).thirdAngle;
             if (lastTurn < 0) {
                 lastTurn = 180 + (180 - Math.abs(lastTurn));
             }
@@ -260,94 +266,67 @@ public class Drivetrain extends RobotHardware {
         BACKWARD,
         LEFT,
         RIGHT,
+        NO_DIRECTION
     }
 
     public void directDrive(Direction desiredDirection) {
 
-        if((state == DriveState.DIRECT_DRIVE || state == DriveState.NOT_DRIVING) && direction != 0) {
+        if((state == DriveState.DIRECT_DRIVE || state == DriveState.NOT_DRIVING)
+                && desiredDirection != Direction.NO_DIRECTION) {
+
+            double startingAngle = 0;
+            if(!directDriveStarted) {
+                startingAngle = navx.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
+                        AngleUnit.DEGREES).thirdAngle;
+                directDriveStarted = true;
+            }
 
             state = DriveState.DIRECT_DRIVE;
+            double forward = 0;
+            double strafe = 0;
 
-            direction = 0;
-            if (desiredDirection == Direction.FORWARD) direction = Math.atan2(1, 0);
-            else if (desiredDirection == Direction.BACKWARD) direction = Math.atan2(-1, 0);
-            else if (desiredDirection == Direction.LEFT) direction = Math.atan2(0, -1);
-            else if (desiredDirection == Direction.RIGHT) direction = Math.atan2(0, 1);
-            else direction = 0;
-
-            //Calculate change in time
-            double currentTime = System.currentTimeMillis();
-            double elapsedTime = 0;
-            if (lastTime == 0) {
-                elapsedTime = 0;
-            } else {
-                elapsedTime = currentTime - lastTime;
+            if(desiredDirection == Direction.FORWARD) {
+                forward = 1;
+                strafe = 0;
             }
-            double totalTimeElapsed = 0;
-            totalTimeElapsed += elapsedTime;
-            lastTime = System.currentTimeMillis();
-
-            //Calculate change in position for each motor
-            double flCurrentPos = frontLeft.getCurrentPosition();
-            double blCurrentPos = backLeft.getCurrentPosition();
-            double frCurrentPos = frontRight.getCurrentPosition();
-            double brCurrentPos = backRight.getCurrentPosition();
-            double flPosChange;
-            double frPosChange;
-            double blPosChange;
-            double brPosChange;
-
-            if (flLastPos == 0) {
-                flPosChange = flCurrentPos;
-                blPosChange = blCurrentPos;
-                frPosChange = frCurrentPos;
-                brPosChange = brCurrentPos;
-            } else {
-                flPosChange = flCurrentPos - flLastPos;
-                blPosChange = blCurrentPos - blLastPos;
-                brPosChange = brCurrentPos - brLastPos;
-                frPosChange = frCurrentPos - frLastPos;
+            else if(desiredDirection == Direction.BACKWARD) {
+                forward = -1;
+                strafe = 0;
+            }
+            else if(desiredDirection == Direction.LEFT) {
+                forward = 0;
+                strafe = -1;
+            }
+            else if(desiredDirection == Direction.RIGHT) {
+                forward = 0;
+                strafe = 1;
             }
 
-            flLastPos = frontLeft.getCurrentPosition();
-            blLastPos = backLeft.getCurrentPosition();
-            frLastPos = frontRight.getCurrentPosition();
-            brLastPos = backRight.getCurrentPosition();
+            //Calculate error and integral of error for turn
+            double currentTurn = navx.getAngularOrientation(AxesReference.INTRINSIC, XYZ,
+                    AngleUnit.DEGREES).thirdAngle;
 
-            double flVel = flPosChange / elapsedTime;
-            double frVel = frPosChange / elapsedTime;
-            double blVel = blPosChange / elapsedTime;
-            double brVel = brPosChange / elapsedTime;
+            if(currentTurn > 180 + startingAngle) turnError = -currentTurn + (360 + startingAngle);
+            else turnError = (0 + startingAngle) - currentTurn;
+            turnErrorSum += turnError;
 
-            desiredFrontLeftSpeed = Math.sin(direction + Math.PI / 4);
-            desiredFrontRightSpeed = Math.sin(direction - Math.PI / 4);
-            desiredBackRightSpeed = Math.sin(direction + Math.PI / 4);
-            desiredBackLeftSpeed = Math.sin(direction - Math.PI / 4);
+            //Turning PID gains
+            double turnKP = 0.012;
+            double turnKI = 0.0003;
 
-            flError = desiredFrontLeftSpeed - flVel;
-            frError = desiredFrontRightSpeed - frVel;
-            blError = desiredBackLeftSpeed - blVel;
-            brError = desiredBackRightSpeed - brVel;
+            //Turn output
+            double turnOutput = (turnError * turnKP) + (turnErrorSum * turnKI);
 
-            flSum += flError;
-            frSum += frError;
-            blSum += blError;
-            brSum += brError;
+            double turnOutputChange = turnOutput - lastTurnOutput;
+            if(Math.abs(turnOutputChange) > 0.3) turnOutput = 0;
 
-            double kP = 0.1;
-            double kI = 0.01;
+            if(Math.abs(turnError) < 180) turnOutput *= -1;
 
-            frontLeftOutput = (flError * kP) + (flSum * kI);
-            frontRightOutput = (frError * kP) + (frSum * kI);
-            backLeftOutput = (blError * kP) + (blSum * kI);
-            backRightOutput = (brError * kP) + (brSum * kI);
-
-            frontLeft.setPower(frontLeftOutput);
-            frontRight.setPower(frontRightOutput);
-            backLeft.setPower(backLeftOutput);
-            backRight.setPower(backRightOutput);
+            update(forward, strafe, turnOutput);
+            lastTurnOutput = turnOutput;
         }
         else state = DriveState.NOT_DRIVING;
+        directDriveStarted = false;
     }
 
     public enum DriveState {
