@@ -325,6 +325,7 @@ public class Drivetrain extends RobotHardware {
             update(forward, strafe, turnOutput);
             lastTurnOutput = turnOutput;
         }
+
         else state = DriveState.NOT_DRIVING;
         directDriveStarted = false;
     }

@@ -31,7 +31,17 @@ public class MasterTeleSingle extends OpMode {
         colourVals = robot.odometry.sensorValues();
 
         //Control Drivetrain
-        robot.drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        double turnVal;
+        turnVal = gamepad1.right_stick_x;
+        if(Math.abs(turnVal) < 0.05) {
+            if(Math.abs(gamepad1.left_trigger / 2) < 0.025) {
+                turnVal = gamepad1.right_trigger / 2;
+            }
+            if(Math.abs(gamepad1.right_trigger / 2) < 0.025) {
+                turnVal = -(gamepad1.left_trigger / 2);
+            }
+        }
+        robot.drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, turnVal);
 
         //Indexing Routine (NO JAMS!!!)
         if(!isIndexing) {
