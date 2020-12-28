@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opModes.teleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 import java.util.HashMap;
@@ -41,8 +42,20 @@ public class MasterTeleSingle extends OpMode {
                 turnVal = -(gamepad1.left_trigger / 2);
             }
         }
-        robot.drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, turnVal);
 
+        if(Math.abs(gamepad1.left_stick_y) > 0.025 || Math.abs(gamepad1.left_stick_x) > 0.025 ||
+                Math.abs(turnVal) > 0.025) {
+            robot.drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, turnVal);
+        }
+        else {
+            Drivetrain.Direction direction = Drivetrain.Direction.NO_DIRECTION;
+            if(gamepad1.dpad_up) direction = Drivetrain.Direction.FORWARD;
+            else if(gamepad1.dpad_down) direction = Drivetrain.Direction.BACKWARD;
+            else if(gamepad1.dpad_left) direction = Drivetrain.Direction.LEFT;
+            else if(gamepad1.dpad_right) direction = Drivetrain.Direction.RIGHT;
+
+            robot.drivetrain.directDrive(direction);
+        }
         //Indexing Routine (NO JAMS!!!)
         if(!isIndexing) {
             if (colourVals.get("Red") > 300 && colourVals.get("Green") > 300) {

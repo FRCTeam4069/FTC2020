@@ -71,6 +71,8 @@ public class Drivetrain extends RobotHardware {
     double startingAngle;
     double lastTurnOutput = 0;
 
+    double turnToAngleSum = 0;
+
     //Save drivetrain state
     Drivetrain.DriveState state = DriveState.NOT_DRIVING;
 
@@ -328,6 +330,23 @@ public class Drivetrain extends RobotHardware {
 
         else state = DriveState.NOT_DRIVING;
         directDriveStarted = false;
+    }
+
+    public void turnToAngle(double desiredAngle) {
+
+        currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, XYZ, AngleUnit.DEGREES).thirdAngle;
+        double error = desiredAngle - currentTurn;
+        turnToAngleSum += error;
+        double kP = 0.01205;
+        double kI = 0.000025;
+        double output = error * kP + turnToAngleSum * kI;
+
+        if(Math.abs(error) < 180) {
+            update(0, 0, -output);
+        }
+        else {
+            update(0, 0, output);
+        }
     }
 
     public enum DriveState {
