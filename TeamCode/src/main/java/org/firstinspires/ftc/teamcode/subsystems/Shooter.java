@@ -39,6 +39,10 @@ public class Shooter extends RobotHardware {
 
     public double speed;
 
+    private ControlMethod controlMethod;
+    private double rpm;
+    private double power;
+
     public Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
         super(hardwareMap);
 
@@ -55,7 +59,16 @@ public class Shooter extends RobotHardware {
 
     }
 //////////////Shooter
+
+    public enum ControlMethod {
+        RPM,
+        RAW
+    }
+
     public void update(double rpm) {
+
+        this.rpm = rpm;
+        controlMethod = ControlMethod.RPM;
 
         //Calculate change in time
         double currentTime = System.currentTimeMillis();
@@ -126,6 +139,10 @@ public class Shooter extends RobotHardware {
     }
 
     public void rawControl(double power) {
+
+        this.power = power;
+        controlMethod = ControlMethod.RAW;
+
         shooterMaster.setPower(power);
         shooterSlave.setPower(power);
 
@@ -173,6 +190,11 @@ public class Shooter extends RobotHardware {
         lastSpeed2 = changePos1 / totalTimeElapsed;
 
         speed = (actualSpeed1 + actualSpeed2) / 2;
+    }
+
+    public boolean isReady() {
+        if(controlMethod == ControlMethod.RPM) return Math.abs(rpm - speed) < 250;
+        else return true;
     }
 
     @Override

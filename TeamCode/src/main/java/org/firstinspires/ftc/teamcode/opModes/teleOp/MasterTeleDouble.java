@@ -24,7 +24,6 @@ public class MasterTeleDouble extends OpMode {
     @Override
     public void init() {
         robot = new Robot(hardwareMap, telemetry);
-        shooterSetpoint = 0.0;
     }
 
     @Override
@@ -38,7 +37,7 @@ public class MasterTeleDouble extends OpMode {
             if(Math.abs(gamepad1.left_trigger / 2) < 0.025) {
                 turnVal = gamepad1.right_trigger / 2;
             }
-            if(Math.abs(gamepad1.right_trigger / 2) < 0.025) {
+            else if(Math.abs(gamepad1.right_trigger / 2) < 0.025) {
                 turnVal = -(gamepad1.left_trigger / 2);
             }
         }
@@ -80,11 +79,11 @@ public class MasterTeleDouble extends OpMode {
         }
 
         //Control Intake
-        if(gamepad2.a) {
+        if(gamepad2.a && !gamepad2.b) {
             in = true;
             out = false;
         }
-        else if(gamepad2.b) {
+        else if(gamepad2.b && gamepad2.a) {
             out = true;
             in = false;
         }
@@ -94,19 +93,38 @@ public class MasterTeleDouble extends OpMode {
         }
         if(!isIndexing) robot.intake.update(in, out);
 
+        if(!in && !out && !isIndexing) {
+            robot.intake.updateIntake(gamepad2.x, gamepad2.y);
+        }
+
         //Control shooter
-        if (gamepad2.y) {
+        //High Goal Line
+        if (gamepad2.right_bumper) {
             shooterSetpoint = 2000;
             shooterRunning = true;
         }
-        else if (gamepad2.x) {
+
+        //High Goal Wall
+        else if (gamepad2.left_bumper) {
             shooterSetpoint = 2250;
             shooterRunning = true;
         }
-        else if (gamepad1.left_bumper) {
+
+        //Power Shot line
+        else if (gamepad2.left_trigger > 0.25) {
+            shooterSetpoint = 1750;
+            shooterRunning = true;
+        }
+
+        //Power Shot wall
+        else if(gamepad2.right_trigger > 0.25) {
+            shooterSetpoint = 2000;
+            shooterRunning = true;
+        }
+
+        //Unjam
+        else if(gamepad2.right_stick_button) {
             shooterSetpoint = -500;
-            in = false;
-            out = true;
         }
         else {
             shooterSetpoint = 0;
@@ -116,9 +134,9 @@ public class MasterTeleDouble extends OpMode {
         telemetry.addData("Shooter setpoint", shooterSetpoint);
         robot.shooter.getTelemetry(false);
         if(!isIndexing) robot.shooter.update(shooterSetpoint);
-
-        //robot.clamp.update(gamepad1.left_bumper, gamepad1.right_bumper, gamepad1.dpad_up, gamepad1.dpad_down);
-
+        if(shooterRunning && !isIndexing && robot.shooter.isReady())
+            robot.intake.updatePassthrough(true, false);
+        
         telemetry.update();
     }
 }
