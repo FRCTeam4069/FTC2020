@@ -17,9 +17,10 @@ public class MasterTeleDouble extends OpMode {
     boolean out;
     HashMap<String, Integer> colourVals;
     double startingTime = 0;
-    boolean isIndexing;
 
+    boolean isIndexing;
     boolean shooterRunning = false;
+    boolean turningToAngle = false;
 
     @Override
     public void init() {
@@ -45,6 +46,17 @@ public class MasterTeleDouble extends OpMode {
         if(Math.abs(gamepad1.left_stick_y) > 0.025 || Math.abs(gamepad1.left_stick_x) > 0.025 ||
                 Math.abs(turnVal) > 0.025) {
             robot.drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, turnVal);
+        }
+        else if(gamepad1.left_bumper || gamepad1.right_bumper || gamepad1.x || gamepad1.a) {
+            turningToAngle = true;
+            if(!robot.drivetrain.atCorrectAngle()) {
+                double angle = 0;
+                if (gamepad1.left_bumper) angle = 90;
+                else if (gamepad1.right_bumper) angle = 270;
+                else if (gamepad1.a) angle = 180;
+            }
+            else turningToAngle = false;
+            robot.drivetrain.update(0, 0, 0);
         }
         else {
             Drivetrain.Direction direction = Drivetrain.Direction.NO_DIRECTION;
@@ -136,7 +148,7 @@ public class MasterTeleDouble extends OpMode {
         if(!isIndexing) robot.shooter.update(shooterSetpoint);
         if(shooterRunning && !isIndexing && robot.shooter.isReady())
             robot.intake.updatePassthrough(true, false);
-        
+
         telemetry.update();
     }
 }
