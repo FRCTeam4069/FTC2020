@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opModes.teleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
@@ -36,29 +37,38 @@ public class MasterTeleDouble extends OpMode {
         turnVal = gamepad1.right_stick_x;
         if(Math.abs(turnVal) < 0.05) {
             if(Math.abs(gamepad1.left_trigger / 2) < 0.025) {
+                telemetry.addData("Mini turn", true);
                 turnVal = gamepad1.right_trigger / 2;
             }
             else if(Math.abs(gamepad1.right_trigger / 2) < 0.025) {
+                telemetry.addData("Mini turn", true);
                 turnVal = -(gamepad1.left_trigger / 2);
             }
         }
 
-        if(Math.abs(gamepad1.left_stick_y) > 0.025 || Math.abs(gamepad1.left_stick_x) > 0.025 ||
-                Math.abs(turnVal) > 0.025) {
+        if((Math.abs(gamepad1.left_stick_y) > 0.025 || Math.abs(gamepad1.left_stick_x) > 0.025 ||
+                Math.abs(turnVal) > 0.025) && !turningToAngle) {
             robot.drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, turnVal);
         }
         else if(gamepad1.left_bumper || gamepad1.right_bumper || gamepad1.x || gamepad1.a) {
             turningToAngle = true;
             if(!robot.drivetrain.atCorrectAngle()) {
+                telemetry.addData("Turning to angle", true);
+                telemetry.addData("Heading", robot.odometry.getCurrentHeading());
                 double angle = 0;
                 if (gamepad1.left_bumper) angle = 90;
                 else if (gamepad1.right_bumper) angle = 270;
                 else if (gamepad1.a) angle = 180;
+                robot.drivetrain.turnToAngle(angle);
             }
-            else turningToAngle = false;
-            robot.drivetrain.update(0, 0, 0);
+            else {
+                turningToAngle = false;
+                robot.drivetrain.update(0, 0, 0);
+            }
         }
         else {
+            turningToAngle = false;
+            telemetry.addData("Direct", true);
             Drivetrain.Direction direction = Drivetrain.Direction.NO_DIRECTION;
             if(gamepad1.dpad_up) direction = Drivetrain.Direction.FORWARD;
             else if(gamepad1.dpad_down) direction = Drivetrain.Direction.BACKWARD;

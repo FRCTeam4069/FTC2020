@@ -119,8 +119,7 @@ public class Drivetrain extends RobotHardware {
     //Update motors after calculating proper outputs
     public void update(double forward, double strafe, double turn) {
 
-        if((state == DriveState.NOT_DRIVING || state == DriveState.HOLONOMIC) &&
-                (forward > 0.05 || strafe > 0.05 || turn > 0.05)) {
+        if(((Math.abs(forward) > 0.05 || Math.abs(strafe) > 0.05 || Math.abs(turn) > 0.05))) {
 
             state = DriveState.HOLONOMIC;
 
@@ -261,7 +260,13 @@ public class Drivetrain extends RobotHardware {
             backLeft.setPower(backLeftOutput);
             backRight.setPower(backRightOutput);
         }
-        else state = DriveState.NOT_DRIVING;
+        else {
+            state = DriveState.NOT_DRIVING;
+            frontLeft.setPower(0);
+            backLeft.setPower(0);
+            frontRight.setPower(0);
+            backRight.setPower(0);
+        }
     }
 
     public enum Direction {
@@ -272,21 +277,22 @@ public class Drivetrain extends RobotHardware {
         NO_DIRECTION
     }
 
+    double forward = 0;
+    double strafe = 0;
+    double startingAngleDD = 0;
+
     public void directDrive(Direction desiredDirection) {
 
         if((state == DriveState.DIRECT_DRIVE || state == DriveState.NOT_DRIVING)
                 && desiredDirection != Direction.NO_DIRECTION) {
 
-            double startingAngle = 0;
             if(!directDriveStarted) {
-                startingAngle = navx.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
+                startingAngleDD = navx.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
                         AngleUnit.DEGREES).thirdAngle;
                 directDriveStarted = true;
             }
 
             state = DriveState.DIRECT_DRIVE;
-            double forward = 0;
-            double strafe = 0;
 
             if(desiredDirection == Direction.FORWARD) {
                 forward = 1;
@@ -309,8 +315,8 @@ public class Drivetrain extends RobotHardware {
             double currentTurn = navx.getAngularOrientation(AxesReference.INTRINSIC, XYZ,
                     AngleUnit.DEGREES).thirdAngle;
 
-            if(currentTurn > 180 + startingAngle) turnError = -currentTurn + (360 + startingAngle);
-            else turnError = (0 + startingAngle) - currentTurn;
+            if(currentTurn > 180 + startingAngleDD) turnError = -currentTurn + (360 + startingAngleDD);
+            else turnError = (0 + startingAngleDD) - currentTurn;
             turnErrorSum += turnError;
 
             //Turning PID gains
@@ -329,8 +335,14 @@ public class Drivetrain extends RobotHardware {
             lastTurnOutput = turnOutput;
         }
 
-        else state = DriveState.NOT_DRIVING;
-        directDriveStarted = false;
+        else {
+            state = DriveState.NOT_DRIVING;
+            directDriveStarted = false;
+            frontLeft.setPower(0);
+            backLeft.setPower(0);
+            frontRight.setPower(0);
+            backRight.setPower(0);
+        }
     }
 
     public void turnToAngle(double desiredAngle) {
