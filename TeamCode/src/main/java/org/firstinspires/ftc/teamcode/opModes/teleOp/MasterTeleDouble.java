@@ -74,13 +74,17 @@ public class MasterTeleDouble extends OpMode {
         else {
             turningToAngle = false;
             telemetry.addData("Direct", true);
-            Drivetrain.Direction direction = Drivetrain.Direction.NO_DIRECTION;
+            Drivetrain.Direction direction;
             if(gamepad1.dpad_up) direction = Drivetrain.Direction.FORWARD;
             else if(gamepad1.dpad_down) direction = Drivetrain.Direction.BACKWARD;
             else if(gamepad1.dpad_left) direction = Drivetrain.Direction.LEFT;
             else if(gamepad1.dpad_right) direction = Drivetrain.Direction.RIGHT;
+            else direction = Drivetrain.Direction.NO_DIRECTION;
 
             outputs = robot.drivetrain.directDrive(direction);
+            for(double output : outputs) {
+                telemetry.addData("Output", output);
+            }
         }
         outputs[2] = turnVal;
 

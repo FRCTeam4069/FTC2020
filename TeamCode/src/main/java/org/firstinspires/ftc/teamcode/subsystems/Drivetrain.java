@@ -121,8 +121,6 @@ public class Drivetrain extends RobotHardware {
 
         if(((Math.abs(forward) > 0.05 || Math.abs(strafe) > 0.05 || Math.abs(turn) > 0.05))) {
 
-            state = DriveState.HOLONOMIC;
-
             this.turn = turn;
 
             if (navx.isCalibrating()) {
