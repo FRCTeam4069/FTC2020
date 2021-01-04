@@ -46,9 +46,11 @@ public class MasterTeleDouble extends OpMode {
             }
         }
 
+        double[] outputs = new double[3];
         if((Math.abs(gamepad1.left_stick_y) > 0.025 || Math.abs(gamepad1.left_stick_x) > 0.025 ||
                 Math.abs(turnVal) > 0.025) && !turningToAngle) {
-            robot.drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, turnVal);
+            outputs[0] = -gamepad1.left_stick_y;
+            outputs[1] = gamepad1.left_stick_x;
         }
         else if(gamepad1.left_bumper || gamepad1.right_bumper || gamepad1.x || gamepad1.a) {
             turningToAngle = true;
@@ -59,11 +61,11 @@ public class MasterTeleDouble extends OpMode {
                 if (gamepad1.left_bumper) angle = 90;
                 else if (gamepad1.right_bumper) angle = 270;
                 else if (gamepad1.a) angle = 180;
-                robot.drivetrain.turnToAngle(angle);
+                turnVal = robot.drivetrain.turnToAngle(angle);
             }
             else {
                 turningToAngle = false;
-                robot.drivetrain.update(0, 0, 0);
+                turnVal = 0;
             }
         }
         else {
@@ -75,8 +77,12 @@ public class MasterTeleDouble extends OpMode {
             else if(gamepad1.dpad_left) direction = Drivetrain.Direction.LEFT;
             else if(gamepad1.dpad_right) direction = Drivetrain.Direction.RIGHT;
 
-            robot.drivetrain.directDrive(direction);
+            outputs = robot.drivetrain.directDrive(direction);
         }
+        outputs[2] = turnVal;
+
+        robot.drivetrain.update(outputs[0], outputs[1], outputs[2]);
+
         //Indexing Routine (NO JAMS!!!)
         if(!isIndexing) {
             if (colourVals.get("Red") > 300 && colourVals.get("Green") > 300) {

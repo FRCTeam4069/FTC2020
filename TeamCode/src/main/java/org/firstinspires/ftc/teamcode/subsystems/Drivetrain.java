@@ -132,6 +132,7 @@ public class Drivetrain extends RobotHardware {
 
             //Calculate direction and speed
             double direction = Math.atan2(forward, strafe);
+            if(direction < 0) direction = (Math.PI * 2) + direction;
             desiredSpeed = Math.hypot(forward, strafe);
 
             //Calculate change in time
@@ -209,10 +210,14 @@ public class Drivetrain extends RobotHardware {
             double brActualVelocity = brPosChange / elapsedTime;
 
             //Calculate desired motor outputs
-            desiredFrontLeftSpeed = (Math.sin(direction + Math.PI / 4) * desiredSpeed) + turnOutput;
-            desiredFrontRightSpeed = (Math.sin(direction - Math.PI / 4) * desiredSpeed) - turnOutput;
-            desiredBackRightSpeed = (Math.sin(direction + Math.PI / 4) * desiredSpeed) - turnOutput;
-            desiredBackLeftSpeed = (Math.sin(direction - Math.PI / 4) * desiredSpeed) + turnOutput;
+            desiredFrontLeftSpeed = (Math.sin(direction + Math.PI / 4) * desiredSpeed)
+                    * Math.sqrt(2) + turnOutput;
+            desiredFrontRightSpeed = (Math.sin(direction - Math.PI / 4) * desiredSpeed)
+                    * Math.sqrt(2) - turnOutput;
+            desiredBackRightSpeed = (Math.sin(direction + Math.PI / 4) * desiredSpeed)
+                    * Math.sqrt(2)- turnOutput;
+            desiredBackLeftSpeed = (Math.sin(direction - Math.PI / 4) * desiredSpeed)
+                    * Math.sqrt(2) + turnOutput;
 
             //PID Outputs
             flSum = 0;
@@ -281,7 +286,7 @@ public class Drivetrain extends RobotHardware {
     double strafe = 0;
     double startingAngleDD = 0;
 
-    public void directDrive(Direction desiredDirection) {
+    public double[] directDrive(Direction desiredDirection) {
 
         if((state == DriveState.DIRECT_DRIVE || state == DriveState.NOT_DRIVING)
                 && desiredDirection != Direction.NO_DIRECTION) {
@@ -331,21 +336,19 @@ public class Drivetrain extends RobotHardware {
 
             if(Math.abs(turnError) < 180) turnOutput *= -1;
 
-            update(forward, strafe, turnOutput);
             lastTurnOutput = turnOutput;
+
+            return new double[]{forward, strafe, turnOutput};
         }
 
         else {
             state = DriveState.NOT_DRIVING;
             directDriveStarted = false;
-            frontLeft.setPower(0);
-            backLeft.setPower(0);
-            frontRight.setPower(0);
-            backRight.setPower(0);
+            return new double[]{0, 0, 0};
         }
     }
 
-    public void turnToAngle(double desiredAngle) {
+    public double turnToAngle(double desiredAngle) {
 
         this.desiredAngle = desiredAngle;
         currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, XYZ, AngleUnit.DEGREES).thirdAngle;
@@ -356,10 +359,10 @@ public class Drivetrain extends RobotHardware {
         double output = error * kP + turnToAngleSum * kI;
 
         if(Math.abs(error) < 180) {
-            update(0, 0, -output);
+            return -output;
         }
         else {
-            update(0, 0, output);
+            return output;
         }
     }
 
