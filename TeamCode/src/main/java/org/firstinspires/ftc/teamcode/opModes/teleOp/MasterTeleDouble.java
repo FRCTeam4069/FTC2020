@@ -22,6 +22,7 @@ public class MasterTeleDouble extends OpMode {
     boolean isIndexing;
     boolean shooterRunning = false;
     boolean turningToAngle = false;
+    boolean active = false;
 
     @Override
     public void init() {
@@ -52,9 +53,9 @@ public class MasterTeleDouble extends OpMode {
             outputs[0] = -gamepad1.left_stick_y;
             outputs[1] = gamepad1.left_stick_x;
         }
-        else if(gamepad1.left_bumper || gamepad1.right_bumper || gamepad1.x || gamepad1.a) {
+        else if(gamepad1.left_bumper || gamepad1.right_bumper || gamepad1.y || gamepad1.a) {
             turningToAngle = true;
-            if(!robot.drivetrain.atCorrectAngle()) {
+            if(!robot.drivetrain.atCorrectAngle() || !active) {
                 telemetry.addData("Turning to angle", true);
                 telemetry.addData("Heading", robot.odometry.getCurrentHeading());
                 double angle = 0;
@@ -62,10 +63,12 @@ public class MasterTeleDouble extends OpMode {
                 else if (gamepad1.right_bumper) angle = 270;
                 else if (gamepad1.a) angle = 180;
                 turnVal = robot.drivetrain.turnToAngle(angle);
+                active = true;
             }
             else {
                 turningToAngle = false;
                 turnVal = 0;
+                active = false;
             }
         }
         else {

@@ -282,11 +282,11 @@ public class Drivetrain extends RobotHardware {
         NO_DIRECTION
     }
 
-    double forward = 0;
-    double strafe = 0;
-    double startingAngleDD = 0;
-
     public double[] directDrive(Direction desiredDirection) {
+
+        double forward = 0;
+        double strafe = 0;
+        double startingAngleDD = 0;
 
         if((state == DriveState.DIRECT_DRIVE || state == DriveState.NOT_DRIVING)
                 && desiredDirection != Direction.NO_DIRECTION) {
@@ -351,11 +351,15 @@ public class Drivetrain extends RobotHardware {
     public double turnToAngle(double desiredAngle) {
 
         this.desiredAngle = desiredAngle;
-        currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, XYZ, AngleUnit.DEGREES).thirdAngle;
+        currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ,
+                AngleUnit.DEGREES).thirdAngle;
+        if(currentTurn < 0) {
+            currentTurn = 180 + (180 + currentTurn);
+        }
         double error = desiredAngle - currentTurn;
         turnToAngleSum += error;
-        double kP = 0.01205;
-        double kI = 0.000025;
+        double kP = 0.019;
+        double kI = 0.000012;
         double output = error * kP + turnToAngleSum * kI;
 
         if(Math.abs(error) < 180) {
@@ -367,8 +371,10 @@ public class Drivetrain extends RobotHardware {
     }
 
     public boolean atCorrectAngle() {
-        double currentAngle = navx.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
-                AngleUnit.DEGREES).thirdAngle;
+        double currentAngle = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+        if(currentAngle < 0) {
+            currentAngle = 180 + (180 + currentAngle);
+        }
         if(Double.isNaN(desiredAngle)) desiredAngle = 0;
         return(Math.abs(desiredAngle - currentAngle)) < 5;
     }
