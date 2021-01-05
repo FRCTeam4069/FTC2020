@@ -24,6 +24,7 @@ public class DrivetrainTeleOpTest extends OpMode {
     public void loop() {
         robot.drivetrain.update(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         robot.drivetrain.addBaseTelemetry(false);
+        telemetry.addData("Strafing encoder ticks/sec", robot.odometry.x.getCurrentVel());
         robot.odometry.addTelemetry(true);
         robot.intake.update(gamepad1.a, gamepad1.b);
         robot.clamp.update(gamepad1.left_bumper, gamepad1.right_bumper, gamepad1.dpad_up, gamepad1.dpad_down);

@@ -23,6 +23,10 @@ public class DriveToPosition extends Command {
     double turnOutputChange = 0;
     double lastTurnOutput = 0;
 
+    double rampOutput = 0;
+    double lastTime = 0;
+    boolean rampComplete = false;
+
     //Get desired location
     public DriveToPosition(double xSetPoint, double ySetPoint) {
         this.xSetPoint = xSetPoint;
@@ -78,6 +82,25 @@ public class DriveToPosition extends Command {
         double yOutput = (yError * yKP) + (yErrorSum * yKI) + (yChangeError * yKD);
         double xOutput = (xError * xKP) + (xErrorSum * xKI) + (xChangeError * xKD);
 
+        if(Math.abs(xOutput) > 0.5) {
+            double currentTime = System.currentTimeMillis();
+            //Ramp Strafing speed
+            if (Math.abs(robot.odometry.x.getCurrentVel()) < 20000 && !rampComplete) {
+                if (currentTime - lastTime > 25) {
+                    if (xError > 0) rampOutput += 0.025;
+                    else rampOutput -= 0.025;
+                }
+                xOutput = rampOutput;
+                telemetry.addData("Ramping", true);
+            }
+            else {
+                rampOutput = 0;
+                rampComplete = true;
+            }
+
+            lastTime = System.currentTimeMillis();
+        }
+
         //Calculate error and integral of error for turn
         double currentTurn = robot.odometry.getCurrentHeading();
 
@@ -86,22 +109,20 @@ public class DriveToPosition extends Command {
         turnErrorSum += turnError;
 
         //Turning PID gains
-        double turnKP = 0.012;
-        double turnKI = 0.0003;
+        double turnKP = 0.022;
+        double turnKI = 0.001;
 
         //Turn output
         double turnOutput = (turnError * turnKP) + (turnErrorSum * turnKI);
 
-        turnOutputChange = turnOutput - lastTurnOutput;
-        if(Math.abs(turnOutputChange) > 0.3) turnOutput = 0;
-
         if(Math.abs(turnError) < 180) turnOutput *= -1;
 
+        lastTurnOutput = turnOutput;
 
 
         //Setting outputs to be executed by the drivetrain
         robot.drivetrain.update(yOutput, -xOutput, turnOutput);
-        lastTurnOutput = turnOutput;
+
 
         /////TELEMETRY
 
@@ -109,6 +130,8 @@ public class DriveToPosition extends Command {
         telemetry.addData("Heading", robot.odometry.getCurrentHeading());
         telemetry.addData("XPos", robot.odometry.x.getPosition());
         telemetry.addData("YPos", robot.odometry.yRight.getPosition());
+        telemetry.addData("turn output", turnOutput);
+        telemetry.addData("x vel", robot.odometry.x.getCurrentVel());
     }
 
 
@@ -116,6 +139,7 @@ public class DriveToPosition extends Command {
     public boolean isFinished() {
         //If close enough to accurate return isFinished as true
         if((Math.abs(yError) < 5000) && (Math.abs(xError) < 5000) && (Math.abs(turnError) < 3)) {
+            rampComplete = false;
             return true;
         }
         else return false;
