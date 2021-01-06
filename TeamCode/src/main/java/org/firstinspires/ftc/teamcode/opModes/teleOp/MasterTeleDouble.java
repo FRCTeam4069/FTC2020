@@ -23,6 +23,7 @@ public class MasterTeleDouble extends OpMode {
     boolean shooterRunning = false;
     boolean turningToAngle = false;
     boolean active = false;
+    boolean conveyerRunning = false;
 
     @Override
     public void init() {
@@ -134,26 +135,26 @@ public class MasterTeleDouble extends OpMode {
 
         //Control shooter
         //High Goal Line
-        if (gamepad2.right_bumper) {
-            shooterSetpoint = 2000;
+        if (gamepad2.left_bumper) {
+            shooterSetpoint = 3000;
             shooterRunning = true;
         }
 
         //High Goal Wall
-        else if (gamepad2.left_bumper) {
-            shooterSetpoint = 2250;
+        else if (gamepad2.left_trigger > 0.25) {
+            shooterSetpoint = 2500;
             shooterRunning = true;
         }
 
         //Power Shot line
-        else if (gamepad2.left_trigger > 0.25) {
-            shooterSetpoint = 1750;
+        else if (gamepad2.right_bumper) {
+            shooterSetpoint = 2250;
             shooterRunning = true;
         }
 
         //Power Shot wall
         else if(gamepad2.right_trigger > 0.25) {
-            shooterSetpoint = 2000;
+            shooterSetpoint = 2200;
             shooterRunning = true;
         }
 
@@ -164,13 +165,16 @@ public class MasterTeleDouble extends OpMode {
         else {
             shooterSetpoint = 0;
             shooterRunning = false;
+            conveyerRunning = false;
         }
 
         telemetry.addData("Shooter setpoint", shooterSetpoint);
         robot.shooter.getTelemetry(false);
         if(!isIndexing) robot.shooter.update(shooterSetpoint);
-        if(shooterRunning && !isIndexing && robot.shooter.isReady())
+        if(shooterRunning && !isIndexing && (robot.shooter.isReady() || conveyerRunning)) {
+            conveyerRunning = true;
             robot.intake.updatePassthrough(true, false);
+        }
 
         telemetry.update();
     }
