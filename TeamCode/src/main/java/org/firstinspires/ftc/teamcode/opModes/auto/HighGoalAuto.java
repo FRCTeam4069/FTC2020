@@ -26,7 +26,10 @@ public class HighGoalAuto extends LinearOpMode {
         Scheduler initialScheduler = new Scheduler(telemetry, robot);
         Scheduler secondScheduler = new Scheduler(telemetry, robot);
 
+        //Scheduler to drive to starter stack
         initialScheduler.addCommand(new DriveToPosition(50000, 0));
+
+        //Drives to line, turns and fires
         secondScheduler.addCommand(new DriveToPosition(75000, 30000));
         secondScheduler.addCommand(new TurnCommand(270));
         secondScheduler.addCommand(new ResetEncoders());
@@ -35,12 +38,14 @@ public class HighGoalAuto extends LinearOpMode {
 
         waitForStart();
 
+        //Drive to starter stack
         while(opModeIsActive() && initialScheduler.getQueueSize() != 0) {
             initialScheduler.run();
             telemetry.update();
             idle();
         }
 
+        //Check for stack
         if(opModeIsActive()) {
             double startTime = System.currentTimeMillis();
             while(System.currentTimeMillis() + 500 < startTime && opModeIsActive()) {
@@ -50,13 +55,28 @@ public class HighGoalAuto extends LinearOpMode {
             }
         }
 
+        //Set third scheduler based on stack (pick it up or no)
+        Scheduler thirdScheduler = setScheduler(isStack);
+
+        //Drive to line and fire
         while(opModeIsActive() && secondScheduler.getQueueSize() != 0) {
-            secondScheduler.run();
+            if(robot.shooter.isReady()) secondScheduler.run();
+            if(secondScheduler.getQueueSize() < 2) robot.shooter.update(3000);
+            telemetry.update();
+            idle();
+        }
+
+        //Pick up stack, fire and park on line or just park on line based on stack
+        while(opModeIsActive() && thirdScheduler.getQueueSize() != 0) {
+            if(robot.shooter.isReady()) thirdScheduler.run();
+            if(thirdScheduler.getQueueSize() < 4 && thirdScheduler.getQueueSize() > 2)
+                robot.shooter.update(3000);
             telemetry.update();
             idle();
         }
     }
 
+    //Set final scheduler based on stack
     private Scheduler setScheduler(boolean isStack) {
         Scheduler scheduler = new Scheduler(telemetry, robot);
         if(isStack) {

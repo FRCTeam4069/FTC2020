@@ -40,7 +40,7 @@ public class Shooter extends RobotHardware {
     public double speed;
 
     private ControlMethod controlMethod;
-    private double rpm;
+    private double rpm = 0;
     private double power;
 
     public Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
