@@ -117,16 +117,18 @@ public class Shooter extends RobotHardware {
         if(Double.isNaN(errorSum1)) errorSum1 = error1;
         else errorSum1 += error1;
         kP1 = 0.0032;
+        kI1 = 0.0004;
         kD1 = 0;
 
         error2 = rpm - actualSpeed2;
         if(Double.isNaN(errorSum2)) errorSum2 = error2;
         else errorSum2 += error2;
-        kP2 = 0.0032;
+        kP2 = 0.003;
+        kI2 = 0.000046;
         kD2 = 0;
 
-        output1 = (error1 * kP1) + (deltaV1 * kD1);
-        output2 = (error2 * kP2) + (deltaV2 * kD2);
+        output1 = (error1 * kP1) + (errorSum1 * kI1) + (deltaV1 * kD1);
+        output2 = (error2 * kP2) + (errorSum2 * kI2) + (deltaV2 * kD2);
 
         shooterMaster.setPower(output1);
         shooterSlave.setPower(output2);
