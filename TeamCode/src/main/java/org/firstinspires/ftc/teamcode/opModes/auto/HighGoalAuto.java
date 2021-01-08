@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
 import org.firstinspires.ftc.teamcode.autonomous.commands.DriveToPosition;
 import org.firstinspires.ftc.teamcode.autonomous.commands.IntakeFeed;
 import org.firstinspires.ftc.teamcode.autonomous.commands.IntakeOff;
+import org.firstinspires.ftc.teamcode.autonomous.commands.PassthroughFeed;
 import org.firstinspires.ftc.teamcode.autonomous.commands.ResetEncoders;
 import org.firstinspires.ftc.teamcode.autonomous.commands.ShooterOff;
 import org.firstinspires.ftc.teamcode.autonomous.commands.ShooterOn;
@@ -29,10 +30,8 @@ public class HighGoalAuto extends LinearOpMode {
         secondScheduler.addCommand(new DriveToPosition(75000, 30000));
         secondScheduler.addCommand(new TurnCommand(270));
         secondScheduler.addCommand(new ResetEncoders());
-        secondScheduler.addCommand(new ShooterOn(3000));
-        secondScheduler.addCommand(new IntakeFeed());
-        secondScheduler.addCommand(new IntakeOff());
-        secondScheduler.addCommand(new ShooterOff());
+        //Start running shooter
+        secondScheduler.addCommand(new PassthroughFeed(3000, true));
 
         waitForStart();
 
@@ -64,8 +63,13 @@ public class HighGoalAuto extends LinearOpMode {
             scheduler.addCommand(new IntakeFeed());
             scheduler.addCommand(new DriveToPosition(0, -50000));
             scheduler.addCommand(new DriveToPosition(0, 20000));
-            scheduler.addCommand(new );
+            //Run shooter here
+            scheduler.addCommand(new PassthroughFeed(3000, true));
+            scheduler.addCommand(new ShooterOff());
+            scheduler.addCommand(new DriveToPosition(0, 30000));
         }
         else scheduler.addCommand(new DriveToPosition(0, 30000));
+
+        return scheduler;
     }
 }
