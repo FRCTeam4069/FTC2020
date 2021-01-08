@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode.autonomous.commands;
 
 public class ShooterOn extends Command{
 
-    double desiredSpeed;
+    double rpm;
 
-    public ShooterOn(double desiredSpeed) {
-        this.desiredSpeed = desiredSpeed;
+    public ShooterOn(double rpm) {
+        this.rpm = rpm;
     }
 
     @Override
@@ -13,11 +13,11 @@ public class ShooterOn extends Command{
 
     @Override
     public void loop() {
-        robot.shooter.update(desiredSpeed);
+        robot.shooter.update(rpm);
     }
 
     @Override
     public boolean isFinished() {
-        return (Math.abs(desiredSpeed - robot.shooter.speed)) < 0.2;
+        return (Math.abs(rpm - robot.shooter.speed)) < 200;
     }
 }

@@ -6,10 +6,6 @@ public class IntakeFeed extends Command {
     double elapsedTime;
     double elapsedTimeMilli;
 
-    public IntakeFeed(double elapsedTimeMilli) {
-        this.elapsedTimeMilli = elapsedTimeMilli;
-    }
-
     @Override
     public void start() {
         startingTime = System.currentTimeMillis();
@@ -17,12 +13,16 @@ public class IntakeFeed extends Command {
 
     @Override
     public void loop() {
-        elapsedTime = System.currentTimeMillis();
         robot.intake.update(true, false);
     }
 
     @Override
     public boolean isFinished() {
-        return (startingTime + elapsedTimeMilli) < elapsedTime;
+        if (robot.odometry.sensorValues().get("Red") > 300 &&
+                robot.odometry.sensorValues().get("Green") > 300) {
+            robot.intake.update(false, false);
+            return true;
+        }
+        else return false;
     }
 }
