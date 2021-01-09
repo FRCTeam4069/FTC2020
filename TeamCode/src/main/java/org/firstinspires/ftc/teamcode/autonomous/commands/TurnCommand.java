@@ -43,6 +43,6 @@ public class TurnCommand extends Command {
     //If less than 5 degrees off the action is complete
     @Override
     public boolean isFinished() {
-        return Math.abs(error) < 2;
+        return Math.abs(error) < 3;
     }
 }

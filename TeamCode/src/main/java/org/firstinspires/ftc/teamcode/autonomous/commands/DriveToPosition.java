@@ -82,25 +82,25 @@ public class DriveToPosition extends Command {
         double yOutput = (yError * yKP) + (yErrorSum * yKI) + (yChangeError * yKD);
         double xOutput = (xError * xKP) + (xErrorSum * xKI) + (xChangeError * xKD);
 
-        if(Math.abs(xOutput) > 0.5) {
-            double currentTime = System.currentTimeMillis();
-            //Ramp Strafing speed
-            if (Math.abs(robot.odometry.x.getCurrentVel()) < 20000 && !rampComplete) {
-                if (currentTime - lastTime > 25) {
-                    if (xError > 0) rampOutput += 0.025;
-                    else rampOutput -= 0.025;
+        if(xSetPoint > ySetPoint) {
+            if (Math.abs(xOutput) > 0.5) {
+                double currentTime = System.currentTimeMillis();
+                //Ramp Strafing speed
+                if (Math.abs(robot.odometry.x.getCurrentVel()) < 20000 && !rampComplete) {
+                    if (currentTime - lastTime > 25) {
+                        if (xError > 0) rampOutput += 0.025;
+                        else rampOutput -= 0.025;
+                    }
+                    xOutput = rampOutput;
+                    telemetry.addData("Ramping", true);
+                } else {
+                    rampOutput = 0;
+                    rampComplete = true;
                 }
-                xOutput = rampOutput;
-                telemetry.addData("Ramping", true);
-            }
-            else {
-                rampOutput = 0;
-                rampComplete = true;
-            }
 
-            lastTime = System.currentTimeMillis();
+                lastTime = System.currentTimeMillis();
+            }
         }
-
         //Calculate error and integral of error for turn
         double currentTurn = robot.odometry.getCurrentHeading();
 

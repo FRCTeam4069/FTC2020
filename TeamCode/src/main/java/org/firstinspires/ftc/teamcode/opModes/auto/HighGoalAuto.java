@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opModes.auto;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.autonomous.commands.ShooterOn;
 import org.firstinspires.ftc.teamcode.autonomous.commands.TurnCommand;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
+@Autonomous
 public class HighGoalAuto extends LinearOpMode {
 
     Robot robot;
@@ -27,10 +29,10 @@ public class HighGoalAuto extends LinearOpMode {
         Scheduler secondScheduler = new Scheduler(telemetry, robot);
 
         //Scheduler to drive to starter stack
-        initialScheduler.addCommand(new DriveToPosition(50000, 0));
+        initialScheduler.addCommand(new DriveToPosition(-50000, 0));
 
         //Drives to line, turns and fires
-        secondScheduler.addCommand(new DriveToPosition(75000, 30000));
+        secondScheduler.addCommand(new DriveToPosition(-100000, 20000));
         secondScheduler.addCommand(new TurnCommand(270));
         secondScheduler.addCommand(new ResetEncoders());
         //Start running shooter
@@ -45,16 +47,19 @@ public class HighGoalAuto extends LinearOpMode {
             idle();
         }
 
+
         //Check for stack
         if(opModeIsActive()) {
             double startTime = System.currentTimeMillis();
-            while(System.currentTimeMillis() + 500 < startTime && opModeIsActive()) {
+            while(System.currentTimeMillis() + 3000 < startTime && opModeIsActive()) {
                 robot.detector.updateRecognitions();
                 if(robot.detector.getStarterStackSize(100) != 0) isStack = true;
+                sleep(50);
                 idle();
             }
         }
-
+        telemetry.addData("IS stack?", isStack);
+        telemetry.update();
         //Set third scheduler based on stack (pick it up or no)
         Scheduler thirdScheduler = setScheduler(isStack);
 
@@ -63,6 +68,7 @@ public class HighGoalAuto extends LinearOpMode {
             if(robot.shooter.isReady()) secondScheduler.run();
             if(secondScheduler.getQueueSize() < 2) robot.shooter.update(3000);
             telemetry.update();
+            sleep(1000);
             idle();
         }
 
