@@ -26,6 +26,8 @@ public class MasterTeleDouble extends OpMode {
     boolean active = false;
     boolean conveyerRunning = false;
 
+
+
     @Override
     public void init() {
         robot = new Robot(hardwareMap, telemetry);
@@ -33,6 +35,9 @@ public class MasterTeleDouble extends OpMode {
 
     @Override
     public void loop() {
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        Telemetry dashTelemetry = dashboard.getTelemetry();
+
         colourVals = robot.odometry.sensorValues();
 
         //Control Drivetrain
@@ -178,5 +183,11 @@ public class MasterTeleDouble extends OpMode {
         }
 
         telemetry.update();
+
+        dashTelemetry.addData("RPM", robot.shooter.speed);
+        dashTelemetry.addData("Desired RPM", shooterSetpoint);
+        dashTelemetry.addData("RPM1", robot.shooter.actualSpeed1);
+        dashTelemetry.addData("RPM2", robot.shooter.actualSpeed2);
+        dashTelemetry.update();
     }
 }
