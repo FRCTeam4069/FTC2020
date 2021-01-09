@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.testOpModes;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 @TeleOp
@@ -19,6 +21,8 @@ public class TestShooter extends OpMode {
 
     @Override
     public void loop() {
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
         if(gamepad1.left_stick_button) {
             robot.shooter.rawControl(1);
@@ -39,6 +43,12 @@ public class TestShooter extends OpMode {
 
             robot.shooter.update(setPoint);
             robot.intake.update(gamepad1.start, gamepad1.back);
+
+            dashboardTelemetry.addData("RPM", robot.shooter.speed);
+            dashboardTelemetry.addData("Desired RPM", setPoint);
+            dashboardTelemetry.addData("RPM1", robot.shooter.actualSpeed1);
+            dashboardTelemetry.addData("RPM2", robot.shooter.actualSpeed2);
+            dashboardTelemetry.update();
         }
     }
 }

@@ -20,6 +20,9 @@ public class Shooter extends RobotHardware {
     private double lastPos2 = 0;
     private double lastSpeed2 = 0;
 
+    public double actualSpeed1;
+    public double actualSpeed2;
+
     double totalTimeElapsed;
     double deltaV1;
     double kP1;
@@ -91,7 +94,7 @@ public class Shooter extends RobotHardware {
 
         //Calculate velocity, and change in velocity for first wheel
         //Velocity in ticks/second
-        double actualSpeed1 = (changePos1 / elapsedTime) * 1000;
+        actualSpeed1 = (changePos1 / elapsedTime) * 1000;
         //Velocity in rpm
         actualSpeed1 *= (60.0 / 28.0);
         if(lastSpeed1 == 0) deltaV1 = 0;
@@ -106,7 +109,7 @@ public class Shooter extends RobotHardware {
 
         //Calculate velocity, and change in velocity for second wheel
         //Velocity in ticks/second
-        double actualSpeed2 = (changePos2 / elapsedTime) * 1000;
+        actualSpeed2 = (changePos2 / elapsedTime) * 1000;
         //Velocity in rpm
         actualSpeed2 *= (60.0 / 28.0);
         if(lastSpeed2 == 0) deltaV2 = 0;
@@ -116,16 +119,16 @@ public class Shooter extends RobotHardware {
         error1 = rpm - actualSpeed1;
         if(Double.isNaN(errorSum1)) errorSum1 = error1;
         else errorSum1 += error1;
-        kP1 = 0.0032;
-        kI1 = 0.0004;
-        kD1 = 0;
+        kP1 = 0.00095;
+        kI1 = 0.00006;
+        kD1 = 0.00092;
 
         error2 = rpm - actualSpeed2;
         if(Double.isNaN(errorSum2)) errorSum2 = error2;
         else errorSum2 += error2;
-        kP2 = 0.003;
-        kI2 = 0.000046;
-        kD2 = 0;
+        kP2 = 0.00017;
+        kI2 = 0.000021;
+        kD2 = 0.0013;
 
         output1 = (error1 * kP1) + (errorSum1 * kI1) + (deltaV1 * kD1);
         output2 = (error2 * kP2) + (errorSum2 * kI2) + (deltaV2 * kD2);
@@ -169,7 +172,7 @@ public class Shooter extends RobotHardware {
 
         //Calculate velocity, and change in velocity for first wheel
         //Velocity in ticks/second
-        double actualSpeed1 = (changePos1 / elapsedTime) * 1000;
+        actualSpeed1 = (changePos1 / elapsedTime) * 1000;
         //Velocity in rpm
         actualSpeed1 *= (60.0 / 28.0);
         if(lastSpeed1 == 0) deltaV1 = 0;
@@ -184,7 +187,7 @@ public class Shooter extends RobotHardware {
 
         //Calculate velocity, and change in velocity for second wheel
         //Velocity in ticks/second
-        double actualSpeed2 = (changePos2 / elapsedTime) * 1000;
+        actualSpeed2 = (changePos2 / elapsedTime) * 1000;
         //Velocity in rpm
         actualSpeed2 *= (60.0 / 28.0);
         if(lastSpeed2 == 0) deltaV2 = 0;
