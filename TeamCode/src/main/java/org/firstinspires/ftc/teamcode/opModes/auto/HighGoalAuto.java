@@ -35,7 +35,7 @@ public class HighGoalAuto extends LinearOpMode {
         secondScheduler.addCommand(new ResetEncoders());
         secondScheduler.addCommand(new TurnCommand(270));
         secondScheduler.addCommand(new ResetEncoders());
-        secondScheduler.addCommand(new DriveToPosition(24000, 40000));
+        secondScheduler.addCommand(new DriveToPosition(24000, 50000));
         //Start running shooter
         secondScheduler.addCommand(new PassthroughFeed(3000, true));
 
@@ -52,7 +52,7 @@ public class HighGoalAuto extends LinearOpMode {
         //Check for stack
         if(opModeIsActive()) {
             double startTime = System.currentTimeMillis();
-            while(System.currentTimeMillis() + 3000 < startTime && opModeIsActive()) {
+            while(System.currentTimeMillis() < startTime + 3000 && opModeIsActive()) {
                 robot.detector.updateRecognitions();
                 if(robot.detector.getStarterStackSize(100) != 0) isStack = true;
                 sleep(50);
@@ -82,9 +82,15 @@ public class HighGoalAuto extends LinearOpMode {
 
         //Pick up stack, fire and park on line or just park on line based on stack
         while(opModeIsActive() && thirdScheduler.getQueueSize() != 0) {
+            double shooterSetpoint;
             if(robot.shooter.isReady()) thirdScheduler.run();
             if(thirdScheduler.getQueueSize() < 4 && thirdScheduler.getQueueSize() > 2)
-                robot.shooter.update(3000);
+                shooterSetpoint = 3000;
+            else shooterSetpoint = 0;
+            robot.shooter.update(shooterSetpoint);
+            if(robot.odometry.sensorValues().get("Red") > 300 &&
+                    robot.odometry.sensorValues().get("Green") > 300 && shooterSetpoint == 0)
+                robot.intake.updatePassthrough(false, false);
             telemetry.update();
             idle();
         }
@@ -95,12 +101,13 @@ public class HighGoalAuto extends LinearOpMode {
         Scheduler scheduler = new Scheduler(telemetry, robot);
         if(isStack) {
             scheduler.addCommand(new IntakeFeed());
-            scheduler.addCommand(new DriveToPosition(0, 0));
-            scheduler.addCommand(new DriveToPosition(0, 60000));
+            scheduler.addCommand(new DriveToPosition(24000, -5000));
+            scheduler.addCommand(new IntakeOff());
+            scheduler.addCommand(new DriveToPosition(24000, 50000));
             //Run shooter here
             scheduler.addCommand(new PassthroughFeed(3000, true));
             scheduler.addCommand(new ShooterOff());
-            scheduler.addCommand(new DriveToPosition(0, 30000));
+            scheduler.addCommand(new DriveToPosition(24000, 62000));
         }
         else scheduler.addCommand(new DriveToPosition(24000, 62000));
 

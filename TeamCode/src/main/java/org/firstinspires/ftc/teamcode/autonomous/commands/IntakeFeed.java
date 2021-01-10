@@ -13,16 +13,18 @@ public class IntakeFeed extends Command {
 
     @Override
     public void loop() {
-        robot.intake.update(true, false);
+        if(robot.odometry.sensorValues().get("Red") > 300 &&
+                robot.odometry.sensorValues().get("Green") > 300) {
+            robot.intake.updatePassthrough(false, false);
+            robot.intake.updateIntake(true, false);
+        }
+        else {
+            robot.intake.update(true, false);
+        }
     }
 
     @Override
     public boolean isFinished() {
-        if (robot.odometry.sensorValues().get("Red") > 300 &&
-                robot.odometry.sensorValues().get("Green") > 300) {
-            robot.intake.update(false, false);
-            return true;
-        }
-        else return false;
+        return true;
     }
 }
