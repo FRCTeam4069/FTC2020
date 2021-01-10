@@ -5,6 +5,8 @@ public class ResetEncoders extends Command{
     @Override
     public void start() {
         robot.drivetrain.resetEncoders();
+        robot.odometry.x.reset();
+        robot.odometry.yRight.reset();
     }
 
     @Override

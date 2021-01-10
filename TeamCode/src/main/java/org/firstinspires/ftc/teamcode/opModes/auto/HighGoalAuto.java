@@ -29,12 +29,13 @@ public class HighGoalAuto extends LinearOpMode {
         Scheduler secondScheduler = new Scheduler(telemetry, robot);
 
         //Scheduler to drive to starter stack
-        initialScheduler.addCommand(new DriveToPosition(-50000, 0));
+        initialScheduler.addCommand(new DriveToPosition(-60000, 0));
 
         //Drives to line, turns and fires
-        secondScheduler.addCommand(new DriveToPosition(-100000, 20000));
+        secondScheduler.addCommand(new ResetEncoders());
         secondScheduler.addCommand(new TurnCommand(270));
         secondScheduler.addCommand(new ResetEncoders());
+        secondScheduler.addCommand(new DriveToPosition(4000, 40000));
         //Start running shooter
         secondScheduler.addCommand(new PassthroughFeed(3000, true));
 
@@ -68,7 +69,6 @@ public class HighGoalAuto extends LinearOpMode {
             if(robot.shooter.isReady()) secondScheduler.run();
             if(secondScheduler.getQueueSize() < 2) robot.shooter.update(3000);
             telemetry.update();
-            sleep(1000);
             idle();
         }
 
@@ -87,8 +87,8 @@ public class HighGoalAuto extends LinearOpMode {
         Scheduler scheduler = new Scheduler(telemetry, robot);
         if(isStack) {
             scheduler.addCommand(new IntakeFeed());
-            scheduler.addCommand(new DriveToPosition(0, -50000));
-            scheduler.addCommand(new DriveToPosition(0, 20000));
+            scheduler.addCommand(new DriveToPosition(0, 0));
+            scheduler.addCommand(new DriveToPosition(0, 60000));
             //Run shooter here
             scheduler.addCommand(new PassthroughFeed(3000, true));
             scheduler.addCommand(new ShooterOff());

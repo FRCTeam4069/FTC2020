@@ -82,11 +82,11 @@ public class DriveToPosition extends Command {
         double yOutput = (yError * yKP) + (yErrorSum * yKI) + (yChangeError * yKD);
         double xOutput = (xError * xKP) + (xErrorSum * xKI) + (xChangeError * xKD);
 
-        if(xSetPoint > ySetPoint) {
+        if(Math.abs(xSetPoint) > ySetPoint) {
             if (Math.abs(xOutput) > 0.5) {
                 double currentTime = System.currentTimeMillis();
                 //Ramp Strafing speed
-                if (Math.abs(robot.odometry.x.getCurrentVel()) < 20000 && !rampComplete) {
+                if (Math.abs(robot.odometry.x.getCurrentVel()) < 27500 && !rampComplete) {
                     if (currentTime - lastTime > 25) {
                         if (xError > 0) rampOutput += 0.025;
                         else rampOutput -= 0.025;
@@ -109,8 +109,17 @@ public class DriveToPosition extends Command {
         turnErrorSum += turnError;
 
         //Turning PID gains
-        double turnKP = 0.022;
-        double turnKI = 0.001;
+        double turnKP = 0;
+        double turnKI = 0;
+
+        if(Math.abs(turnError) < 5) {
+            turnKP = 0.0205;
+            turnKI = 0.001;
+        }
+        else {
+            turnKP = 0.012;
+            turnKI = 0.0;
+        }
 
         //Turn output
         double turnOutput = (turnError * turnKP) + (turnErrorSum * turnKI);
@@ -138,7 +147,7 @@ public class DriveToPosition extends Command {
     @Override
     public boolean isFinished() {
         //If close enough to accurate return isFinished as true
-        if((Math.abs(yError) < 5000) && (Math.abs(xError) < 5000) && (Math.abs(turnError) < 3)) {
+        if((Math.abs(yError) < 5000) && (Math.abs(xError) < 5000) && (Math.abs(turnError) < 5)) {
             rampComplete = false;
             return true;
         }

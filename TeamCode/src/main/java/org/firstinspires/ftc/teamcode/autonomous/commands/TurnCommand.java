@@ -25,24 +25,27 @@ public class TurnCommand extends Command {
     //Calculate error in turn, if greater than 180 turn counter clockwise
     @Override
     public void loop() {
+        currentTurn = robot.odometry.getCurrentHeading();
         error = desiredTurn - currentTurn;
+        if(error > 180) error = -error + 360;
+        else error = 0 - error;
         errorSum += error;
-        double kP = 0.01205;
-        double kI = 0.000025;
+        double kP = 0.012;
+        double kI = 0.0;
         double output = error * kP + errorSum * kI;
 
         if(Math.abs(error) < 180) {
-            robot.drivetrain.update(0, 0, -output);
-        }
-        else {
             robot.drivetrain.update(0, 0, output);
         }
-        currentTurn = robot.odometry.getCurrentHeading();
+        else {
+            robot.drivetrain.update(0, 0, -output);
+        }
+        telemetry.addData("Turn error", error);
     }
 
     //If less than 5 degrees off the action is complete
     @Override
     public boolean isFinished() {
-        return Math.abs(error) < 3;
+        return Math.abs(error) < 7;
     }
 }
