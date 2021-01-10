@@ -23,6 +23,6 @@ public class PassthroughFeed extends Command {
 
     @Override
     public boolean isFinished() {
-        return (startTime + runTimeMillis) > System.currentTimeMillis();
+        return (startTime + runTimeMillis) < System.currentTimeMillis();
     }
 }

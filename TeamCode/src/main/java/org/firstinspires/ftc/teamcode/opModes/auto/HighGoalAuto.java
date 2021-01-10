@@ -35,7 +35,7 @@ public class HighGoalAuto extends LinearOpMode {
         secondScheduler.addCommand(new ResetEncoders());
         secondScheduler.addCommand(new TurnCommand(270));
         secondScheduler.addCommand(new ResetEncoders());
-        secondScheduler.addCommand(new DriveToPosition(4000, 40000));
+        secondScheduler.addCommand(new DriveToPosition(24000, 40000));
         //Start running shooter
         secondScheduler.addCommand(new PassthroughFeed(3000, true));
 
@@ -66,10 +66,18 @@ public class HighGoalAuto extends LinearOpMode {
 
         //Drive to line and fire
         while(opModeIsActive() && secondScheduler.getQueueSize() != 0) {
+            double shooterSetpoint = 0;
             if(robot.shooter.isReady()) secondScheduler.run();
-            if(secondScheduler.getQueueSize() < 2) robot.shooter.update(3000);
+            if(secondScheduler.getQueueSize() < 2) shooterSetpoint = 3000;
+            robot.shooter.update(shooterSetpoint);
+            telemetry.addData("RPM", robot.shooter.speed);
+            telemetry.addData("Queue", secondScheduler.getQueueSize());
             telemetry.update();
             idle();
+        }
+
+        while(!robot.shooter.isReady()) {
+            robot.shooter.update(0);
         }
 
         //Pick up stack, fire and park on line or just park on line based on stack
@@ -94,7 +102,7 @@ public class HighGoalAuto extends LinearOpMode {
             scheduler.addCommand(new ShooterOff());
             scheduler.addCommand(new DriveToPosition(0, 30000));
         }
-        else scheduler.addCommand(new DriveToPosition(0, 30000));
+        else scheduler.addCommand(new DriveToPosition(24000, 62000));
 
         return scheduler;
     }
