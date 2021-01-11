@@ -16,14 +16,14 @@ public class DropIntake extends Command {
 
     @Override
     public void loop() {
-        if(System.currentTimeMillis() < startingTime + 1000)
+        if(System.currentTimeMillis() < startingTime + 250)
             robot.drivetrain.update(-1, 0, 0);
         else {
             if(firstForward) {
                 forwardTime = System.currentTimeMillis();
                 firstForward = false;
             }
-            if(System.currentTimeMillis() < forwardTime + 750)
+            if(System.currentTimeMillis() < forwardTime + 350)
                 robot.drivetrain.update(1, 0, 0);
             else isDone = true;
         }

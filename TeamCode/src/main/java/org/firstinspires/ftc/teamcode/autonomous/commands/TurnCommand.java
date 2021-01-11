@@ -34,18 +34,23 @@ public class TurnCommand extends Command {
         double kI = 0.0;
         double output = error * kP + errorSum * kI;
 
-        if(Math.abs(error) < 180) {
-            robot.drivetrain.update(0, 0, output);
+        if(Math.abs(error) < 7) {
+            if(error < 0) robot.drivetrain.update(0, 0, -0.15);
+            else robot.drivetrain.update(0, 0, 0.15);
         }
         else {
-            robot.drivetrain.update(0, 0, -output);
+            if (Math.abs(error) < 180) {
+                robot.drivetrain.update(0, 0, output);
+            } else {
+                robot.drivetrain.update(0, 0, -output);
+            }
         }
         telemetry.addData("Turn error", error);
     }
 
-    //If less than 5 degrees off the action is complete
+    //If less than 2.5 degrees off the action is complete
     @Override
     public boolean isFinished() {
-        return Math.abs(error) < 7;
+        return Math.abs(error) < 2.5;
     }
 }

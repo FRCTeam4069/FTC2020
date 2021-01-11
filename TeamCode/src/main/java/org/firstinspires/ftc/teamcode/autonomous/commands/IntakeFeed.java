@@ -5,6 +5,11 @@ public class IntakeFeed extends Command {
     double startingTime;
     double elapsedTime;
     double elapsedTimeMilli;
+    boolean index;
+
+    public IntakeFeed(boolean index) {
+        this.index = index;
+    }
 
     @Override
     public void start() {
@@ -13,14 +18,16 @@ public class IntakeFeed extends Command {
 
     @Override
     public void loop() {
-        if(robot.odometry.sensorValues().get("Red") > 300 &&
-                robot.odometry.sensorValues().get("Green") > 300) {
-            robot.intake.updatePassthrough(false, false);
-            robot.intake.updateIntake(true, false);
+        if (index) {
+            if (robot.odometry.sensorValues().get("Red") > 300 &&
+                    robot.odometry.sensorValues().get("Green") > 300) {
+                robot.intake.updatePassthrough(false, false);
+                robot.intake.updateIntake(true, false);
+            } else {
+                robot.intake.update(true, false);
+            }
         }
-        else {
-            robot.intake.update(true, false);
-        }
+        else robot.intake.update(true, false);
     }
 
     @Override
