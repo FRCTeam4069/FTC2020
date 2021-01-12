@@ -16,7 +16,6 @@ public class TestShooter extends OpMode {
     @Override
     public void init() {
         robot = new Robot(hardwareMap, telemetry);
-        setPoint = 0.0;
     }
 
     @Override
