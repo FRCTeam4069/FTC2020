@@ -19,8 +19,8 @@ public class IntakeFeed extends Command {
     @Override
     public void loop() {
         if (index) {
-            if (robot.odometry.sensorValues().get("Red") > 300 &&
-                    robot.odometry.sensorValues().get("Green") > 300) {
+            if (robot.odometry.colorSensor().red() > 300 &&
+                    robot.odometry.colorSensor().green() > 300) {
                 robot.intake.updatePassthrough(false, false);
                 robot.intake.updateIntake(true, false);
             } else {

@@ -46,6 +46,9 @@ public class Shooter extends RobotHardware {
     private double rpm = 0;
     private double power;
 
+    double lastUpdateTime = 0;
+    public double timeSinceLastUpdate;
+
     public Shooter(HardwareMap hardwareMap, Telemetry telemetry) {
         super(hardwareMap);
 
@@ -82,56 +85,62 @@ public class Shooter extends RobotHardware {
         else {
             elapsedTime = currentTime - lastTime;
         }
-        totalTimeElapsed = 0;
-        totalTimeElapsed += elapsedTime;
-        lastTime = System.currentTimeMillis();
 
-        //Change in position on first wheel
-        double changePos1;
-        if(lastPos1 == 0) changePos1 = 0;
-        else changePos1 = shooterMaster.getCurrentPosition() - lastPos1;
-        lastPos1 = shooterMaster.getCurrentPosition();
+        timeSinceLastUpdate = System.currentTimeMillis() - lastUpdateTime;
+        if(timeSinceLastUpdate > 40) {
 
-        //Calculate velocity, and change in velocity for first wheel
-        //Velocity in ticks/second
-        actualSpeed1 = (changePos1 / elapsedTime) * 1000;
-        //Velocity in rpm
-        actualSpeed1 *= (60.0 / 28.0);
-        if(lastSpeed1 == 0) deltaV1 = 0;
-        else deltaV1 = lastSpeed1 - actualSpeed1;
-        lastSpeed1 = changePos1 / totalTimeElapsed;
+            lastUpdateTime = System.currentTimeMillis();
+            totalTimeElapsed = 0;
+            totalTimeElapsed += elapsedTime;
+            lastTime = System.currentTimeMillis();
 
-        //Change in position for second wheel
-        double changePos2;
-        if(lastPos2 == 0) changePos2 = 0;
-        else changePos2 = shooterSlave.getCurrentPosition() - lastPos2;
-        lastPos2 = shooterSlave.getCurrentPosition();
+            //Change in position on first wheel
+            double changePos1;
+            if (lastPos1 == 0) changePos1 = 0;
+            else changePos1 = shooterMaster.getCurrentPosition() - lastPos1;
+            lastPos1 = shooterMaster.getCurrentPosition();
 
-        //Calculate velocity, and change in velocity for second wheel
-        //Velocity in ticks/second
-        actualSpeed2 = (changePos2 / elapsedTime) * 1000;
-        //Velocity in rpm
-        actualSpeed2 *= (60.0 / 28.0);
-        if(lastSpeed2 == 0) deltaV2 = 0;
-        else deltaV2 = lastSpeed2 - actualSpeed2;
-        lastSpeed2 = changePos1 / totalTimeElapsed;
+            //Calculate velocity, and change in velocity for first wheel
+            //Velocity in ticks/second
+            actualSpeed1 = (changePos1 / elapsedTime) * 1000;
+            //Velocity in rpm
+            actualSpeed1 *= (60.0 / 28.0);
+            if (lastSpeed1 == 0) deltaV1 = 0;
+            else deltaV1 = lastSpeed1 - actualSpeed1;
+            lastSpeed1 = changePos1 / totalTimeElapsed;
 
-        error1 = rpm - actualSpeed1;
-        if(Double.isNaN(errorSum1)) errorSum1 = error1;
-        else errorSum1 += error1;
-        kP1 = 0.00098;
-        kI1 = 0.000065;
-        kD1 = 0.00074;
+            //Change in position for second wheel
+            double changePos2;
+            if (lastPos2 == 0) changePos2 = 0;
+            else changePos2 = shooterSlave.getCurrentPosition() - lastPos2;
+            lastPos2 = shooterSlave.getCurrentPosition();
 
-        error2 = rpm - actualSpeed2;
-        if(Double.isNaN(errorSum2)) errorSum2 = error2;
-        else errorSum2 += error2;
-        kP2 = 0.00098;
-        kI2 = 0.000065;
-        kD2 = 0.00074;
+            //Calculate velocity, and change in velocity for second wheel
+            //Velocity in ticks/second
+            actualSpeed2 = (changePos2 / elapsedTime) * 1000;
+            //Velocity in rpm
+            actualSpeed2 *= (60.0 / 28.0);
+            if (lastSpeed2 == 0) deltaV2 = 0;
+            else deltaV2 = lastSpeed2 - actualSpeed2;
+            lastSpeed2 = changePos1 / totalTimeElapsed;
 
-        output1 = (error1 * kP1) + (errorSum1 * kI1) + (deltaV1 * kD1);
-        output2 = (error2 * kP2) + (errorSum2 * kI2) + (deltaV2 * kD2);
+            error1 = rpm - actualSpeed1;
+            if (Double.isNaN(errorSum1)) errorSum1 = error1;
+            else errorSum1 += error1;
+            kP1 = 0.00098;
+            kI1 = 0.000065;
+            kD1 = 0.00074;
+
+            error2 = rpm - actualSpeed2;
+            if (Double.isNaN(errorSum2)) errorSum2 = error2;
+            else errorSum2 += error2;
+            kP2 = 0.00098;
+            kI2 = 0.000065;
+            kD2 = 0.00074;
+
+            output1 = (error1 * kP1) + (errorSum1 * kI1) + (deltaV1 * kD1);
+            output2 = (error2 * kP2) + (errorSum2 * kI2) + (deltaV2 * kD2);
+        }
 
         shooterMaster.setPower(output1);
         shooterSlave.setPower(output2);

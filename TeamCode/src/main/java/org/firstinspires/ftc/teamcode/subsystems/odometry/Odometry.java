@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.odometry;
 
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -75,15 +76,8 @@ public class Odometry extends RobotHardware {
         if(update) telemetry.update();
     }
 
-    public HashMap<String, Integer> sensorValues() {
-        HashMap<String, Integer> vals = new HashMap<>();
-
-        vals.put("Red", colourSensor.red());
-        vals.put("Blue", colourSensor.blue());
-        vals.put("Green", colourSensor.green());
-        vals.put("Alpha", colourSensor.alpha());
-
-        return vals;
+    public ColorSensor colorSensor() {
+        return colourSensor;
     }
 
     @Override

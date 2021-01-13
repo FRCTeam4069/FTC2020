@@ -78,7 +78,6 @@ public class HighGoalAuto extends LinearOpMode {
 //            if(secondScheduler.getQueueSize() < 2) shooterSetpoint = 2550;
 //            else shooterSetpoint = 0;
             robot.shooter.update(3000);
-            double green = robot.odometry.sensorValues().get("Green");
             dashboardTelemetry.addData("RPM", robot.shooter.speed);
 //            dashboardTelemetry.addData("Shooter setpoint", shooterSetpoint);
             dashboardTelemetry.addData("Queue", secondScheduler.getQueueSize());
@@ -99,8 +98,8 @@ public class HighGoalAuto extends LinearOpMode {
             if(thirdScheduler.getQueueSize() <= 4) shooterSetpoint = 3000;
             else shooterSetpoint = 0;
             robot.shooter.update(shooterSetpoint);
-            if(robot.odometry.sensorValues().get("Red") > 300 &&
-                    robot.odometry.sensorValues().get("Green") > 300 && shooterSetpoint == 0) {
+            if(robot.odometry.colorSensor().red() > 300 &&
+                    robot.odometry.colorSensor().green() > 300 && shooterSetpoint == 0) {
                 if(!indexStarted) {
                     timeStartIndex = System.currentTimeMillis();
                     indexStarted = true;

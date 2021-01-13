@@ -15,7 +15,6 @@ public class MasterTeleSingle extends OpMode {
     double shooterSetpoint;
     boolean in;
     boolean out;
-    HashMap<String, Integer> colourVals;
     double startingTime = 0;
     boolean isIndexing;
 
@@ -29,7 +28,6 @@ public class MasterTeleSingle extends OpMode {
 
     @Override
     public void loop() {
-        colourVals = robot.odometry.sensorValues();
 
         //Control Drivetrain
         double turnVal;
@@ -58,7 +56,7 @@ public class MasterTeleSingle extends OpMode {
         }
         //Indexing Routine (NO JAMS!!!)
         if(!isIndexing) {
-            if (colourVals.get("Red") > 300 && colourVals.get("Green") > 300) {
+            if (robot.odometry.colorSensor().red() > 300 && robot.odometry.colorSensor().green() > 300) {
                 telemetry.addData("Indexing", true);
 
                 startingTime = System.currentTimeMillis();
@@ -67,8 +65,8 @@ public class MasterTeleSingle extends OpMode {
             }
         }
         else {
-            if((System.currentTimeMillis() < startingTime + 2000) && (colourVals.get("Red") > 300 &&
-                    colourVals.get("Green") > 300) && !gamepad1.left_stick_button && !shooterRunning) {
+            if((System.currentTimeMillis() < startingTime + 2000) && (robot.odometry.colorSensor().red() > 300 &&
+                    robot.odometry.colorSensor().green() > 300) && !gamepad1.left_stick_button && !shooterRunning) {
                 robot.intake.updatePassthrough(false, true);
                 robot.shooter.rawControl(-0.25);
                 robot.intake.updateIntake(false, false);
