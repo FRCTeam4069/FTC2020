@@ -42,7 +42,7 @@ public class HighGoalAuto extends LinearOpMode {
         secondScheduler.addCommand(new ResetEncoders());
         secondScheduler.addCommand(new TurnCommand(270));
         secondScheduler.addCommand(new ResetEncoders());
-        secondScheduler.addCommand(new DriveToPosition(24000, 41500));
+        secondScheduler.addCommand(new DriveToPosition(27000, 40000));
         secondScheduler.addCommand(new TurnCommand(270));
         //Start running shooter
         secondScheduler.addCommand(new PassthroughFeed(3000, true));
@@ -77,7 +77,7 @@ public class HighGoalAuto extends LinearOpMode {
             if(robot.shooter.isReady()) secondScheduler.run();
 //            if(secondScheduler.getQueueSize() < 2) shooterSetpoint = 2550;
 //            else shooterSetpoint = 0;
-            robot.shooter.update(3000);
+            robot.shooter.update(2850);
             dashboardTelemetry.addData("RPM", robot.shooter.speed);
 //            dashboardTelemetry.addData("Shooter setpoint", shooterSetpoint);
             dashboardTelemetry.addData("Queue", secondScheduler.getQueueSize());
@@ -94,8 +94,8 @@ public class HighGoalAuto extends LinearOpMode {
         while(opModeIsActive() && thirdScheduler.getQueueSize() != 0) {
             double timeStartIndex = 0;
             double shooterSetpoint;
-            if(robot.shooter.isReady()) thirdScheduler.run();
-            if(thirdScheduler.getQueueSize() <= 4) shooterSetpoint = 3000;
+            if(robot.shooter.isReady() || thirdScheduler.getQueueSize() > 4) thirdScheduler.run();
+            if(thirdScheduler.getQueueSize() <= 4) shooterSetpoint = 2850;
             else shooterSetpoint = 0;
             robot.shooter.update(shooterSetpoint);
             if(robot.odometry.colorSensor().red() > 300 &&
@@ -131,7 +131,8 @@ public class HighGoalAuto extends LinearOpMode {
             scheduler.addCommand(new IntakeFeed(true));
             scheduler.addCommand(new RawDriveControl(-0.5, 2200));
             scheduler.addCommand(new IntakeOff());
-            scheduler.addCommand(new DriveToPosition(24000, 41500));
+            scheduler.addCommand(new TurnCommand(270));
+            scheduler.addCommand(new DriveToPosition(24000, 40000));
             scheduler.addCommand(new TurnCommand(270));
             //Run shooter here
             scheduler.addCommand(new IntakeFeed(false));
