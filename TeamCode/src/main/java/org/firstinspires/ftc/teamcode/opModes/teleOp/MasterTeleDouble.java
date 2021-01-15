@@ -25,6 +25,7 @@ public class MasterTeleDouble extends OpMode {
     boolean active = false;
     boolean conveyerRunning = false;
 
+    boolean overrideIndex = false;
 
 
     @Override
@@ -118,40 +119,48 @@ public class MasterTeleDouble extends OpMode {
         }
 
         //Control Intake
-        if(gamepad2.a && !gamepad2.b) {
+        if(gamepad2.dpad_down) {
+            overrideIndex = true;
+            robot.intake.updatePassthrough(false, true);
+        }
+        else if(gamepad2.a && !gamepad2.b && !overrideIndex) {
             in = true;
             out = false;
         }
-        else if(gamepad2.b && gamepad2.a) {
+        else if(gamepad2.b && !gamepad2.a && !overrideIndex) {
             out = true;
             in = false;
         }
         else {
             in = false;
             out = false;
+            overrideIndex = false;
         }
-        if(!isIndexing) robot.intake.update(in, out);
+        if(!isIndexing && !shooterRunning) {
+            if(!overrideIndex) robot.intake.update(in, out);
+            else robot.intake.updateIntake(in, out);
+        }
 
-        if(!in && !out && !isIndexing) {
+        if(!in && !out && !isIndexing && !shooterRunning) {
             robot.intake.updateIntake(gamepad2.x, gamepad2.y);
         }
 
         //Control shooter
         //High Goal Line
         if (gamepad2.left_bumper) {
-            shooterSetpoint = 3000;
+            shooterSetpoint = 2950;
             shooterRunning = true;
         }
 
         //High Goal Wall
         else if (gamepad2.left_trigger > 0.25) {
-            shooterSetpoint = 2500;
+            shooterSetpoint = 2550;
             shooterRunning = true;
         }
 
         //Power Shot line
         else if (gamepad2.right_bumper) {
-            shooterSetpoint = 2250;
+            shooterSetpoint = 2280;
             shooterRunning = true;
         }
 
