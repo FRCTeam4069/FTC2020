@@ -185,6 +185,7 @@ public class MasterTeleDouble extends OpMode {
         dashTelemetry.addData("Desired RPM", shooterSetpoint);
         dashTelemetry.addData("RPM1", robot.shooter.actualSpeed1);
         dashTelemetry.addData("RPM2", robot.shooter.actualSpeed2);
-        dashTelemetry.update();
+        robot.drivetrain.addBaseTelemetry(true);
+//        dashTelemetry.update();
     }
 }

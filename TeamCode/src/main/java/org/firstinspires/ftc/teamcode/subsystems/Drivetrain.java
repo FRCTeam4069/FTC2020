@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -18,6 +19,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 public class Drivetrain extends RobotHardware {
 
     Telemetry telemetry;
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+    Telemetry DTelemetry = dashboard.getTelemetry();
 
     //Just in case
     public final double TICKS_PER_REV = 432;
@@ -53,6 +56,11 @@ public class Drivetrain extends RobotHardware {
     double frontRightOutput;
     double backLeftOutput;
     double backRightOutput;
+
+    double flActualVelocity;
+    double frActualVelocity;
+    double blActualVelocity;
+    double brActualVelocity;
 
     double flSum;
     double frSum;
@@ -202,10 +210,10 @@ public class Drivetrain extends RobotHardware {
             } else turnOutput = turn;
 
             //Calculate actual velocity of each motor
-            double flActualVelocity = flPosChange / elapsedTime;
-            double blActualVelocity = blPosChange / elapsedTime;
-            double frActualVelocity = frPosChange / elapsedTime;
-            double brActualVelocity = brPosChange / elapsedTime;
+            flActualVelocity = flPosChange / elapsedTime;
+            blActualVelocity = blPosChange / elapsedTime;
+            frActualVelocity = frPosChange / elapsedTime;
+            brActualVelocity = brPosChange / elapsedTime;
 
             //Calculate desired motor outputs
             desiredFrontLeftSpeed = (Math.sin(direction + Math.PI / 4) * desiredSpeed)
@@ -408,7 +416,12 @@ public class Drivetrain extends RobotHardware {
         telemetry.addData("Desired Back Left Speed", desiredBackLeftSpeed);
         telemetry.addData("Desired Back Right Speed", desiredBackRightSpeed);
 
-        telemetry.addData("Front Left Output", frontLeftOutput);
+        telemetry.addData("Front Left Speed", flActualVelocity);
+        telemetry.addData("Front Right Speed", frActualVelocity);
+        telemetry.addData("Back Left Speed", blActualVelocity);
+        telemetry.addData("Back Right Speed", brActualVelocity);
+
+        telemetry.addData("Front Left Output", frontLeft);
         telemetry.addData("Front Right Output", frontRightOutput);
         telemetry.addData("Back Left Output", backLeftOutput);
         telemetry.addData("Back Right Output", backRightOutput);
@@ -419,6 +432,29 @@ public class Drivetrain extends RobotHardware {
         if(update) {
             telemetry.update();
         }
+        DTelemetry.addData("Desired Speed", desiredSpeed);
+        DTelemetry.addData("Desired Front Left Speed", desiredFrontLeftSpeed);
+        DTelemetry.addData("Desired Front Right Speed", desiredFrontRightSpeed);
+        DTelemetry.addData("Desired Back Left Speed", desiredBackLeftSpeed);
+        DTelemetry.addData("Desired Back Right Speed", desiredBackRightSpeed);
+
+        DTelemetry.addData("Front Left Speed", flActualVelocity);
+        DTelemetry.addData("Front Right Speed", frActualVelocity);
+        DTelemetry.addData("Back Left Speed", blActualVelocity);
+        DTelemetry.addData("Back Right Speed", brActualVelocity);
+
+        DTelemetry.addData("Front Left Output", frontLeft);
+        DTelemetry.addData("Front Right Output", frontRightOutput);
+        DTelemetry.addData("Back Left Output", backLeftOutput);
+        DTelemetry.addData("Back Right Output", backRightOutput);
+
+        DTelemetry.addData("Turn Error", turnError);
+        DTelemetry.addData("Turn Output", turnOutput);
+        DTelemetry.addData("Current Turn", currentTurn);
+        if(update) {
+            DTelemetry.update();
+        }
+
     }
 
     public void addTurnTelemetry(boolean update) {
