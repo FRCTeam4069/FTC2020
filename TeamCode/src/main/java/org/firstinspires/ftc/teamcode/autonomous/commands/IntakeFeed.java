@@ -27,7 +27,7 @@ public class IntakeFeed extends Command {
                 robot.intake.update(true, false);
             }
         }
-        else robot.intake.update(true, false);
+        else robot.intake.update(true, false, 0.5);
     }
 
     @Override

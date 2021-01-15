@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -15,6 +16,8 @@ import java.util.List;
 public class StarterStackDetector extends RobotHardware {
 
     Telemetry telemetry;
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+    Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
     //TF Detector assets
     private static final String TF_DECTECTOR_MODEL_ASSETS = "UltimateGoal.tflite";
@@ -22,7 +25,11 @@ public class StarterStackDetector extends RobotHardware {
     private static final String LABEL_SECOND_ELEMENT = "Single";
 
     //Vuforia Asset
-    private static final String VUFORIA_KEY = "AUdbl2P/////AAABmWYe3kyuhU8cm/rBVoVMzVotL3p0vfzGnir9dscLSA2K03xgWC6VBG08gzHvNXA4ac6axF+EINaVBUMwEcoY6tNQX8bSAY778bfzT6WQzilY8UNOo+Pa0oBZ6Ut5B0piq7wcLLUSMjXv2iX0yjcioMJ9Lqoo5tXAbaL2x3sn+zkioNVm1zl1a1fgzXmtxilRTrK4MN7kYFoO0yfIlq5YDKiNU5Hzrbr1wzdhSp2+FoQekvlCfMZzi0YjICtfooi5m70RuTJcn7aRNHHMyuKSSmqzxe4W4j0cLR+Kw4yFVxue75GDxMIh1Ot7zi1blRojFBZ1oY5s84aQvCZ5Xtsf+COCA0MP1GQwcw9utlH9Ln2o";
+    private static final String VUFORIA_KEY = "AUdbl2P/////AAABmWYe3kyuhU8cm/rBVoVMzVotL3p0vfzGnir9d" +
+            "scLSA2K03xgWC6VBG08gzHvNXA4ac6axF+EINaVBUMwEcoY6tNQX8bSAY778bfzT6WQzilY8UNOo+Pa0oBZ6Ut5" +
+            "B0piq7wcLLUSMjXv2iX0yjcioMJ9Lqoo5tXAbaL2x3sn+zkioNVm1zl1a1fgzXmtxilRTrK4MN7kYFoO0yfIlq" +
+            "5YDKiNU5Hzrbr1wzdhSp2+FoQekvlCfMZzi0YjICtfooi5m70RuTJcn7aRNHHMyuKSSmqzxe4W4j0cLR+Kw4yFV" +
+            "xue75GDxMIh1Ot7zi1blRojFBZ1oY5s84aQvCZ5Xtsf+COCA0MP1GQwcw9utlH9Ln2o";
 
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfDetector;
@@ -51,7 +58,7 @@ public class StarterStackDetector extends RobotHardware {
 
         // Create necessary params for tf init
         TFObjectDetector.Parameters tfParam = new TFObjectDetector.Parameters();
-        tfParam.minResultConfidence = 0.75f;
+        tfParam.minResultConfidence = 0.88f;
 
         // Create tf detector and add model assets
         tfDetector = ClassFactory.getInstance().createTFObjectDetector(tfParam, vuforia);
@@ -73,7 +80,9 @@ public class StarterStackDetector extends RobotHardware {
         if(tfDetector.getUpdatedRecognitions() == null) updatedRecognitions = tfDetector.getRecognitions();
 
         //Update list of updated recognitions
-        else updatedRecognitions = tfDetector.getUpdatedRecognitions();
+        else {
+            updatedRecognitions = tfDetector.getUpdatedRecognitions();
+        }
     }
 
     public void printCurrentVals() {
@@ -114,6 +123,8 @@ public class StarterStackDetector extends RobotHardware {
             telemetry.addData("Num Objects", updatedRecognitions.size());
             if (updatedRecognitions.size() != 0) {
                 Recognition starterStack = updatedRecognitions.get(0);
+                dashboardTelemetry.addData("Confidence", starterStack.getConfidence());
+                dashboardTelemetry.update();
 
                 //Adding telemetry recognition data
                 telemetry.addData("Confidence", starterStack.getConfidence());

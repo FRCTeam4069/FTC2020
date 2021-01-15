@@ -128,9 +128,9 @@ public class DriveToPosition extends Command {
 
         lastTurnOutput = turnOutput;
 
-
         //Setting outputs to be executed by the drivetrain
         robot.drivetrain.update(yOutput, -xOutput, turnOutput);
+
 
 
         /////TELEMETRY
@@ -147,7 +147,7 @@ public class DriveToPosition extends Command {
     @Override
     public boolean isFinished() {
         //If close enough to accurate return isFinished as true
-        if((Math.abs(yError) < 5000) && (Math.abs(xError) < 5000) && (Math.abs(turnError) < 5)) {
+        if((Math.abs(yError) < 3000) && (Math.abs(xError) < 3000) && (Math.abs(turnError) < 5)) {
             rampComplete = false;
             return true;
         }

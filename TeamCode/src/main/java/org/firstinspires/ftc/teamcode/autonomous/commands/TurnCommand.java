@@ -34,7 +34,7 @@ public class TurnCommand extends Command {
         double kI = 0.0;
         double output = error * kP + errorSum * kI;
 
-        if(Math.abs(error) < 7) {
+        if(Math.abs(error) < 9) {
             if(error < 0) robot.drivetrain.update(0, 0, -0.2);
             else robot.drivetrain.update(0, 0, 0.2);
         }

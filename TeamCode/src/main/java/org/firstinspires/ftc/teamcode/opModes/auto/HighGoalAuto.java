@@ -36,13 +36,13 @@ public class HighGoalAuto extends LinearOpMode {
         Scheduler secondScheduler = new Scheduler(telemetry, robot);
 
         //Scheduler to drive to starter stack
-        initialScheduler.addCommand(new DriveToPosition(-60000, 0));
+        initialScheduler.addCommand(new DriveToPosition(-62000, 0));
 
         //Drives to line, turns and fires
         secondScheduler.addCommand(new ResetEncoders());
         secondScheduler.addCommand(new TurnCommand(270));
         secondScheduler.addCommand(new ResetEncoders());
-        secondScheduler.addCommand(new DriveToPosition(27000, 40000));
+        secondScheduler.addCommand(new DriveToPosition(29000, 40000));
         secondScheduler.addCommand(new TurnCommand(270));
         //Start running shooter
         secondScheduler.addCommand(new PassthroughFeed(3000, true));
@@ -62,12 +62,12 @@ public class HighGoalAuto extends LinearOpMode {
             while(System.currentTimeMillis() < startTime + 1000 && opModeIsActive()) {
                 robot.detector.updateRecognitions();
                 if(robot.detector.getStarterStackSize(100) != 0) isStack = true;
+                dashboardTelemetry.addData("IS stack?", isStack);
+                dashboardTelemetry.update();
                 sleep(50);
                 idle();
             }
         }
-        telemetry.addData("IS stack?", isStack);
-        telemetry.update();
         //Set third scheduler based on stack (pick it up or no)
         Scheduler thirdScheduler = setScheduler(isStack);
 
@@ -77,7 +77,7 @@ public class HighGoalAuto extends LinearOpMode {
             if(robot.shooter.isReady()) secondScheduler.run();
 //            if(secondScheduler.getQueueSize() < 2) shooterSetpoint = 2550;
 //            else shooterSetpoint = 0;
-            robot.shooter.update(2850);
+            robot.shooter.update(2800);
             dashboardTelemetry.addData("RPM", robot.shooter.speed);
 //            dashboardTelemetry.addData("Shooter setpoint", shooterSetpoint);
             dashboardTelemetry.addData("Queue", secondScheduler.getQueueSize());
@@ -95,10 +95,10 @@ public class HighGoalAuto extends LinearOpMode {
             double timeStartIndex = 0;
             double shooterSetpoint;
             if(robot.shooter.isReady() || thirdScheduler.getQueueSize() > 4) thirdScheduler.run();
-            if(thirdScheduler.getQueueSize() <= 4) shooterSetpoint = 2850;
+            if(thirdScheduler.getQueueSize() <= 4) shooterSetpoint = 2800;
             else shooterSetpoint = 0;
             robot.shooter.update(shooterSetpoint);
-            if(robot.odometry.colorSensor().red() > 300 &&
+            if(robot.odometry.colorSensor().red() > 300 && opModeIsActive() &&
                     robot.odometry.colorSensor().green() > 300 && shooterSetpoint == 0) {
                 if(!indexStarted) {
                     timeStartIndex = System.currentTimeMillis();
@@ -109,7 +109,6 @@ public class HighGoalAuto extends LinearOpMode {
                 }
             }
             else {
-                timeStartIndex = 0;
                 indexStarted = false;
             }
             dashboardTelemetry.addData("RPM", robot.shooter.speed);
@@ -132,14 +131,14 @@ public class HighGoalAuto extends LinearOpMode {
             scheduler.addCommand(new RawDriveControl(-0.5, 2200));
             scheduler.addCommand(new IntakeOff());
             scheduler.addCommand(new TurnCommand(270));
-            scheduler.addCommand(new DriveToPosition(24000, 40000));
+            scheduler.addCommand(new DriveToPosition(29000, 40000));
             scheduler.addCommand(new TurnCommand(270));
             //Run shooter here
             scheduler.addCommand(new IntakeFeed(false));
             scheduler.addCommand(new WaitCommand(3000));
-            scheduler.addCommand(new DriveToPosition(24000, 60000));
+            scheduler.addCommand(new DriveToPosition(29000, 60000));
         }
-        else scheduler.addCommand(new DriveToPosition(24000, 60000));
+        else scheduler.addCommand(new DriveToPosition(29000, 60000));
 
         return scheduler;
     }
