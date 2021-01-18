@@ -207,7 +207,7 @@ public class Shooter extends RobotHardware {
     }
 
     public boolean isReady() {
-        if(controlMethod == ControlMethod.RPM) return Math.abs(rpm - speed) < 250;
+        if(controlMethod == ControlMethod.RPM) return Math.abs(rpm - speed) < 150;
         else return true;
     }
 

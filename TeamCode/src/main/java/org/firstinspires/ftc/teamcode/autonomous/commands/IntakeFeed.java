@@ -6,9 +6,11 @@ public class IntakeFeed extends Command {
     double elapsedTime;
     double elapsedTimeMilli;
     boolean index;
+    double speed;
 
-    public IntakeFeed(boolean index) {
+    public IntakeFeed(boolean index, double speed) {
         this.index = index;
+        this.speed = speed;
     }
 
     @Override
@@ -27,7 +29,7 @@ public class IntakeFeed extends Command {
                 robot.intake.update(true, false);
             }
         }
-        else robot.intake.update(true, false, 0.5);
+        else robot.intake.update(true, false, speed);
     }
 
     @Override

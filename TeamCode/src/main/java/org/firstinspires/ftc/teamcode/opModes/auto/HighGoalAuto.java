@@ -45,7 +45,9 @@ public class HighGoalAuto extends LinearOpMode {
         secondScheduler.addCommand(new DriveToPosition(29000, 40000));
         secondScheduler.addCommand(new TurnCommand(270));
         //Start running shooter
-        secondScheduler.addCommand(new PassthroughFeed(3000, true));
+        secondScheduler.addCommand(new IntakeFeed(false, 1));
+        secondScheduler.addCommand(new WaitCommand(3000));
+        secondScheduler.addCommand(new IntakeOff());
 
         waitForStart();
 
@@ -77,7 +79,7 @@ public class HighGoalAuto extends LinearOpMode {
             if(robot.shooter.isReady()) secondScheduler.run();
 //            if(secondScheduler.getQueueSize() < 2) shooterSetpoint = 2550;
 //            else shooterSetpoint = 0;
-            robot.shooter.update(2800);
+            robot.shooter.update(3000);
             dashboardTelemetry.addData("RPM", robot.shooter.speed);
 //            dashboardTelemetry.addData("Shooter setpoint", shooterSetpoint);
             dashboardTelemetry.addData("Queue", secondScheduler.getQueueSize());
@@ -95,7 +97,7 @@ public class HighGoalAuto extends LinearOpMode {
             double timeStartIndex = 0;
             double shooterSetpoint;
             if(robot.shooter.isReady() || thirdScheduler.getQueueSize() > 4) thirdScheduler.run();
-            if(thirdScheduler.getQueueSize() <= 4) shooterSetpoint = 2800;
+            if(thirdScheduler.getQueueSize() <= 4) shooterSetpoint = 3000;
             else shooterSetpoint = 0;
             robot.shooter.update(shooterSetpoint);
             if(robot.odometry.colorSensor().red() > 300 && opModeIsActive() &&
@@ -127,14 +129,14 @@ public class HighGoalAuto extends LinearOpMode {
         if(isStack) {
             scheduler.addCommand(new DropIntake());
             scheduler.addCommand(new TurnCommand(270));
-            scheduler.addCommand(new IntakeFeed(true));
+            scheduler.addCommand(new IntakeFeed(true, 0.5));
             scheduler.addCommand(new RawDriveControl(-0.5, 2200));
             scheduler.addCommand(new IntakeOff());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new DriveToPosition(29000, 40000));
             scheduler.addCommand(new TurnCommand(270));
             //Run shooter here
-            scheduler.addCommand(new IntakeFeed(false));
+            scheduler.addCommand(new IntakeFeed(false, 1));
             scheduler.addCommand(new WaitCommand(3000));
             scheduler.addCommand(new DriveToPosition(29000, 60000));
         }

@@ -148,7 +148,7 @@ public class MasterTeleDouble extends OpMode {
         //Control shooter
         //High Goal Line
         if (gamepad2.left_bumper) {
-            shooterSetpoint = 2950;
+            shooterSetpoint = 3000;
             shooterRunning = true;
         }
 
