@@ -14,7 +14,7 @@ public class WobbleGoalClamp extends RobotHardware {
         this.telemetry = telemetry;
     }
 
-    public void update(boolean clamp, boolean open, boolean up, boolean down) {
+    public void update(boolean clamp, boolean open, double position) {
         if(clamp && !open) {
             left.setPower(1);
             right.setPower(-1);
@@ -28,23 +28,13 @@ public class WobbleGoalClamp extends RobotHardware {
             right.setPower(0);
         }
 
-        if(up && !down) {
-            wobbleMaster.setPower(1);
-        }
-        else if(down && !up) {
-            wobbleMaster.setPower(-0.5);
-        }
-        else {
-            wobbleMaster.setPower(0);
-        }
-        wobbleSlave.setPower(wobbleMaster.getPower());
+        wobbleMaster.setPosition(position);
+        wobbleSlave.setPosition(position);
     }
 
     @Override
     public void disable() {
         left.setPower(0);
         right.setPower(0);
-        wobbleSlave.setPower(0);
-        wobbleMaster.setPower(0);
     }
 }

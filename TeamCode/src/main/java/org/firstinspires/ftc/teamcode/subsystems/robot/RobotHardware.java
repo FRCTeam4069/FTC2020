@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -26,8 +27,8 @@ public abstract class RobotHardware {
     protected DcMotorEx passthroughMotor;
 
     //WobbleGoalClamp
-    protected CRServo wobbleMaster;
-    protected CRServo wobbleSlave;
+    protected Servo wobbleMaster;
+    protected Servo wobbleSlave;
     protected CRServo left;
     protected CRServo right;
 
@@ -50,9 +51,9 @@ public abstract class RobotHardware {
         passthroughMotor = hardwareMap.get(DcMotorEx.class, "passthroughMotor");
 
         //WobbleGoalClamp
-        wobbleMaster = hardwareMap.get(CRServo.class, "master");
-        wobbleSlave = hardwareMap.get(CRServo.class, "slave");
-        wobbleSlave.setDirection(DcMotorSimple.Direction.REVERSE);
+        wobbleMaster = hardwareMap.get(Servo.class, "master");
+        wobbleSlave = hardwareMap.get(Servo.class, "slave");
+        wobbleSlave.setDirection(Servo.Direction.REVERSE);
         left = hardwareMap.get(CRServo.class, "left");
         right = hardwareMap.get(CRServo.class, "right");
 
