@@ -13,6 +13,7 @@ public class DrivetrainTeleOpTest extends OpMode {
 
     Robot robot;
     Scheduler scheduler;
+    double position = 1;
 
     @Override
     public void init() {
@@ -27,7 +28,9 @@ public class DrivetrainTeleOpTest extends OpMode {
         telemetry.addData("Strafing encoder ticks/sec", robot.odometry.x.getCurrentVel());
         robot.odometry.addTelemetry(true);
         robot.intake.update(gamepad1.a, gamepad1.b);
-        robot.clamp.update(gamepad1.left_bumper, gamepad1.right_bumper, gamepad1.dpad_up, gamepad1.dpad_down);
+        if(gamepad1.dpad_down) position = 0;
+        else if(gamepad1.dpad_up) position = 1;
+        robot.clamp.update(gamepad1.left_bumper, gamepad1.right_bumper, position);
 
     }
 }

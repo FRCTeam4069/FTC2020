@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 public class WobbleGoalTest extends OpMode {
 
     Robot robot;
+    double position = 0;
 
     @Override
     public void init() {
@@ -17,6 +18,8 @@ public class WobbleGoalTest extends OpMode {
 
     @Override
     public void loop() {
-        robot.clamp.update(gamepad1.left_bumper, gamepad1.right_bumper, gamepad1.dpad_up, gamepad1.dpad_down);
+        if(gamepad1.dpad_up) position = 1;
+        else if(gamepad1.dpad_down) position = 0;
+        robot.clamp.update(gamepad1.left_bumper, gamepad1.right_bumper, position);
     }
 }

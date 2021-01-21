@@ -83,10 +83,10 @@ public class DriveToPosition extends Command {
         double xOutput = (xError * xKP) + (xErrorSum * xKI) + (xChangeError * xKD);
 
         if(Math.abs(xSetPoint) > ySetPoint) {
-            if (Math.abs(xOutput) > 0.5) {
+            if (Math.abs(xOutput) > 0.4) {
                 double currentTime = System.currentTimeMillis();
                 //Ramp Strafing speed
-                if (Math.abs(robot.odometry.x.getCurrentVel()) < 27500 && !rampComplete) {
+                if (Math.abs(robot.odometry.x.getCurrentVel()) < 30000 && !rampComplete) {
                     if (currentTime - lastTime > 25) {
                         if (xError > 0) rampOutput += 0.025;
                         else rampOutput -= 0.025;

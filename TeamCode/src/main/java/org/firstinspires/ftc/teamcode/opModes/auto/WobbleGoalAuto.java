@@ -1,11 +1,17 @@
 package org.firstinspires.ftc.teamcode.opModes.auto;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
 import org.firstinspires.ftc.teamcode.autonomous.commands.DriveToPosition;
+import org.firstinspires.ftc.teamcode.autonomous.commands.IntakeFeed;
+import org.firstinspires.ftc.teamcode.autonomous.commands.IntakeOff;
+import org.firstinspires.ftc.teamcode.autonomous.commands.ResetEncoders;
 import org.firstinspires.ftc.teamcode.autonomous.commands.TurnCommand;
+import org.firstinspires.ftc.teamcode.autonomous.commands.WaitCommand;
 import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
@@ -26,49 +32,48 @@ public class WobbleGoalAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        Telemetry dashboardTelemetry = dashboard.getTelemetry();
+
         robot = new Robot(hardwareMap, telemetry);
         Scheduler initialScheduler = new Scheduler(telemetry, robot);
         Scheduler secondScheduler = new Scheduler(telemetry, robot);
-        scheduler = new Scheduler(telemetry, robot);
 
-        initialScheduler.addCommand(new DriveToPosition(100000, 0));
-        secondScheduler.addCommand(new DriveToPosition(50000, 100000));
-        secondScheduler.addCommand(new TurnCommand(90));
+        //Scheduler to drive to starter stack
+        initialScheduler.addCommand(new DriveToPosition(-62000, 0));
+
+        //Drives to line, turns and fires
+        secondScheduler.addCommand(new ResetEncoders());
+        secondScheduler.addCommand(new TurnCommand(270));
+        secondScheduler.addCommand(new ResetEncoders());
+        secondScheduler.addCommand(new DriveToPosition(29000, 40000));
+        secondScheduler.addCommand(new TurnCommand(270));
+        //Start running shooter
+        secondScheduler.addCommand(new IntakeFeed(false, 1));
+        secondScheduler.addCommand(new WaitCommand(3000));
+        secondScheduler.addCommand(new IntakeOff());
 
         waitForStart();
 
-        while(initialScheduler.getQueueSize() != 0 && opModeIsActive()) {
+        //Drive to starter stack
+        while(opModeIsActive() && initialScheduler.getQueueSize() != 0) {
             initialScheduler.run();
             telemetry.update();
             idle();
         }
-
-        double startingTime = System.currentTimeMillis();
-        while(System.currentTimeMillis() < (startingTime + 1000) && opModeIsActive()) {
-            robot.detector.updateRecognitions();
-            telemetry.addData("Updating recognitions", true);
-            idle();
+        int stackSize;
+        //Check for stack
+        if(opModeIsActive()) {
+            double startTime = System.currentTimeMillis();
+            while(System.currentTimeMillis() < startTime + 1000 && opModeIsActive()) {
+                robot.detector.updateRecognitions();
+                stackSize = robot.detector.getStarterStackSize(100);
+                dashboardTelemetry.addData("Stack size?", stackSize);
+                dashboardTelemetry.update();
+                sleep(50);
+                idle();
+            }
         }
 
-        while(secondScheduler.getQueueSize() != 0 && opModeIsActive()) {
-            secondScheduler.run();
-            idle();
-        }
-
-        int starterStack = robot.detector.getStarterStackSize(100);
-        StarterStackDetector.DropZone dropZone;
-        if(starterStack == 0) dropZone = StarterStackDetector.DropZone.A;
-        else if(starterStack == 1) dropZone = StarterStackDetector.DropZone.B;
-        else if(starterStack == 4) dropZone = StarterStackDetector.DropZone.C;
-        else dropZone = StarterStackDetector.DropZone.BAD;
-
-        setScheduler(dropZone);
-
-        while(opModeIsActive()) {
-            scheduler.run();
-            telemetry.addData("Drop Zone", dropZone);
-            telemetry.update();
-            idle();
-        }
     }
 }

@@ -160,7 +160,7 @@ public class MasterTeleDouble extends OpMode {
 
         //Power Shot line
         else if (gamepad2.right_bumper) {
-            shooterSetpoint = 2280;
+            shooterSetpoint = 2310;
             shooterRunning = true;
         }
 
