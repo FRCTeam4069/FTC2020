@@ -32,6 +32,16 @@ public class WobbleGoalClamp extends RobotHardware {
         wobbleSlave.setPosition(position);
     }
 
+    public void positionTelemetry(boolean update) {
+        telemetry.addData("L Pos", wobbleMaster.getPosition());
+        telemetry.addData("R Pos", wobbleSlave.getPosition());
+        if(update) telemetry.update();
+    }
+
+    public double position() {
+        return (wobbleSlave.getPosition() + wobbleMaster.getPosition()) / 2;
+    }
+
     @Override
     public void disable() {
         left.setPower(0);

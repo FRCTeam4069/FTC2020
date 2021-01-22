@@ -27,10 +27,13 @@ public class MasterTeleDouble extends OpMode {
 
     boolean overrideIndex = false;
 
+    double position;
+
 
     @Override
     public void init() {
         robot = new Robot(hardwareMap, telemetry);
+        position = robot.clamp.position();
     }
 
     @Override
@@ -152,21 +155,9 @@ public class MasterTeleDouble extends OpMode {
             shooterRunning = true;
         }
 
-        //High Goal Wall
-        else if (gamepad2.left_trigger > 0.25) {
-            shooterSetpoint = 2550;
-            shooterRunning = true;
-        }
-
         //Power Shot line
         else if (gamepad2.right_bumper) {
             shooterSetpoint = 2310;
-            shooterRunning = true;
-        }
-
-        //Power Shot wall
-        else if(gamepad2.right_trigger > 0.25) {
-            shooterSetpoint = 2200;
             shooterRunning = true;
         }
 
@@ -179,6 +170,14 @@ public class MasterTeleDouble extends OpMode {
             shooterRunning = false;
             conveyerRunning = false;
         }
+
+        //Control Wobble Goal
+
+        if(gamepad2.left_trigger > 0.25) position += 0.01;
+        else if(gamepad2.right_trigger > 0.25) position -= 0.01;
+        if(position > 1) position = 1;
+        else if(position < 0.5) position = 0.5;
+        robot.clamp.update(gamepad2.dpad_left, gamepad2.dpad_right, position);
 
         telemetry.addData("Shooter setpoint", shooterSetpoint);
         robot.shooter.getTelemetry(false);
@@ -194,6 +193,7 @@ public class MasterTeleDouble extends OpMode {
         dashTelemetry.addData("Desired RPM", shooterSetpoint);
         dashTelemetry.addData("RPM1", robot.shooter.actualSpeed1);
         dashTelemetry.addData("RPM2", robot.shooter.actualSpeed2);
+        robot.clamp.positionTelemetry(false);
         robot.drivetrain.addBaseTelemetry(true);
 //        dashTelemetry.update();
     }
