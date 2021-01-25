@@ -22,8 +22,8 @@ public class WobbleGoalTest extends OpMode {
         if(gamepad1.dpad_up) position += 0.01;
         else if(gamepad1.dpad_down) position -= 0.01;
 
-        if(position > 1) position = 1;
-        else if(position < 0.5) position = 0.5;
+        if(position < 0.05) position = 0.05;
+        else if(position > 0.85) position = 0.85;
         robot.clamp.update(gamepad1.left_bumper, gamepad1.right_bumper, position);
         robot.clamp.positionTelemetry(true);
 

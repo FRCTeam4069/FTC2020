@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.robot;
 
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -37,6 +38,8 @@ public abstract class RobotHardware {
     protected DcMotorEx shooterSlave;
     protected ColorSensor colourSensor;
 
+    protected RevBlinkinLedDriver blinkin;
+
     public RobotHardware(HardwareMap hardwareMap) {
 
         //Drivetrain
@@ -63,6 +66,8 @@ public abstract class RobotHardware {
         shooterMaster.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterSlave.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         colourSensor = hardwareMap.get(ColorSensor.class, "colourSensor");
+
+        blinkin = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
     }
 
 

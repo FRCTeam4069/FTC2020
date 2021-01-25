@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.odometry;
 
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -54,6 +55,11 @@ public class Odometry extends RobotHardware {
     //Return instance of navx
     public NavxMicroNavigationSensor getNavx() {
         return navx;
+    }
+
+    //Access to blinkin
+    public RevBlinkinLedDriver blinkin() {
+        return blinkin;
     }
 
     //Add odometry telemetry
