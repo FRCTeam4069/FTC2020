@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.autonomous.commands;
+package org.firstinspires.ftc.teamcode.autonomous.commands.wobble;
+
+import org.firstinspires.ftc.teamcode.autonomous.commands.Command;
 
 public class WobbleIntake extends Command {
 
@@ -15,11 +17,11 @@ public class WobbleIntake extends Command {
 
     @Override
     public void loop() {
-
+        robot.clamp.update(in, !in, robot.clamp.position());
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 }

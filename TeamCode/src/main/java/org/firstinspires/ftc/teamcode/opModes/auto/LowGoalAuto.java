@@ -4,11 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
-import org.firstinspires.ftc.teamcode.autonomous.commands.DriveToPosition;
-import org.firstinspires.ftc.teamcode.autonomous.commands.IntakeFeed;
-import org.firstinspires.ftc.teamcode.autonomous.commands.IntakeOff;
-import org.firstinspires.ftc.teamcode.autonomous.commands.ShooterOff;
-import org.firstinspires.ftc.teamcode.autonomous.commands.ShooterOn;
+import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.DriveToPosition;
+import org.firstinspires.ftc.teamcode.autonomous.commands.intake.IntakeFeed;
+import org.firstinspires.ftc.teamcode.autonomous.commands.intake.IntakeOff;
+import org.firstinspires.ftc.teamcode.autonomous.commands.shooter.ShooterOff;
+import org.firstinspires.ftc.teamcode.autonomous.commands.shooter.ShooterOn;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 @Autonomous

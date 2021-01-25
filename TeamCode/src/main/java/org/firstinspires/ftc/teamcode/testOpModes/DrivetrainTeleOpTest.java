@@ -4,9 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
-import org.firstinspires.ftc.teamcode.autonomous.commands.TurnCommand;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
-import org.firstinspires.ftc.teamcode.testOpModes.tuningDrivebase.TurnToAngle;
 
 @TeleOp
 public class DrivetrainTeleOpTest extends OpMode {

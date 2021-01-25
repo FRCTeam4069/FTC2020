@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
-import org.firstinspires.ftc.teamcode.autonomous.commands.TurnCommand;
+import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.TurnCommand;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 @Disabled

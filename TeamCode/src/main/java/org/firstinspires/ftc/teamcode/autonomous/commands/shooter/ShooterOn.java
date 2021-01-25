@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode.autonomous.commands;
+package org.firstinspires.ftc.teamcode.autonomous.commands.shooter;
 
-public class ShooterOn extends Command{
+import org.firstinspires.ftc.teamcode.autonomous.commands.Command;
+
+public class ShooterOn extends Command {
 
     double rpm;
 

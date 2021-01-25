@@ -3,8 +3,7 @@ package org.firstinspires.ftc.teamcode.testOpModes.tuningDrivebase;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
-import org.firstinspires.ftc.teamcode.autonomous.commands.DriveToPosition;
-import org.firstinspires.ftc.teamcode.autonomous.commands.StrafeCommand;
+import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.DriveToPosition;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 @Autonomous

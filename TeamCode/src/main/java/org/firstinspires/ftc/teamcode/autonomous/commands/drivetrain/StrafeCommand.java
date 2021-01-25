@@ -1,58 +1,56 @@
-package org.firstinspires.ftc.teamcode.autonomous.commands;
+package org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain;
 
-public class DriveForward extends Command {
+import org.firstinspires.ftc.teamcode.autonomous.commands.Command;
 
+public class StrafeCommand extends Command {
     //Values needed to PID accurate driving positions
     double desiredPosition;
     double error;
     boolean started = false;
-    double currentPos;
-
-    double errorSum = 0;
 
     //Initializer ensures command has a desired position
-    public DriveForward(double desiredPosition) {
+    public StrafeCommand(double desiredPosition) {
         this.desiredPosition = desiredPosition;
     }
 
     //Reset encoders for consistency
     @Override
     public void start() {
+        robot.odometry.disable();
         robot.drivetrain.resetEncoders();
     }
 
     //PID output to stop accurately at desired position
     @Override
     public void loop() {
-        currentPos = robot.odometry.getYAvgPos();
+        double errorSum = 0;
+        double currentPos = robot.odometry.x.getPosition();
         error = desiredPosition - currentPos;
         errorSum += error;
         double lastError = 0;
         double changeInError;
-        if(!started) {
+        if (!started) {
             changeInError = 0;
             started = true;
-        }
-        else {
+        } else {
             changeInError = error - lastError;
         }
         lastError = error;
 
-        double kP = 0.00003;
-        double kI = 0.00000607;
-        double kD = 0.00000078;
+        double kP = 0.0001;
+        double kI = 0.0;
+        double kD = 0.0;
         double output = error * kP + errorSum * kI + changeInError * kD;
-        if(output > 0.8) output = 0.8;
-        else if(output < -0.8) output = -0.8;
-        robot.drivetrain.update(output, 0, 0);
+
+        robot.drivetrain.update(0, output, 0);
     }
 
     //Command is complete if robot is within 5 ticks or less of accurate position
     @Override
     public boolean isFinished() {
-        if(currentPos < desiredPosition + 1500 && currentPos > desiredPosition - 1500) {
-            return true;
+        if (desiredPosition < 0) {
+            return error >= -5;
         }
-        else return false;
+        return error <= 5;
     }
 }

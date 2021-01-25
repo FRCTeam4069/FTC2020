@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
-import org.firstinspires.ftc.teamcode.autonomous.commands.DriveToPosition;
-import org.firstinspires.ftc.teamcode.autonomous.commands.IntakeFeed;
-import org.firstinspires.ftc.teamcode.autonomous.commands.IntakeOff;
-import org.firstinspires.ftc.teamcode.autonomous.commands.ResetEncoders;
-import org.firstinspires.ftc.teamcode.autonomous.commands.TurnCommand;
+import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.DriveToPosition;
+import org.firstinspires.ftc.teamcode.autonomous.commands.intake.IntakeFeed;
+import org.firstinspires.ftc.teamcode.autonomous.commands.intake.IntakeOff;
+import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.ResetEncoders;
+import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.TurnCommand;
 import org.firstinspires.ftc.teamcode.autonomous.commands.WaitCommand;
 import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;

@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode.autonomous.commands;
+package org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain;
 
-public class ResetEncoders extends Command{
+import org.firstinspires.ftc.teamcode.autonomous.commands.Command;
+
+public class ResetEncoders extends Command {
 
     @Override
     public void start() {

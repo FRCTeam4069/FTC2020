@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.autonomous.commands;
+package org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain;
+
+import org.firstinspires.ftc.teamcode.autonomous.commands.Command;
 
 public class RawDriveControl extends Command {
 

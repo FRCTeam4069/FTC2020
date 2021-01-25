@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.autonomous.commands;
+package org.firstinspires.ftc.teamcode.autonomous.commands.intake;
+
+import org.firstinspires.ftc.teamcode.autonomous.commands.Command;
 
 public class IntakeOff extends Command {
 
