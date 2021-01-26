@@ -114,7 +114,7 @@ public class StarterStackDetector extends RobotHardware {
     }
 
     private int lastReturn = 1000;
-    public int getStarterStackSize(int fourStackHeight) {
+    public int getStarterStackSize(int fourStackHeightDivide) {
 
         updateRecognitions();
 
@@ -136,7 +136,7 @@ public class StarterStackDetector extends RobotHardware {
                 telemetry.addData("Width", starterStack.getWidth());
 
                 //Returning starter stack based on hard-coded height values
-                if ((starterStack.getHeight() > (fourStackHeight - 10)) && (starterStack.getHeight() < (fourStackHeight + 10))) {
+                if (starterStack.getHeight() > fourStackHeightDivide) {
                     lastReturn = 4;
                     telemetry.addData("Starter stack", 4);
                     return 4;

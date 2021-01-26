@@ -12,22 +12,49 @@ import org.firstinspires.ftc.teamcode.autonomous.commands.intake.IntakeOff;
 import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.ResetEncoders;
 import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.TurnCommand;
 import org.firstinspires.ftc.teamcode.autonomous.commands.WaitCommand;
+import org.firstinspires.ftc.teamcode.autonomous.commands.wobble.WobbleIntake;
+import org.firstinspires.ftc.teamcode.autonomous.commands.wobble.WobbleIntakeOff;
+import org.firstinspires.ftc.teamcode.autonomous.commands.wobble.WobbleSetPosition;
 import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
+
+
+//A = ZERO RINGS - CLOSEST TO LAUNCH LINE
+//C = FOUR RINGS - CLOSEST TO GOAL
 
 @Autonomous
 public class WobbleGoalAuto extends LinearOpMode {
 
     Robot robot;
-    Scheduler scheduler;
+    StarterStackDetector.DropZone dropZone;
 
-
-    public void setScheduler(StarterStackDetector.DropZone dropZone) {
-        if(dropZone == StarterStackDetector.DropZone.A)
-            scheduler.addCommand(new DriveToPosition(50000, 75000));
-        else if(dropZone == StarterStackDetector.DropZone.B)
-            scheduler.addCommand(new DriveToPosition(25000, 100000));
-        else scheduler.addCommand(new DriveToPosition(50000, 125000));
+    public Scheduler setScheduler(StarterStackDetector.DropZone dropZone) {
+        Scheduler scheduler = new Scheduler(telemetry, robot);
+        if(dropZone == StarterStackDetector.DropZone.A) {
+            scheduler.addCommand(new DriveToPosition(0, 40000));
+            scheduler.addCommand(new WobbleSetPosition(0.15));
+            scheduler.addCommand(new WobbleIntake(false));
+            scheduler.addCommand(new WaitCommand(500));
+            scheduler.addCommand(new WobbleIntakeOff());
+            scheduler.addCommand(new DriveToPosition(29000, 60000));
+        }
+        else if(dropZone == StarterStackDetector.DropZone.B) {
+            scheduler.addCommand(new DriveToPosition(15000, 80000));
+            scheduler.addCommand(new WobbleSetPosition(0.15));
+            scheduler.addCommand(new WobbleIntake(false));
+            scheduler.addCommand(new WaitCommand(500));
+            scheduler.addCommand(new WobbleIntakeOff());
+            scheduler.addCommand(new DriveToPosition(29000, 60000));
+        }
+        else {
+            scheduler.addCommand(new DriveToPosition(0, 110000));
+            scheduler.addCommand(new WobbleSetPosition(0.15));
+            scheduler.addCommand(new WobbleIntake(false));
+            scheduler.addCommand(new WaitCommand(500));
+            scheduler.addCommand(new WobbleIntakeOff());
+            scheduler.addCommand(new DriveToPosition(29000, 60000));
+        }
+        return scheduler;
     }
 
     @Override
@@ -38,8 +65,10 @@ public class WobbleGoalAuto extends LinearOpMode {
         robot = new Robot(hardwareMap, telemetry);
         Scheduler initialScheduler = new Scheduler(telemetry, robot);
         Scheduler secondScheduler = new Scheduler(telemetry, robot);
+        Scheduler thirdScheduler;
 
         //Scheduler to drive to starter stack
+        initialScheduler.addCommand(new WobbleSetPosition(0.85));
         initialScheduler.addCommand(new DriveToPosition(-62000, 0));
 
         //Drives to line, turns and fires
@@ -61,19 +90,39 @@ public class WobbleGoalAuto extends LinearOpMode {
             telemetry.update();
             idle();
         }
-        int stackSize;
+        int stackSize = 0;
         //Check for stack
         if(opModeIsActive()) {
             double startTime = System.currentTimeMillis();
             while(System.currentTimeMillis() < startTime + 1000 && opModeIsActive()) {
                 robot.detector.updateRecognitions();
-                stackSize = robot.detector.getStarterStackSize(100);
+                stackSize = robot.detector.getStarterStackSize(155);
                 dashboardTelemetry.addData("Stack size?", stackSize);
                 dashboardTelemetry.update();
                 sleep(50);
                 idle();
             }
         }
+        if(stackSize == 4) dropZone = StarterStackDetector.DropZone.C;
+        else if (stackSize == 1) dropZone = StarterStackDetector.DropZone.B;
+        else dropZone = StarterStackDetector.DropZone.A;
+        thirdScheduler = setScheduler(dropZone);
 
+        //Drive to line and fire
+        while(opModeIsActive() && secondScheduler.getQueueSize() != 0) {
+            secondScheduler.run();
+            robot.shooter.update(3000);
+            dashboardTelemetry.addData("RPM", robot.shooter.speed);
+            dashboardTelemetry.addData("Queue", secondScheduler.getQueueSize());
+            dashboardTelemetry.update();
+            idle();
+        }
+        //Position after this motion is (29k, 40k) relative to starter stack detection position
+
+        while(opModeIsActive() && thirdScheduler.getQueueSize() != 0) {
+            thirdScheduler.run();
+            idle();
+        }
+        robot.deactivate();
     }
 }
