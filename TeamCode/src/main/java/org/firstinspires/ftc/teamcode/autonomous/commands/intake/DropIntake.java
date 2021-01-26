@@ -49,7 +49,7 @@ public class DropIntake extends Command {
 
         lastTurnOutput = turnOutput;
         if(!backDone) {
-            if (robot.odometry.getYAvgPos() > startingY - 2500)
+            if (robot.odometry.getYAvgPos() > startingY - 1500)
                 robot.drivetrain.update(-1, 0, turnOutput);
             else {
                 backDone = true;

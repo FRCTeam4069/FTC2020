@@ -149,7 +149,7 @@ public class DriveToPosition extends Command {
     @Override
     public boolean isFinished() {
         //If close enough to accurate return isFinished as true
-        if((Math.abs(yError) < 3000) && (Math.abs(xError) < 3000) && (Math.abs(turnError) < 5)) {
+        if((Math.abs(yError) < 4000) && (Math.abs(xError) < 4000) && (Math.abs(turnError) < 5)) {
             rampComplete = false;
             return true;
         }
