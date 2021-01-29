@@ -11,9 +11,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.subsystems.robot.RobotHardware;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Odometry extends RobotHardware {
 
     //Create encoders
@@ -21,6 +18,13 @@ public class Odometry extends RobotHardware {
 //    public Encoder yLeft;
     public Encoder yRight;
     public Encoder x;
+
+    private GyroscopeType gyroscopeType;
+
+    public enum GyroscopeType {
+        IMU,
+        NAVX
+    }
 
     public Odometry(HardwareMap hardwareMap, Telemetry telemetry) {
         super(hardwareMap);
@@ -30,6 +34,12 @@ public class Odometry extends RobotHardware {
 //        yLeft = new Encoder(telemetry, shooterSlave, Encoder.State.NEGATIVE);
         yRight = new Encoder(telemetry, passthroughMotor, Encoder.State.POSITIVE);
         x = new Encoder(telemetry, intakeMotor, Encoder.State.POSITIVE);
+
+        gyroscopeType = Odometry.GyroscopeType.NAVX;
+    }
+
+    public void setGyroscopeType(GyroscopeType gyroscopeType) {
+        this.gyroscopeType = gyroscopeType;
     }
 
     //Return forward/backward position
@@ -39,17 +49,20 @@ public class Odometry extends RobotHardware {
 
     //Return heading
     public double getCurrentHeading() {
+
+        double heading;
         if(!navx.isCalibrating()) {
-            double heading = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+            heading = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+        }
+        else {
+            telemetry.addData("Navx is calibrating?", navx.isCalibrating());
+            heading = imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ,
+                    AngleUnit.DEGREES).thirdAngle + 90;
+        }
             if(heading < 0) {
                 heading = 180 + (180 + heading);
             }
             return heading;
-        }
-        else {
-            telemetry.addData("Navx is calibrating?", navx.isCalibrating());
-            return 0;
-        }
     }
 
     //Return instance of navx

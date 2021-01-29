@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.robot;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
@@ -22,6 +24,7 @@ public abstract class RobotHardware {
     protected DcMotorEx frontRight;
     protected DcMotorEx backRight;
     protected NavxMicroNavigationSensor navx;
+    protected BNO055IMU imu;
 
     //Intake
     protected DcMotorEx intakeMotor;
@@ -68,6 +71,17 @@ public abstract class RobotHardware {
         colourSensor = hardwareMap.get(ColorSensor.class, "colourSensor");
 
         blinkin = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
     }
 
 

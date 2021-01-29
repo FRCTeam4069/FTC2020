@@ -182,7 +182,12 @@ public class Drivetrain extends RobotHardware {
             brLastPos = backRight.getCurrentPosition();
 
             //calculate change in direction (turn)
-            currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, XYZ, AngleUnit.DEGREES).thirdAngle;
+            if(!navx.isCalibrating()) currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC,
+                    XYZ, AngleUnit.DEGREES).thirdAngle;
+            else {
+                currentTurn = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
+                        AngleUnit.DEGREES).thirdAngle + 90;
+            }
             if (currentTurn < 0) {
                 currentTurn = 180 + (180 - Math.abs(currentTurn));
             }
@@ -191,7 +196,12 @@ public class Drivetrain extends RobotHardware {
             } else {
                 turnChange = currentTurn - lastTurn;
             }
-            lastTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, XYZ, AngleUnit.DEGREES).thirdAngle;
+            if(!navx.isCalibrating()) lastTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC,
+                    XYZ, AngleUnit.DEGREES).thirdAngle;
+            else {
+                lastTurn = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
+                        AngleUnit.DEGREES).thirdAngle + 90;
+            }
             if (lastTurn < 0) {
                 lastTurn = 180 + (180 - Math.abs(lastTurn));
             }
@@ -298,8 +308,10 @@ public class Drivetrain extends RobotHardware {
                 && desiredDirection != Direction.NO_DIRECTION) {
 
             if(!directDriveStarted) {
-                startingAngleDD = navx.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
-                        AngleUnit.DEGREES).thirdAngle;
+                if(!navx.isCalibrating()) startingAngleDD = navx.getAngularOrientation(AxesReference.EXTRINSIC,
+                        XYZ, AngleUnit.DEGREES).thirdAngle;
+                else startingAngleDD = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
+                        AngleUnit.DEGREES).thirdAngle + 90;
                 directDriveStarted = true;
             }
 
@@ -323,8 +335,11 @@ public class Drivetrain extends RobotHardware {
             }
 
             //Calculate error and integral of error for turn
-            double currentTurn = navx.getAngularOrientation(AxesReference.INTRINSIC, XYZ,
-                    AngleUnit.DEGREES).thirdAngle;
+            double currentTurn;
+            if(!navx.isCalibrating()) currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC,
+                    XYZ, AngleUnit.DEGREES).thirdAngle;
+            else currentTurn = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
+                    AngleUnit.DEGREES).thirdAngle + 90;
 
             if(currentTurn > 180 + startingAngleDD) turnError = -currentTurn + (360 + startingAngleDD);
             else turnError = (0 + startingAngleDD) - currentTurn;
@@ -357,8 +372,12 @@ public class Drivetrain extends RobotHardware {
     public double turnToAngle(double desiredAngle) {
 
         this.desiredAngle = desiredAngle;
-        currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ,
-                AngleUnit.DEGREES).thirdAngle;
+        if(!navx.isCalibrating()) currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC,
+                AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+        else {
+            currentTurn = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
+                    AngleUnit.DEGREES).thirdAngle + 90;
+        }
         if(currentTurn < 0) {
             currentTurn = 180 + (180 + currentTurn);
         }
@@ -377,7 +396,11 @@ public class Drivetrain extends RobotHardware {
     }
 
     public boolean atCorrectAngle() {
-        double currentAngle = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+        double currentAngle;
+        if(!navx.isCalibrating()) currentAngle = navx.getAngularOrientation(AxesReference.EXTRINSIC,
+                AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+        else currentAngle = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
+                AngleUnit.DEGREES).thirdAngle + 90;
         if(currentAngle < 0) {
             currentAngle = 180 + (180 + currentAngle);
         }
