@@ -29,10 +29,19 @@ public class DriveToPosition extends Command {
     double lastTime = 0;
     boolean rampComplete = false;
 
+    double speedCap;
+
     //Get desired location
     public DriveToPosition(double xSetPoint, double ySetPoint) {
         this.xSetPoint = xSetPoint;
         this.ySetPoint = ySetPoint;
+        speedCap = Double.MAX_VALUE;
+    }
+
+    public DriveToPosition(double xSetPoint, double ySetPoint, double speedCap) {
+        this.xSetPoint = xSetPoint;
+        this.ySetPoint = ySetPoint;
+        this.speedCap = speedCap;
     }
 
     //Get starting turn, used to keep contanst position
@@ -131,6 +140,7 @@ public class DriveToPosition extends Command {
         lastTurnOutput = turnOutput;
 
         //Setting outputs to be executed by the drivetrain
+        if(yOutput > speedCap) yOutput = speedCap;
         robot.drivetrain.update(yOutput, -xOutput, turnOutput);
 
 
