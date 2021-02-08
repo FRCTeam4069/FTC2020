@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
+import org.firstinspires.ftc.teamcode.subsystems.odometry.Odometry;
 import org.firstinspires.ftc.teamcode.subsystems.robot.RobotHardware;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
@@ -132,7 +133,7 @@ public class Drivetrain extends RobotHardware {
             this.turn = turn;
 
             if (navx.isCalibrating()) {
-                telemetry.log().add("NavX Calibrating");
+                telemetry.addLine("NavX Calibrating");
                 telemetry.update();
             }
 
@@ -186,7 +187,7 @@ public class Drivetrain extends RobotHardware {
                     XYZ, AngleUnit.DEGREES).thirdAngle;
             else {
                 currentTurn = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
-                        AngleUnit.DEGREES).thirdAngle + 90;
+                        AngleUnit.DEGREES).thirdAngle;
             }
             if (currentTurn < 0) {
                 currentTurn = 180 + (180 - Math.abs(currentTurn));
@@ -200,7 +201,7 @@ public class Drivetrain extends RobotHardware {
                     XYZ, AngleUnit.DEGREES).thirdAngle;
             else {
                 lastTurn = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
-                        AngleUnit.DEGREES).thirdAngle + 90;
+                        AngleUnit.DEGREES).thirdAngle;
             }
             if (lastTurn < 0) {
                 lastTurn = 180 + (180 - Math.abs(lastTurn));
@@ -311,7 +312,7 @@ public class Drivetrain extends RobotHardware {
                 if(!navx.isCalibrating()) startingAngleDD = navx.getAngularOrientation(AxesReference.EXTRINSIC,
                         XYZ, AngleUnit.DEGREES).thirdAngle;
                 else startingAngleDD = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
-                        AngleUnit.DEGREES).thirdAngle + 90;
+                        AngleUnit.DEGREES).thirdAngle;
                 directDriveStarted = true;
             }
 
@@ -339,7 +340,7 @@ public class Drivetrain extends RobotHardware {
             if(!navx.isCalibrating()) currentTurn = navx.getAngularOrientation(AxesReference.EXTRINSIC,
                     XYZ, AngleUnit.DEGREES).thirdAngle;
             else currentTurn = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
-                    AngleUnit.DEGREES).thirdAngle + 90;
+                    AngleUnit.DEGREES).thirdAngle;
 
             if(currentTurn > 180 + startingAngleDD) turnError = -currentTurn + (360 + startingAngleDD);
             else turnError = (0 + startingAngleDD) - currentTurn;
@@ -376,7 +377,7 @@ public class Drivetrain extends RobotHardware {
                 AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
         else {
             currentTurn = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
-                    AngleUnit.DEGREES).thirdAngle + 90;
+                    AngleUnit.DEGREES).thirdAngle;
         }
         if(currentTurn < 0) {
             currentTurn = 180 + (180 + currentTurn);
@@ -400,7 +401,7 @@ public class Drivetrain extends RobotHardware {
         if(!navx.isCalibrating()) currentAngle = navx.getAngularOrientation(AxesReference.EXTRINSIC,
                 AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
         else currentAngle = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
-                AngleUnit.DEGREES).thirdAngle + 90;
+                AngleUnit.DEGREES).thirdAngle;
         if(currentAngle < 0) {
             currentAngle = 180 + (180 + currentAngle);
         }
