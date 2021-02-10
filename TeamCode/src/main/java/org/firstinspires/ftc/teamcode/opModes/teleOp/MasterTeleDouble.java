@@ -27,13 +27,11 @@ public class MasterTeleDouble extends OpMode {
 
     boolean overrideIndex = false;
 
-    double position;
-
+    double wobblePower = 0;
 
     @Override
     public void init() {
         robot = new Robot(hardwareMap, telemetry);
-        position = robot.clamp.position();
     }
 
     @Override
@@ -172,12 +170,10 @@ public class MasterTeleDouble extends OpMode {
         }
 
         //Control Wobble Goal
-        telemetry.addData("Wobble", robot.clamp.position());
-        if(gamepad2.left_trigger > 0.25) position += 0.01;
-        else if(gamepad2.right_trigger > 0.25) position -= 0.01;
-        if(position > 0.8) position = 0.8;
-        else if(position < 0.1) position = 0.01;
-        robot.clamp.update(gamepad2.dpad_left, gamepad2.dpad_right, position);
+        if(gamepad2.left_trigger > 0.25) wobblePower = 1;
+        else if(gamepad2.right_trigger > 0.25) wobblePower = -1;
+        if(robot.clamp.topSensor() || robot.clamp.bottomSensor()) wobblePower = 0;
+        robot.clamp.update(gamepad2.dpad_left, gamepad2.dpad_right, wobblePower);
 
         telemetry.addData("Shooter setpoint", shooterSetpoint);
         robot.shooter.getTelemetry(false);
@@ -193,7 +189,6 @@ public class MasterTeleDouble extends OpMode {
         dashTelemetry.addData("Desired RPM", shooterSetpoint);
         dashTelemetry.addData("RPM1", robot.shooter.actualSpeed1);
         dashTelemetry.addData("RPM2", robot.shooter.actualSpeed2);
-        robot.clamp.positionTelemetry(false);
         robot.drivetrain.addBaseTelemetry(true);
 //        dashTelemetry.update();
     }

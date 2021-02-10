@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -31,10 +32,13 @@ public abstract class RobotHardware {
     protected DcMotorEx passthroughMotor;
 
     //WobbleGoalClamp
-    protected Servo wobbleMaster;
-    protected Servo wobbleSlave;
+    protected CRServo wobbleMaster;
+    protected CRServo wobbleSlave;
     protected CRServo left;
     protected CRServo right;
+    protected TouchSensor top;
+    protected TouchSensor bottom;
+
 
     //Shooter
     protected DcMotorEx shooterMaster;
@@ -57,11 +61,13 @@ public abstract class RobotHardware {
         passthroughMotor = hardwareMap.get(DcMotorEx.class, "passthroughMotor");
 
         //WobbleGoalClamp
-        wobbleMaster = hardwareMap.get(Servo.class, "master");
-        wobbleSlave = hardwareMap.get(Servo.class, "slave");
-        wobbleSlave.setDirection(Servo.Direction.REVERSE);
+        wobbleMaster = hardwareMap.get(CRServo.class, "master");
+        wobbleSlave = hardwareMap.get(CRServo.class, "slave");
+        wobbleSlave.setDirection(DcMotorSimple.Direction.REVERSE);
         left = hardwareMap.get(CRServo.class, "left");
         right = hardwareMap.get(CRServo.class, "right");
+        top = hardwareMap.get(TouchSensor.class, "top");
+        bottom = hardwareMap.get(TouchSensor.class, "bottom");
 
         //Shooter
         shooterMaster = hardwareMap.get(DcMotorEx.class, "shooterMaster");
