@@ -2,26 +2,20 @@ package org.firstinspires.ftc.teamcode.autonomous.commands.wobble;
 
 import org.firstinspires.ftc.teamcode.autonomous.commands.Command;
 
-public class WobbleSetPosition extends Command {
-
-    double position;
-
-    public WobbleSetPosition(double position) {
-        this.position = position;
-    }
+public class WobbleUp extends Command {
 
     @Override
     public void start() {
-        robot.clamp.update(false, false, position);
+
     }
 
     @Override
     public void loop() {
-        robot.clamp.update(false, false, position);
+        robot.clamp.update(false, false, 1);
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return robot.clamp.topSensor();
     }
 }
