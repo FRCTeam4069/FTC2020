@@ -14,9 +14,10 @@ import org.firstinspires.ftc.teamcode.autonomous.commands.intake.IntakeOff;
 import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.ResetEncoders;
 import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.TurnCommand;
 import org.firstinspires.ftc.teamcode.autonomous.commands.WaitCommand;
+import org.firstinspires.ftc.teamcode.autonomous.commands.wobble.WobbleDown;
 import org.firstinspires.ftc.teamcode.autonomous.commands.wobble.WobbleIntake;
 import org.firstinspires.ftc.teamcode.autonomous.commands.wobble.WobbleIntakeOff;
-import org.firstinspires.ftc.teamcode.autonomous.commands.wobble.WobbleSetPosition;
+import org.firstinspires.ftc.teamcode.autonomous.commands.wobble.WobbleUp;
 import org.firstinspires.ftc.teamcode.subsystems.StarterStackDetector;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
@@ -34,23 +35,23 @@ public class WobbleGoalAuto extends LinearOpMode {
         Scheduler scheduler = new Scheduler(telemetry, robot);
         if(dropZone == StarterStackDetector.DropZone.A) {
             scheduler.addCommand(new DriveToPosition(-10000, 42000));
-            scheduler.addCommand(new WobbleSetPosition(0.15));
+            scheduler.addCommand(new WobbleDown());
             scheduler.addCommand(new WaitCommand(500));
             scheduler.addCommand(new WobbleIntake(false));
             scheduler.addCommand(new WaitCommand(500));
             scheduler.addCommand(new WobbleIntakeOff());
-            scheduler.addCommand(new WobbleSetPosition(0.7));
+            scheduler.addCommand(new WobbleUp());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new DriveToPosition(30000, 66000));
         }
         else if(dropZone == StarterStackDetector.DropZone.B) {
             scheduler.addCommand(new DriveToPosition(30000, 70000));
-            scheduler.addCommand(new WobbleSetPosition(0.15));
+            scheduler.addCommand(new WobbleDown());
             scheduler.addCommand(new WaitCommand(500));
             scheduler.addCommand(new WobbleIntake(false));
             scheduler.addCommand(new WaitCommand(500));
             scheduler.addCommand(new WobbleIntakeOff());
-            scheduler.addCommand(new WobbleSetPosition(0.7));
+            scheduler.addCommand(new WobbleUp());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new DriveToPosition(30000, 55000));
             scheduler.addCommand(new DropIntake());
@@ -68,12 +69,12 @@ public class WobbleGoalAuto extends LinearOpMode {
         }
         else {
             scheduler.addCommand(new DriveToPosition(-10000, 105000));
-            scheduler.addCommand(new WobbleSetPosition(0.15));
+            scheduler.addCommand(new WobbleDown());
             scheduler.addCommand(new WaitCommand(500));
             scheduler.addCommand(new WobbleIntake(false));
             scheduler.addCommand(new WaitCommand(500));
             scheduler.addCommand(new WobbleIntakeOff());
-            scheduler.addCommand(new WobbleSetPosition(0.7));
+            scheduler.addCommand(new WobbleUp());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new DriveToPosition(30000, 55000));
             scheduler.addCommand(new DropIntake());
@@ -103,7 +104,7 @@ public class WobbleGoalAuto extends LinearOpMode {
         Scheduler thirdScheduler;
 
         //Scheduler to drive to starter stack
-        initialScheduler.addCommand(new WobbleSetPosition(0.85));
+        initialScheduler.addCommand(new WobbleUp());
         initialScheduler.addCommand(new DriveToPosition(-62000, 0));
         initialScheduler.addCommand(new TurnCommand(0));
 
