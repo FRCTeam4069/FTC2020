@@ -124,7 +124,7 @@ public class DriveToPosition extends Command {
         double turnKI = 0;
 
         if(Math.abs(turnError) < 5) {
-            turnKP = 0.01;
+            turnKP = 0.016;
             turnKI = 0.001;
         }
         else {

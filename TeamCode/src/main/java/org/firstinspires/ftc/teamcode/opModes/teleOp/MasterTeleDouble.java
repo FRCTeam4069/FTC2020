@@ -172,11 +172,11 @@ public class MasterTeleDouble extends OpMode {
         }
 
         //Control Wobble Goal
-
+        telemetry.addData("Wobble", robot.clamp.position());
         if(gamepad2.left_trigger > 0.25) position += 0.01;
         else if(gamepad2.right_trigger > 0.25) position -= 0.01;
-        if(position > 1) position = 1;
-        else if(position < 0.5) position = 0.5;
+        if(position > 0.8) position = 0.8;
+        else if(position < 0.1) position = 0.01;
         robot.clamp.update(gamepad2.dpad_left, gamepad2.dpad_right, position);
 
         telemetry.addData("Shooter setpoint", shooterSetpoint);
