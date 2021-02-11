@@ -5,6 +5,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
+import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -36,8 +37,9 @@ public abstract class RobotHardware {
     protected CRServo wobbleSlave;
     protected CRServo left;
     protected CRServo right;
-    protected TouchSensor top;
-    protected TouchSensor bottom;
+    protected RevTouchSensor top;
+    protected RevTouchSensor bottom;
+
 
 
     //Shooter
@@ -66,8 +68,8 @@ public abstract class RobotHardware {
         wobbleSlave.setDirection(DcMotorSimple.Direction.REVERSE);
         left = hardwareMap.get(CRServo.class, "left");
         right = hardwareMap.get(CRServo.class, "right");
-        top = hardwareMap.get(TouchSensor.class, "top");
-        bottom = hardwareMap.get(TouchSensor.class, "bottom");
+        top = hardwareMap.get(RevTouchSensor.class, "top");
+        bottom = hardwareMap.get(RevTouchSensor.class, "bottom");
 
         //Shooter
         shooterMaster = hardwareMap.get(DcMotorEx.class, "shooterMaster");

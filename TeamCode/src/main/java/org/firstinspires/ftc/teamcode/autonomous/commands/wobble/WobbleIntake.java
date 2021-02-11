@@ -17,7 +17,7 @@ public class WobbleIntake extends Command {
 
     @Override
     public void loop() {
-        robot.clamp.update(in, !in, robot.clamp.position());
+        robot.clamp.update(in, !in, 0);
     }
 
     @Override

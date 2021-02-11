@@ -170,9 +170,9 @@ public class MasterTeleDouble extends OpMode {
         }
 
         //Control Wobble Goal
-        if(gamepad2.left_trigger > 0.25) wobblePower = 1;
-        else if(gamepad2.right_trigger > 0.25) wobblePower = -1;
-        if(robot.clamp.topSensor() || robot.clamp.bottomSensor()) wobblePower = 0;
+        wobblePower = gamepad2.left_trigger - gamepad2.right_trigger;
+        if(robot.clamp.topSensor() && wobblePower > 0) wobblePower = 0;
+        else if(robot.clamp.bottomSensor() && wobblePower < 0) wobblePower = 0;
         robot.clamp.update(gamepad2.dpad_left, gamepad2.dpad_right, wobblePower);
 
         telemetry.addData("Shooter setpoint", shooterSetpoint);
@@ -183,6 +183,8 @@ public class MasterTeleDouble extends OpMode {
             robot.intake.updatePassthrough(true, false);
         }
 
+        telemetry.addData("Top Button", robot.clamp.topSensor());
+        telemetry.addData("Bottom Button", robot.clamp.bottomSensor());
         telemetry.update();
 
         dashTelemetry.addData("RPM", robot.shooter.speed);

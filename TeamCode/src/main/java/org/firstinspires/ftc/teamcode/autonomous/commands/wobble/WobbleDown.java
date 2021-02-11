@@ -10,7 +10,7 @@ public class WobbleDown extends Command {
 
     @Override
     public void loop() {
-        robot.clamp.update(false, false, -1);
+        robot.clamp.update(false, false, -0.5);
     }
 
     @Override

@@ -9,23 +9,21 @@ import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 public class WobbleGoalTest extends OpMode {
 
     Robot robot;
-    double position;
+    double speed = 0;
 
     @Override
     public void init() {
         robot = new Robot(hardwareMap, telemetry);
-        position = robot.clamp.position();
     }
 
     @Override
     public void loop() {
-        if(gamepad1.dpad_up) position += 0.01;
-        else if(gamepad1.dpad_down) position -= 0.01;
+        if(gamepad1.dpad_up) speed = 1;
+        else if(gamepad1.dpad_down) speed = -1;
+        else speed = 0;
 
-        if(position < 0.05) position = 0.05;
-        else if(position > 0.85) position = 0.85;
-        robot.clamp.update(gamepad1.left_bumper, gamepad1.right_bumper, position);
-        robot.clamp.positionTelemetry(true);
+        if(robot.clamp.bottomSensor() || robot.clamp.topSensor()) speed = 0;
+        robot.clamp.update(gamepad1.left_bumper, gamepad1.right_bumper, speed);
 
     }
 }
