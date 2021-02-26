@@ -60,7 +60,7 @@ public class HighGoalAuto extends LinearOpMode {
             double startTime = System.currentTimeMillis();
             while(System.currentTimeMillis() < startTime + 1000 && opModeIsActive()) {
                 robot.detector.updateRecognitions();
-                if(robot.detector.getStarterStackSize(100) != 0) isStack = true;
+                if(robot.detector.getStarterStackSize() != 0) isStack = true;
                 dashboardTelemetry.addData("IS stack?", isStack);
                 dashboardTelemetry.update();
                 sleep(50);

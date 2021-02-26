@@ -15,6 +15,7 @@ public class WobbleGoalClamp extends RobotHardware {
     }
 
     public void update(boolean clamp, boolean open, double power) {
+
         if(clamp && !open) {
             left.setPower(1);
             right.setPower(-1);
@@ -27,7 +28,8 @@ public class WobbleGoalClamp extends RobotHardware {
             left.setPower(0);
             right.setPower(0);
         }
-
+        if(bottomSensor() && power < 0) power = 0;
+        else if(topSensor() && power > 0) power = 0;
         wobbleMaster.setPower(power);
         wobbleSlave.setPower(power);
     }

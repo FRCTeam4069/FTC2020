@@ -41,6 +41,7 @@ public class WobbleGoalAuto extends LinearOpMode {
             scheduler.addCommand(new WaitCommand(500));
             scheduler.addCommand(new WobbleIntakeOff());
             scheduler.addCommand(new WobbleUp());
+            scheduler.addCommand(new WobbleIntakeOff());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new DriveToPosition(30000, 66000));
         }
@@ -52,6 +53,7 @@ public class WobbleGoalAuto extends LinearOpMode {
             scheduler.addCommand(new WaitCommand(500));
             scheduler.addCommand(new WobbleIntakeOff());
             scheduler.addCommand(new WobbleUp());
+            scheduler.addCommand(new WobbleIntakeOff());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new DriveToPosition(30000, 55000));
             scheduler.addCommand(new DropIntake());
@@ -75,6 +77,7 @@ public class WobbleGoalAuto extends LinearOpMode {
             scheduler.addCommand(new WaitCommand(500));
             scheduler.addCommand(new WobbleIntakeOff());
             scheduler.addCommand(new WobbleUp());
+            scheduler.addCommand(new WobbleIntakeOff());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new DriveToPosition(30000, 55000));
             scheduler.addCommand(new DropIntake());
@@ -105,6 +108,7 @@ public class WobbleGoalAuto extends LinearOpMode {
 
         //Scheduler to drive to starter stack
         initialScheduler.addCommand(new WobbleUp());
+        initialScheduler.addCommand(new WobbleIntakeOff());
         initialScheduler.addCommand(new DriveToPosition(-62000, 0));
         initialScheduler.addCommand(new TurnCommand(0));
 
@@ -135,7 +139,7 @@ public class WobbleGoalAuto extends LinearOpMode {
             double startTime = System.currentTimeMillis();
             while(System.currentTimeMillis() < startTime + 1000 && opModeIsActive()) {
                 robot.detector.updateRecognitions();
-                stackSize = robot.detector.getStarterStackSize(155);
+                stackSize = robot.detector.getStarterStackSize();
                 dashboardTelemetry.addData("Stack size?", stackSize);
                 dashboardTelemetry.update();
                 sleep(50);

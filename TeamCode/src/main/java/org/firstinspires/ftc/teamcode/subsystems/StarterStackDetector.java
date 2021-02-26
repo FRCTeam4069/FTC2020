@@ -19,6 +19,8 @@ public class StarterStackDetector extends RobotHardware {
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
+    double boundRatio = 2.0 / 5;
+
     //TF Detector assets
     private static final String TF_DECTECTOR_MODEL_ASSETS = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
@@ -36,6 +38,8 @@ public class StarterStackDetector extends RobotHardware {
 
     //Global list of returned recogn
     private List<Recognition> updatedRecognitions;
+
+
 
     // Function to initialize vuforia detector (called in init)
     private void initVuforia(HardwareMap hardwareMap) {
@@ -114,7 +118,7 @@ public class StarterStackDetector extends RobotHardware {
     }
 
     private int lastReturn = 1000;
-    public int getStarterStackSize(int fourStackHeightDivide) {
+    public int getStarterStackSize() {
 
         updateRecognitions();
 
@@ -136,7 +140,7 @@ public class StarterStackDetector extends RobotHardware {
                 telemetry.addData("Width", starterStack.getWidth());
 
                 //Returning starter stack based on hard-coded height values
-                if (starterStack.getHeight() > fourStackHeightDivide) {
+                if ((starterStack.getHeight() / starterStack.getWidth()) > boundRatio) {
                     lastReturn = 4;
                     telemetry.addData("Starter stack", 4);
                     return 4;
