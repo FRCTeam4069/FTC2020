@@ -59,7 +59,7 @@ public class WobbleGoalAuto extends LinearOpMode {
             scheduler.addCommand(new DropIntake());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new IntakeFeed(true, 0.5));
-            scheduler.addCommand(new DriveToPosition(30000, 5000, 0.1));
+            scheduler.addCommand(new DriveToPosition(30000, 5000, 0.3));
             scheduler.addCommand(new IntakeOff());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new DriveToPosition(30000, 42000));
@@ -83,7 +83,7 @@ public class WobbleGoalAuto extends LinearOpMode {
             scheduler.addCommand(new DropIntake());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new IntakeFeed(true, 0.5));
-            scheduler.addCommand(new DriveToPosition(30000, 5000, 0.1));
+            scheduler.addCommand(new DriveToPosition(30000, 5000, 0.3));
             scheduler.addCommand(new IntakeOff());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new DriveToPosition(30000, 42000));

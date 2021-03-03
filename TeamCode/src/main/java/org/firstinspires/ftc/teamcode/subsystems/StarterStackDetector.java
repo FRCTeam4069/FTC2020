@@ -19,7 +19,7 @@ public class StarterStackDetector extends RobotHardware {
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
-    double boundRatio = 2.0 / 5;
+    double boundRatio = 0.65;
 
     //TF Detector assets
     private static final String TF_DECTECTOR_MODEL_ASSETS = "UltimateGoal.tflite";
@@ -132,12 +132,10 @@ public class StarterStackDetector extends RobotHardware {
 
                 //Adding telemetry recognition data
                 telemetry.addData("Confidence", starterStack.getConfidence());
-                telemetry.addData("Top", starterStack.getTop());
-                telemetry.addData("Bottom", starterStack.getBottom());
-                telemetry.addData("Left", starterStack.getLeft());
-                telemetry.addData("Right", starterStack.getRight());
+                telemetry.addData("Aspect Ratio", (starterStack.getHeight() / starterStack.getWidth()));
                 telemetry.addData("Height", starterStack.getHeight());
                 telemetry.addData("Width", starterStack.getWidth());
+
 
                 //Returning starter stack based on hard-coded height values
                 if ((starterStack.getHeight() / starterStack.getWidth()) > boundRatio) {
