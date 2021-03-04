@@ -47,7 +47,7 @@ public class Odometry extends RobotHardware {
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-
+        imu.initialize(parameters);
     }
 
     public void setGyroscopeType(GyroscopeType gyroscopeType) {
@@ -61,9 +61,9 @@ public class Odometry extends RobotHardware {
 
     //Return heading
     public double getCurrentHeading() {
-
+        boolean badFix = false;
         double heading;
-        if(!navx.isCalibrating()) {
+        if(!navx.isCalibrating() && badFix) {
             heading = navx.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
         }
         else {

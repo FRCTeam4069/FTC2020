@@ -42,7 +42,7 @@ public class HighGoalAuto extends LinearOpMode {
         secondScheduler.addCommand(new DriveToPosition(29000, 40000));
         secondScheduler.addCommand(new TurnCommand(270));
         //Start running shooter
-        secondScheduler.addCommand(new IntakeFeed(false, 1));
+        secondScheduler.addCommand(new IntakeFeed(1));
         secondScheduler.addCommand(new WaitCommand(3000));
         secondScheduler.addCommand(new IntakeOff());
 
@@ -126,14 +126,14 @@ public class HighGoalAuto extends LinearOpMode {
         if(isStack) {
             scheduler.addCommand(new DropIntake());
             scheduler.addCommand(new TurnCommand(270));
-            scheduler.addCommand(new IntakeFeed(true, 0.5));
+            scheduler.addCommand(new IntakeFeed(0.5));
             scheduler.addCommand(new RawDriveControl(-0.5, 2200));
             scheduler.addCommand(new IntakeOff());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new DriveToPosition(29000, 40000));
             scheduler.addCommand(new TurnCommand(270));
             //Run shooter here
-            scheduler.addCommand(new IntakeFeed(false, 1));
+            scheduler.addCommand(new IntakeFeed(1));
             scheduler.addCommand(new WaitCommand(3000));
             scheduler.addCommand(new DriveToPosition(29000, 60000));
         }

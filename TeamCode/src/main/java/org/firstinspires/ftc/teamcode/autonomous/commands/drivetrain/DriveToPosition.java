@@ -80,7 +80,7 @@ public class DriveToPosition extends Command {
 
         //PID gains
         double xKP = 0.000033;
-        double yKP = 0.000026;
+        double yKP = 0.000022;
 
 
         double xKI = 0.0000001;
@@ -144,6 +144,8 @@ public class DriveToPosition extends Command {
             if(yOutput < 0) yOutput = -speedCap;
             else yOutput = speedCap;
         }
+
+        if(yOutput < 0.1 && xOutput < 0.1 && turnError > 5) turnOutput = (turnOutput / Math.abs(turnOutput)) / 5;
         robot.drivetrain.update(yOutput, -xOutput, turnOutput);
 
 

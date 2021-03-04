@@ -20,7 +20,7 @@ public class LowGoalAuto extends LinearOpMode {
         Scheduler scheduler = new Scheduler(telemetry, robot);
         scheduler.addCommand(new DriveToPosition(18000, 170000));
         scheduler.addCommand(new ShooterOn(1));
-        scheduler.addCommand(new IntakeFeed(false, 1));
+        scheduler.addCommand(new IntakeFeed( 1));
         scheduler.addCommand(new IntakeOff());
         scheduler.addCommand(new ShooterOff());
         scheduler.addCommand(new DriveToPosition(0, 110000));
