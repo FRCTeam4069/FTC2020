@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
+import org.firstinspires.ftc.teamcode.autonomous.commands.ParallelCommand;
 import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.DriveToPosition;
 import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.RawDriveControl;
 import org.firstinspires.ftc.teamcode.autonomous.commands.intake.DropIntake;
@@ -34,28 +35,22 @@ public class WobbleGoalAuto extends LinearOpMode {
     public Scheduler setScheduler(StarterStackDetector.DropZone dropZone) {
         Scheduler scheduler = new Scheduler(telemetry, robot);
         if(dropZone == StarterStackDetector.DropZone.A) {
-            scheduler.addCommand(new DriveToPosition(-10000, 42000));
-            scheduler.addCommand(new WobbleDown());
-            scheduler.addCommand(new WaitCommand(500));
+            scheduler.addCommand(new ParallelCommand(new DriveToPosition(-10000, 42000),
+                    new WobbleDown()));
             scheduler.addCommand(new WobbleIntake(false));
-            scheduler.addCommand(new WaitCommand(500));
-            scheduler.addCommand(new WobbleIntakeOff());
-            scheduler.addCommand(new WobbleUp());
-            scheduler.addCommand(new WobbleIntakeOff());
-            scheduler.addCommand(new TurnCommand(270));
-            scheduler.addCommand(new DriveToPosition(30000, 66000));
+            scheduler.addCommand(new ParallelCommand(new WaitCommand(500),
+                    new TurnCommand(270)));
+            scheduler.addCommand(new ParallelCommand(new WobbleUp(), new WobbleIntakeOff()));
+            scheduler.addCommand(new ParallelCommand(new ParallelCommand(new WobbleUp(),
+                    new WobbleIntakeOff()), new DriveToPosition(30000, 66000)));
         }
         else if(dropZone == StarterStackDetector.DropZone.B) {
-            scheduler.addCommand(new DriveToPosition(30000, 70000));
-            scheduler.addCommand(new WobbleDown());
-            scheduler.addCommand(new WaitCommand(500));
+            scheduler.addCommand(new ParallelCommand(new DriveToPosition(30000, 70000),
+                    new WobbleDown()));
             scheduler.addCommand(new WobbleIntake(false));
-            scheduler.addCommand(new WaitCommand(500));
-            scheduler.addCommand(new WobbleIntakeOff());
-            scheduler.addCommand(new WobbleUp());
-            scheduler.addCommand(new WobbleIntakeOff());
-            scheduler.addCommand(new TurnCommand(270));
-            scheduler.addCommand(new DriveToPosition(30000, 55000));
+            scheduler.addCommand(new ParallelCommand(new WaitCommand(500), new TurnCommand(270)));
+            scheduler.addCommand(new ParallelCommand(new ParallelCommand(new WobbleIntakeOff(), new WobbleUp()),
+                    new DriveToPosition(30000, 55000)));
             scheduler.addCommand(new DropIntake());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new IntakeFeed(0.5));
@@ -70,16 +65,12 @@ public class WobbleGoalAuto extends LinearOpMode {
             scheduler.addCommand(new DriveToPosition(30000, 66000));
         }
         else {
-            scheduler.addCommand(new DriveToPosition(-10000, 105000));
-            scheduler.addCommand(new WobbleDown());
-            scheduler.addCommand(new WaitCommand(500));
+            scheduler.addCommand(new ParallelCommand(new DriveToPosition(-10000, 105000),
+                    new WobbleDown()));
             scheduler.addCommand(new WobbleIntake(false));
-            scheduler.addCommand(new WaitCommand(500));
-            scheduler.addCommand(new WobbleIntakeOff());
-            scheduler.addCommand(new WobbleUp());
-            scheduler.addCommand(new WobbleIntakeOff());
-            scheduler.addCommand(new TurnCommand(270));
-            scheduler.addCommand(new DriveToPosition(30000, 55000));
+            scheduler.addCommand(new ParallelCommand(new WaitCommand(500), new TurnCommand(270)));
+            scheduler.addCommand(new ParallelCommand(new ParallelCommand(new WobbleIntakeOff(), new WobbleUp()),
+                    new DriveToPosition(30000, 55000)));
             scheduler.addCommand(new DropIntake());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new IntakeFeed(0.5));
