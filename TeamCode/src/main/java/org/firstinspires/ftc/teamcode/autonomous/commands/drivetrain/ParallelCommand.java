@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.autonomous.commands;
+package org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain;
+
+import org.firstinspires.ftc.teamcode.autonomous.commands.Command;
 
 public class ParallelCommand extends Command {
 
@@ -12,6 +14,8 @@ public class ParallelCommand extends Command {
 
     @Override
     public void start() {
+        firstCommand.setSubsystems(robot, telemetry);
+        secondCommand.setSubsystems(robot, telemetry);
         firstCommand.start();
         secondCommand.start();
     }

@@ -80,7 +80,7 @@ public class DriveToPosition extends Command {
 
         //PID gains
         double xKP = 0.000033;
-        double yKP = 0.000022;
+        double yKP = 0.00002;
 
 
         double xKI = 0.0000001;
@@ -145,7 +145,7 @@ public class DriveToPosition extends Command {
             else yOutput = speedCap;
         }
 
-        if(yOutput < 0.1 && xOutput < 0.1 && turnError > 5) turnOutput = (turnOutput / Math.abs(turnOutput)) / 5;
+        if(yOutput < 0.1 && xOutput < 0.1 && turnError > 10) turnOutput = (turnOutput / Math.abs(turnOutput)) / 5;
         robot.drivetrain.update(yOutput, -xOutput, turnOutput);
 
 
@@ -164,7 +164,7 @@ public class DriveToPosition extends Command {
     @Override
     public boolean isFinished() {
         //If close enough to accurate return isFinished as true
-        if((Math.abs(yError) < 4000) && (Math.abs(xError) < 4000) && (Math.abs(turnError) < 5)) {
+        if((Math.abs(yError) < 6000) && (Math.abs(xError) < 4000) && (Math.abs(turnError) < 5)) {
             rampComplete = false;
             return true;
         }

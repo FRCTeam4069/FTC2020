@@ -8,6 +8,7 @@ public abstract class Command {
     //Subsystems to be accessed by commands
     protected Robot robot;
     protected Telemetry telemetry;
+
     //MUST be called by a command scheduler and runner
     public void setSubsystems(Robot robot, Telemetry telemetry) {
         this.robot = robot;

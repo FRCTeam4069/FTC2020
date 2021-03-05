@@ -6,15 +6,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.autonomous.Scheduler;
-import org.firstinspires.ftc.teamcode.autonomous.commands.ParallelCommand;
+import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.ParallelCommand;
 import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.DriveToPosition;
-import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.RawDriveControl;
 import org.firstinspires.ftc.teamcode.autonomous.commands.intake.DropIntake;
 import org.firstinspires.ftc.teamcode.autonomous.commands.intake.IntakeFeed;
 import org.firstinspires.ftc.teamcode.autonomous.commands.intake.IntakeOff;
 import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.ResetEncoders;
 import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.TurnCommand;
-import org.firstinspires.ftc.teamcode.autonomous.commands.WaitCommand;
+import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.WaitCommand;
 import org.firstinspires.ftc.teamcode.autonomous.commands.wobble.WobbleDown;
 import org.firstinspires.ftc.teamcode.autonomous.commands.wobble.WobbleIntake;
 import org.firstinspires.ftc.teamcode.autonomous.commands.wobble.WobbleIntakeOff;
@@ -35,54 +34,54 @@ public class WobbleGoalAuto extends LinearOpMode {
     public Scheduler setScheduler(StarterStackDetector.DropZone dropZone) {
         Scheduler scheduler = new Scheduler(telemetry, robot);
         if(dropZone == StarterStackDetector.DropZone.A) {
-            scheduler.addCommand(new ParallelCommand(new DriveToPosition(-10000, 42000),
-                    new WobbleDown()));
+            scheduler.addCommand(new DriveToPosition(-10000, 42000));
+            scheduler.addCommand(new WobbleDown());
             scheduler.addCommand(new WobbleIntake(false));
             scheduler.addCommand(new ParallelCommand(new WaitCommand(500),
                     new TurnCommand(270)));
             scheduler.addCommand(new ParallelCommand(new WobbleUp(), new WobbleIntakeOff()));
-            scheduler.addCommand(new ParallelCommand(new ParallelCommand(new WobbleUp(),
-                    new WobbleIntakeOff()), new DriveToPosition(30000, 66000)));
+            scheduler.addCommand(new ParallelCommand(new WobbleUp(), new WobbleIntakeOff()));
+            scheduler.addCommand(new DriveToPosition(36000, 60000));
         }
         else if(dropZone == StarterStackDetector.DropZone.B) {
-            scheduler.addCommand(new ParallelCommand(new DriveToPosition(30000, 70000),
-                    new WobbleDown()));
+            scheduler.addCommand(new DriveToPosition(35000, 70000));
+            scheduler.addCommand(new WobbleDown());
             scheduler.addCommand(new WobbleIntake(false));
             scheduler.addCommand(new ParallelCommand(new WaitCommand(500), new TurnCommand(270)));
-            scheduler.addCommand(new ParallelCommand(new ParallelCommand(new WobbleIntakeOff(), new WobbleUp()),
-                    new DriveToPosition(30000, 55000)));
+            scheduler.addCommand(new ParallelCommand(new WobbleIntakeOff(), new WobbleUp()));
+            scheduler.addCommand(new DriveToPosition(35000, 55000));
             scheduler.addCommand(new DropIntake());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new IntakeFeed(0.5));
-            scheduler.addCommand(new DriveToPosition(30000, 5000, 0.7));
+            scheduler.addCommand(new DriveToPosition(35000, -1000, 0.7));
             scheduler.addCommand(new IntakeOff());
             scheduler.addCommand(new TurnCommand(270));
-            scheduler.addCommand(new DriveToPosition(30000, 60000));
+            scheduler.addCommand(new DriveToPosition(35000, 50000));
             scheduler.addCommand(new TurnCommand(270));
             //Run shooter here
             scheduler.addCommand(new IntakeFeed(1));
             scheduler.addCommand(new WaitCommand(3000));
-            scheduler.addCommand(new DriveToPosition(30000, 66000));
+            scheduler.addCommand(new DriveToPosition(35000, 60000));
         }
         else {
-            scheduler.addCommand(new ParallelCommand(new DriveToPosition(-10000, 105000),
-                    new WobbleDown()));
+            scheduler.addCommand(new DriveToPosition(-10000, 105000));
+            scheduler.addCommand(new WobbleDown());
             scheduler.addCommand(new WobbleIntake(false));
             scheduler.addCommand(new ParallelCommand(new WaitCommand(500), new TurnCommand(270)));
-            scheduler.addCommand(new ParallelCommand(new ParallelCommand(new WobbleIntakeOff(), new WobbleUp()),
-                    new DriveToPosition(30000, 55000)));
+            scheduler.addCommand(new ParallelCommand(new WobbleIntakeOff(), new WobbleUp()));
+            scheduler.addCommand(new DriveToPosition(35000, 55000));
             scheduler.addCommand(new DropIntake());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new IntakeFeed(0.5));
-            scheduler.addCommand(new DriveToPosition(30000, 5000, 0.7));
+            scheduler.addCommand(new DriveToPosition(35000, -1000, 0.7));
             scheduler.addCommand(new IntakeOff());
             scheduler.addCommand(new TurnCommand(270));
-            scheduler.addCommand(new DriveToPosition(30000, 60000));
+            scheduler.addCommand(new DriveToPosition(35000, 50000));
             scheduler.addCommand(new TurnCommand(270));
             //Run shooter here
             scheduler.addCommand(new IntakeFeed(1));
             scheduler.addCommand(new WaitCommand(3000));
-            scheduler.addCommand(new DriveToPosition(30000, 66000));
+            scheduler.addCommand(new DriveToPosition(35000, 60000));
         }
         return scheduler;
     }
@@ -107,7 +106,7 @@ public class WobbleGoalAuto extends LinearOpMode {
         secondScheduler.addCommand(new ResetEncoders());
         secondScheduler.addCommand(new TurnCommand(270));
         secondScheduler.addCommand(new ResetEncoders());
-        secondScheduler.addCommand(new DriveToPosition(32000, 42000));
+        secondScheduler.addCommand(new DriveToPosition(35000, 42000));
         secondScheduler.addCommand(new TurnCommand(270));
         //Start running shooter
         secondScheduler.addCommand(new IntakeFeed( 0.9));

@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.autonomous.commands.intake.IntakeOff;
 import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.RawDriveControl;
 import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.ResetEncoders;
 import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.TurnCommand;
-import org.firstinspires.ftc.teamcode.autonomous.commands.WaitCommand;
+import org.firstinspires.ftc.teamcode.autonomous.commands.drivetrain.WaitCommand;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 @Autonomous
