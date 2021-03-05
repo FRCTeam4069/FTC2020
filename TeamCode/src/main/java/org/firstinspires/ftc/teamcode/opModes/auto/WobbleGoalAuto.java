@@ -30,6 +30,7 @@ public class WobbleGoalAuto extends LinearOpMode {
 
     Robot robot;
     StarterStackDetector.DropZone dropZone;
+    private int firstStrafePosition = 0;
 
     public Scheduler setScheduler(StarterStackDetector.DropZone dropZone) {
         Scheduler scheduler = new Scheduler(telemetry, robot);
@@ -41,7 +42,7 @@ public class WobbleGoalAuto extends LinearOpMode {
                     new TurnCommand(270)));
             scheduler.addCommand(new ParallelCommand(new WobbleUp(), new WobbleIntakeOff()));
             scheduler.addCommand(new ParallelCommand(new WobbleUp(), new WobbleIntakeOff()));
-            scheduler.addCommand(new DriveToPosition(36000, 60000));
+            scheduler.addCommand(new DriveToPosition(36000, 65000));
         }
         else if(dropZone == StarterStackDetector.DropZone.B) {
             scheduler.addCommand(new DriveToPosition(35000, 70000));
@@ -53,7 +54,7 @@ public class WobbleGoalAuto extends LinearOpMode {
             scheduler.addCommand(new DropIntake());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new IntakeFeed(0.5));
-            scheduler.addCommand(new DriveToPosition(35000, -1000, 0.7));
+            scheduler.addCommand(new DriveToPosition(35000, -10000, 0.6));
             scheduler.addCommand(new IntakeOff());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new DriveToPosition(35000, 50000));
@@ -61,7 +62,7 @@ public class WobbleGoalAuto extends LinearOpMode {
             //Run shooter here
             scheduler.addCommand(new IntakeFeed(1));
             scheduler.addCommand(new WaitCommand(3000));
-            scheduler.addCommand(new DriveToPosition(35000, 60000));
+            scheduler.addCommand(new DriveToPosition(35000, 65000));
         }
         else {
             scheduler.addCommand(new DriveToPosition(-10000, 105000));
@@ -73,7 +74,7 @@ public class WobbleGoalAuto extends LinearOpMode {
             scheduler.addCommand(new DropIntake());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new IntakeFeed(0.5));
-            scheduler.addCommand(new DriveToPosition(35000, -1000, 0.7));
+            scheduler.addCommand(new DriveToPosition(35000, -10000, 0.6));
             scheduler.addCommand(new IntakeOff());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new DriveToPosition(35000, 50000));
@@ -81,7 +82,7 @@ public class WobbleGoalAuto extends LinearOpMode {
             //Run shooter here
             scheduler.addCommand(new IntakeFeed(1));
             scheduler.addCommand(new WaitCommand(3000));
-            scheduler.addCommand(new DriveToPosition(35000, 60000));
+            scheduler.addCommand(new DriveToPosition(35000, 65000));
         }
         return scheduler;
     }
@@ -99,10 +100,11 @@ public class WobbleGoalAuto extends LinearOpMode {
         Scheduler thirdScheduler;
 
         //Scheduler to drive to starter stack
-        initialScheduler.addCommand(new DriveToPosition(-62000, 0));
+        initialScheduler.addCommand(new DriveToPosition(-60000, 0));
         initialScheduler.addCommand(new TurnCommand(0));
 
         //Drives to line, turns and fires
+        firstStrafePosition = robot.odometry.x.getPosition();
         secondScheduler.addCommand(new ResetEncoders());
         secondScheduler.addCommand(new TurnCommand(270));
         secondScheduler.addCommand(new ResetEncoders());
@@ -142,6 +144,8 @@ public class WobbleGoalAuto extends LinearOpMode {
             dropZone = StarterStackDetector.DropZone.A;
             isStack = false;
         }
+        telemetry.addLine("Drop Zone" + dropZone);
+
         thirdScheduler = setScheduler(dropZone);
 
         //Drive to line and fire

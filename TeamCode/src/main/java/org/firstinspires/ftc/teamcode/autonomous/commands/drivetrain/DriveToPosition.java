@@ -80,7 +80,7 @@ public class DriveToPosition extends Command {
 
         //PID gains
         double xKP = 0.000033;
-        double yKP = 0.00002;
+        double yKP = 0.000017;
 
 
         double xKI = 0.0000001;
