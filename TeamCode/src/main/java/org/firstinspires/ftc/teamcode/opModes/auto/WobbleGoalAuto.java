@@ -30,59 +30,58 @@ public class WobbleGoalAuto extends LinearOpMode {
 
     Robot robot;
     StarterStackDetector.DropZone dropZone;
-    private int firstStrafePosition = 0;
 
     public Scheduler setScheduler(StarterStackDetector.DropZone dropZone) {
         Scheduler scheduler = new Scheduler(telemetry, robot);
         if(dropZone == StarterStackDetector.DropZone.A) {
-            scheduler.addCommand(new DriveToPosition(-10000, 42000));
+            scheduler.addCommand(new DriveToPosition(-10000, 102000));
             scheduler.addCommand(new WobbleDown());
             scheduler.addCommand(new WobbleIntake(false));
             scheduler.addCommand(new ParallelCommand(new WaitCommand(500),
                     new TurnCommand(270)));
             scheduler.addCommand(new ParallelCommand(new WobbleUp(), new WobbleIntakeOff()));
             scheduler.addCommand(new ParallelCommand(new WobbleUp(), new WobbleIntakeOff()));
-            scheduler.addCommand(new DriveToPosition(36000, 65000));
+            scheduler.addCommand(new DriveToPosition(36000, 125000));
         }
         else if(dropZone == StarterStackDetector.DropZone.B) {
-            scheduler.addCommand(new DriveToPosition(35000, 70000));
+            scheduler.addCommand(new DriveToPosition(35000, 130000));
             scheduler.addCommand(new WobbleDown());
             scheduler.addCommand(new WobbleIntake(false));
             scheduler.addCommand(new ParallelCommand(new WaitCommand(500), new TurnCommand(270)));
             scheduler.addCommand(new ParallelCommand(new WobbleIntakeOff(), new WobbleUp()));
-            scheduler.addCommand(new DriveToPosition(35000, 55000));
+            scheduler.addCommand(new DriveToPosition(35000, 115000));
             scheduler.addCommand(new DropIntake());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new IntakeFeed(0.5));
-            scheduler.addCommand(new DriveToPosition(35000, -10000, 0.6));
+            scheduler.addCommand(new DriveToPosition(35000, 10000, 0.6));
             scheduler.addCommand(new IntakeOff());
             scheduler.addCommand(new TurnCommand(270));
-            scheduler.addCommand(new DriveToPosition(35000, 50000));
+            scheduler.addCommand(new DriveToPosition(35000, 110000));
             scheduler.addCommand(new TurnCommand(270));
             //Run shooter here
             scheduler.addCommand(new IntakeFeed(1));
             scheduler.addCommand(new WaitCommand(3000));
-            scheduler.addCommand(new DriveToPosition(35000, 65000));
+            scheduler.addCommand(new DriveToPosition(35000, 125000));
         }
         else {
-            scheduler.addCommand(new DriveToPosition(-10000, 105000));
+            scheduler.addCommand(new DriveToPosition(-10000, 165000));
             scheduler.addCommand(new WobbleDown());
             scheduler.addCommand(new WobbleIntake(false));
             scheduler.addCommand(new ParallelCommand(new WaitCommand(500), new TurnCommand(270)));
             scheduler.addCommand(new ParallelCommand(new WobbleIntakeOff(), new WobbleUp()));
-            scheduler.addCommand(new DriveToPosition(35000, 55000));
+            scheduler.addCommand(new DriveToPosition(35000, 115000));
             scheduler.addCommand(new DropIntake());
             scheduler.addCommand(new TurnCommand(270));
             scheduler.addCommand(new IntakeFeed(0.5));
-            scheduler.addCommand(new DriveToPosition(35000, -10000, 0.6));
+            scheduler.addCommand(new DriveToPosition(35000, 10000, 0.6));
             scheduler.addCommand(new IntakeOff());
             scheduler.addCommand(new TurnCommand(270));
-            scheduler.addCommand(new DriveToPosition(35000, 50000));
+            scheduler.addCommand(new DriveToPosition(35000, 110000));
             scheduler.addCommand(new TurnCommand(270));
             //Run shooter here
             scheduler.addCommand(new IntakeFeed(1));
             scheduler.addCommand(new WaitCommand(3000));
-            scheduler.addCommand(new DriveToPosition(35000, 65000));
+            scheduler.addCommand(new DriveToPosition(35000, 125000));
         }
         return scheduler;
     }
@@ -104,11 +103,13 @@ public class WobbleGoalAuto extends LinearOpMode {
         initialScheduler.addCommand(new TurnCommand(0));
 
         //Drives to line, turns and fires
-        firstStrafePosition = robot.odometry.x.getPosition();
-        secondScheduler.addCommand(new ResetEncoders());
+        int firstStrafePositionX = robot.odometry.x.getPosition();
+        int firstStrafePositionY = robot.odometry.yRight.getPosition();
         secondScheduler.addCommand(new TurnCommand(270));
         secondScheduler.addCommand(new ResetEncoders());
-        secondScheduler.addCommand(new DriveToPosition(35000, 42000));
+        robot.odometry.yRight.setCurrentPositionTo(-firstStrafePositionX);
+        robot.odometry.x.setCurrentPositionTo(firstStrafePositionY);
+        secondScheduler.addCommand(new DriveToPosition(35000, 102000));
         secondScheduler.addCommand(new TurnCommand(270));
         //Start running shooter
         secondScheduler.addCommand(new IntakeFeed( 0.9));
@@ -132,8 +133,8 @@ public class WobbleGoalAuto extends LinearOpMode {
             while(System.currentTimeMillis() < startTime + 1000 && opModeIsActive()) {
                 robot.detector.updateRecognitions();
                 stackSize = robot.detector.getStarterStackSize();
-                dashboardTelemetry.addData("Stack size?", stackSize);
-                dashboardTelemetry.update();
+              //  dashboardTelemetry.addData("Stack size?", stackSize);
+              //  dashboardTelemetry.update();
                 sleep(50);
                 idle();
             }
@@ -152,8 +153,9 @@ public class WobbleGoalAuto extends LinearOpMode {
         while(opModeIsActive() && secondScheduler.getQueueSize() != 0) {
             secondScheduler.run();
             robot.shooter.update(3000);
-            dashboardTelemetry.addData("RPM", robot.shooter.speed);
-            dashboardTelemetry.addData("Queue", secondScheduler.getQueueSize());
+           // dashboardTelemetry.addData("RPM", robot.shooter.speed);
+           // dashboardTelemetry.addData("Queue", secondScheduler.getQueueSize());
+            telemetry.addData("Y Position", robot.odometry.yRight.getPosition());
             dashboardTelemetry.update();
             idle();
         }
@@ -193,7 +195,11 @@ public class WobbleGoalAuto extends LinearOpMode {
                 indexStarted = false;
             }
         }
-
+        
+        while(opModeIsActive() && thirdScheduler.getQueueSize() != 0 && !isStack) {
+            thirdScheduler.run();
+            idle();
+        }
         robot.deactivate();
     }
 }

@@ -9,10 +9,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Encoder {
 
     DcMotorEx motor;
+    private int positionalDifference;
 
     //Initializer takes in the motor associated with the encoder port, and direction
     public Encoder(Telemetry telemetry, DcMotorEx motor, State state) {
 
+        positionalDifference = 0;
         //Ensure motor is not null
         if(motor != null) {
             this.motor = motor;
@@ -34,7 +36,7 @@ public class Encoder {
     }
 
     public int getPosition() {
-        return motor.getCurrentPosition();
+        return motor.getCurrentPosition() + positionalDifference;
     }
 
     public double getCurrentVel() {
@@ -45,6 +47,15 @@ public class Encoder {
     public void reset() {
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void setCurrentPositionTo(int position) {
+        reset();
+        positionalDifference = position;
+    }
+
+    public void addPosition(double position) {
+        positionalDifference += position;
     }
 
     //Directional state
