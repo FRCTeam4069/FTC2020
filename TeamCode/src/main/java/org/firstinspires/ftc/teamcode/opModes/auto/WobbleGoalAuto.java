@@ -103,12 +103,8 @@ public class WobbleGoalAuto extends LinearOpMode {
         initialScheduler.addCommand(new TurnCommand(0));
 
         //Drives to line, turns and fires
-        int firstStrafePositionX = robot.odometry.x.getPosition();
-        int firstStrafePositionY = robot.odometry.yRight.getPosition();
         secondScheduler.addCommand(new TurnCommand(270));
-        secondScheduler.addCommand(new ResetEncoders());
-        robot.odometry.yRight.setCurrentPositionTo(-firstStrafePositionX);
-        robot.odometry.x.setCurrentPositionTo(firstStrafePositionY);
+        secondScheduler.addCommand(new WaitCommand(100));
         secondScheduler.addCommand(new DriveToPosition(35000, 102000));
         secondScheduler.addCommand(new TurnCommand(270));
         //Start running shooter
@@ -149,9 +145,15 @@ public class WobbleGoalAuto extends LinearOpMode {
 
         thirdScheduler = setScheduler(dropZone);
 
+        int firstStrafePositionX = robot.odometry.x.getPosition();
+        int firstStrafePositionY = robot.odometry.yRight.getPosition();
         //Drive to line and fire
         while(opModeIsActive() && secondScheduler.getQueueSize() != 0) {
             secondScheduler.run();
+            if(secondScheduler.getQueueSize() == 6) {
+                robot.odometry.yRight.setCurrentPositionTo(-firstStrafePositionX);
+                robot.odometry.x.setCurrentPositionTo(firstStrafePositionY);
+            }
             robot.shooter.update(3000);
            // dashboardTelemetry.addData("RPM", robot.shooter.speed);
            // dashboardTelemetry.addData("Queue", secondScheduler.getQueueSize());
@@ -195,7 +197,7 @@ public class WobbleGoalAuto extends LinearOpMode {
                 indexStarted = false;
             }
         }
-        
+
         while(opModeIsActive() && thirdScheduler.getQueueSize() != 0 && !isStack) {
             thirdScheduler.run();
             idle();
