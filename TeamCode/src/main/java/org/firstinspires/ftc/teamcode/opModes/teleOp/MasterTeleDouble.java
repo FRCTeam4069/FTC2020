@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opModes.teleOp;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -32,6 +33,8 @@ public class MasterTeleDouble extends OpMode {
     @Override
     public void init() {
         robot = new Robot(hardwareMap, telemetry);
+        robot.odometry.blinkin().setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+
     }
 
     @Override

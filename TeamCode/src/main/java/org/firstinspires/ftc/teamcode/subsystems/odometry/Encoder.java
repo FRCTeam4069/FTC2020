@@ -47,6 +47,7 @@ public class Encoder {
     public void reset() {
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        positionalDifference = 0;
     }
 
     public void setCurrentPositionTo(int position) {

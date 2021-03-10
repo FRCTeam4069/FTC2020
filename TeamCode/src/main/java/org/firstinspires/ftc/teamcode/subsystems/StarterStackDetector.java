@@ -62,7 +62,7 @@ public class StarterStackDetector extends RobotHardware {
 
         // Create necessary params for tf init
         TFObjectDetector.Parameters tfParam = new TFObjectDetector.Parameters();
-        tfParam.minResultConfidence = 0.88f;
+        tfParam.minResultConfidence = 0.8f;
 
         // Create tf detector and add model assets
         tfDetector = ClassFactory.getInstance().createTFObjectDetector(tfParam, vuforia);
@@ -127,14 +127,14 @@ public class StarterStackDetector extends RobotHardware {
             telemetry.addData("Num Objects", updatedRecognitions.size());
             if (updatedRecognitions.size() != 0) {
                 Recognition starterStack = updatedRecognitions.get(0);
-//                dashboardTelemetry.addData("Confidence", starterStack.getConfidence());
-//                dashboardTelemetry.update();
+                dashboardTelemetry.addData("Confidence", starterStack.getConfidence());
+                dashboardTelemetry.update();
 
                 //Adding telemetry recognition data
-//                telemetry.addData("Confidence", starterStack.getConfidence());
-//                telemetry.addData("Aspect Ratio", (starterStack.getHeight() / starterStack.getWidth()));
-//                telemetry.addData("Height", starterStack.getHeight());
-//                telemetry.addData("Width", starterStack.getWidth());
+                telemetry.addData("Confidence", starterStack.getConfidence());
+                telemetry.addData("Aspect Ratio", (starterStack.getHeight() / starterStack.getWidth()));
+                telemetry.addData("Height", starterStack.getHeight());
+                telemetry.addData("Width", starterStack.getWidth());
 
 
                 //Returning starter stack based on hard-coded height values
