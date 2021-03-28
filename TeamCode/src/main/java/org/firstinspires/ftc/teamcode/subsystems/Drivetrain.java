@@ -83,6 +83,8 @@ public class Drivetrain extends RobotHardware {
     double turnToAngleSum = 0;
     double desiredAngle;
 
+    boolean turnZero = false;
+
     //Save drivetrain state
     Drivetrain.DriveState state = DriveState.NOT_DRIVING;
 
@@ -219,6 +221,30 @@ public class Drivetrain extends RobotHardware {
 
                 turnOutput = turn + (turnError * turnP) + (turnErrorSum * turnI) + (turnChange * turnD);
             } else turnOutput = turn;
+
+            //Maintain heading if no turn applied
+            if(Math.abs(turn) < 0.025) {
+                double turnRef = 0;
+                if(!turnZero) {
+                    turnZero = true;
+                    turnRef = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
+                            AngleUnit.DEGREES).thirdAngle;
+                }
+                turnError = turnRef - currentTurn;
+                double turnP = 0.012;
+
+                turnOutput = turnError * turnP;
+                if(Math.abs(turnError) < 9) {
+                    if(turnError < 0) turnOutput = -0.2;
+                    else turnOutput = 0.2;
+                }
+                else {
+                    if (Math.abs(turnError) > 180) {
+                        turnOutput *= -1;
+                    }
+                }
+            }
+            else turnZero = false;
 
             //Calculate actual velocity of each motor
             flActualVelocity = flPosChange / elapsedTime;
