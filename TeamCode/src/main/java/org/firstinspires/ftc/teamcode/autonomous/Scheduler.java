@@ -28,6 +28,10 @@ public class Scheduler {
         command.setSubsystems(robot, telemetry);
     }
 
+    public void setCommand(int index, Command command) {
+        commandQueue.add(index, command);
+    }
+
     public int getQueueSize() {
         return commandQueue.size();
     }

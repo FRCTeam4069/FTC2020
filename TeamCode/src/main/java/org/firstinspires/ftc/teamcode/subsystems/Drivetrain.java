@@ -84,6 +84,7 @@ public class Drivetrain extends RobotHardware {
     double desiredAngle;
 
     boolean turnZero = false;
+    double turnRef = 0;
 
     //Save drivetrain state
     Drivetrain.DriveState state = DriveState.NOT_DRIVING;
@@ -130,8 +131,9 @@ public class Drivetrain extends RobotHardware {
     //Update motors after calculating proper outputs
     public void update(double forward, double strafe, double turn) {
 
-        if(((Math.abs(forward) > 0.05 || Math.abs(strafe) > 0.05 || Math.abs(turn) > 0.05))) {
-
+        if(forward == 0 && strafe == 0 && turn == 0) {
+            state = DriveState.NOT_DRIVING;
+        }
             this.turn = turn;
 
             if (navx.isCalibrating()) {
@@ -223,26 +225,37 @@ public class Drivetrain extends RobotHardware {
             } else turnOutput = turn;
 
             //Maintain heading if no turn applied
-            if(Math.abs(turn) < 0.025) {
-                double turnRef = 0;
+            if(Math.abs(turn) < 0.015) {
+
                 if(!turnZero) {
                     turnZero = true;
                     turnRef = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
                             AngleUnit.DEGREES).thirdAngle;
+                    if (turnRef < 0) {
+                        turnRef = 180 + (180 - Math.abs(turnRef));
+                    }
                 }
                 turnError = turnRef - currentTurn;
-                double turnP = 0.012;
+                if(turnError > 180) turnError = -turnError + 360;
+                else turnError = 0 - turnError;
+                double turnP = 0.0042;
 
                 turnOutput = turnError * turnP;
-                if(Math.abs(turnError) < 9) {
-                    if(turnError < 0) turnOutput = -0.2;
-                    else turnOutput = 0.2;
+                if(Math.abs(turnError) < 9 && Math.abs(turnError) > 2.5) {
+                    if(turnError < 0) turnOutput = 0.2;
+                    else turnOutput = -0.2;
                 }
                 else {
                     if (Math.abs(turnError) > 180) {
                         turnOutput *= -1;
                     }
                 }
+
+                DTelemetry.addData("Turn Ref", turnRef);
+                DTelemetry.addData("Current Turn", currentTurn);
+                DTelemetry.addData("Turn Error", turnError);
+                DTelemetry.addData("Turn Output", turnOutput);
+                DTelemetry.update();
             }
             else turnZero = false;
 
@@ -307,14 +320,7 @@ public class Drivetrain extends RobotHardware {
             frontRight.setPower(frontRightOutput);
             backLeft.setPower(backLeftOutput);
             backRight.setPower(backRightOutput);
-        }
-        else {
-            state = DriveState.NOT_DRIVING;
-            frontLeft.setPower(0);
-            backLeft.setPower(0);
-            frontRight.setPower(0);
-            backRight.setPower(0);
-        }
+
     }
 
     public enum Direction {
@@ -460,6 +466,8 @@ public class Drivetrain extends RobotHardware {
 
     //To add or add and update important drivetrain vals to telemetry
     public void addBaseTelemetry(boolean update) {
+        telemetry.addData("Turn Ref", turnRef);
+
         telemetry.addData("Desired Speed", desiredSpeed);
         telemetry.addData("Desired Front Left Speed", desiredFrontLeftSpeed);
         telemetry.addData("Desired Front Right Speed", desiredFrontRightSpeed);
