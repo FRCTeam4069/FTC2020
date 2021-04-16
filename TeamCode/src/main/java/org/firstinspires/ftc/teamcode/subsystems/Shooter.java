@@ -142,6 +142,9 @@ public class Shooter extends RobotHardware {
             output2 = (error2 * kP2) + (errorSum2 * kI2) + (deltaV2 * kD2);
         }
 
+        if(output1 < 0) output1 = 0;
+        if(output2 < 0) output2 = 0;
+
         shooterMaster.setPower(output1);
         shooterSlave.setPower(output2);
 

@@ -85,6 +85,7 @@ public class Drivetrain extends RobotHardware {
 
     boolean turnZero = false;
     double turnRef = 0;
+    boolean turnApplied = false;
 
     //Save drivetrain state
     Drivetrain.DriveState state = DriveState.NOT_DRIVING;
@@ -134,6 +135,8 @@ public class Drivetrain extends RobotHardware {
         if(forward == 0 && strafe == 0 && turn == 0) {
             state = DriveState.NOT_DRIVING;
         }
+
+            if (turn != 0) turnApplied = true;
             this.turn = turn;
 
             if (navx.isCalibrating()) {
@@ -225,39 +228,39 @@ public class Drivetrain extends RobotHardware {
             } else turnOutput = turn;
 
             //Maintain heading if no turn applied
-            if(Math.abs(turn) < 0.015) {
-
-                if(!turnZero) {
-                    turnZero = true;
-                    turnRef = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
-                            AngleUnit.DEGREES).thirdAngle;
-                    if (turnRef < 0) {
-                        turnRef = 180 + (180 - Math.abs(turnRef));
-                    }
-                }
-                turnError = turnRef - currentTurn;
-                if(turnError > 180) turnError = -turnError + 360;
-                else turnError = 0 - turnError;
-                double turnP = 0.0042;
-
-                turnOutput = turnError * turnP;
-                if(Math.abs(turnError) < 9 && Math.abs(turnError) > 2.5) {
-                    if(turnError < 0) turnOutput = 0.2;
-                    else turnOutput = -0.2;
-                }
-                else {
-                    if (Math.abs(turnError) > 180) {
-                        turnOutput *= -1;
-                    }
-                }
-
-                DTelemetry.addData("Turn Ref", turnRef);
-                DTelemetry.addData("Current Turn", currentTurn);
-                DTelemetry.addData("Turn Error", turnError);
-                DTelemetry.addData("Turn Output", turnOutput);
-                DTelemetry.update();
-            }
-            else turnZero = false;
+//            if(Math.abs(turn) < 0.015 && turnApplied) {
+//
+//                if(!turnZero) {
+//                    turnZero = true;
+//                    turnRef = imu.getAngularOrientation(AxesReference.EXTRINSIC, XYZ,
+//                            AngleUnit.DEGREES).thirdAngle;
+//                    if (turnRef < 0) {
+//                        turnRef = 180 + (180 - Math.abs(turnRef));
+//                    }
+//                }
+//                turnError = turnRef - currentTurn;
+//                if(turnError > 180) turnError = -turnError + 360;
+//                else turnError = 0 - turnError;
+//                double turnP = 0.0042;
+//
+//                turnOutput = turnError * turnP;
+//                if(Math.abs(turnError) < 9 && Math.abs(turnError) > 2.5) {
+//                    if(turnError < 0) turnOutput = 0.2;
+//                    else turnOutput = -0.2;
+//                }
+//                else {
+//                    if (Math.abs(turnError) > 180) {
+//                        turnOutput *= -1;
+//                    }
+//                }
+//
+//                DTelemetry.addData("Turn Ref", turnRef);
+//                DTelemetry.addData("Current Turn", currentTurn);
+//                DTelemetry.addData("Turn Error", turnError);
+//                DTelemetry.addData("Turn Output", turnOutput);
+//                DTelemetry.update();
+//            }
+//            else turnZero = false;
 
             //Calculate actual velocity of each motor
             flActualVelocity = flPosChange / elapsedTime;
