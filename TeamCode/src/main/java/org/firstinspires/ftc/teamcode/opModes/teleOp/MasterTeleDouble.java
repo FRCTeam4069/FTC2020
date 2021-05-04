@@ -30,6 +30,9 @@ public class MasterTeleDouble extends OpMode {
 
     double wobblePower = 0;
 
+    boolean warmUpShooter = false;
+    boolean lastWarmUpShooter = false;
+
     @Override
     public void init() {
         robot = new Robot(hardwareMap, telemetry);
@@ -147,6 +150,16 @@ public class MasterTeleDouble extends OpMode {
 
         if(!in && !out && !isIndexing && !shooterRunning) {
             robot.intake.updateIntake(gamepad2.x, gamepad2.y);
+        }
+
+        //Warm up shooter toggle
+        if(gamepad2.dpad_up) {
+            warmUpShooter = !lastWarmUpShooter;
+        }
+        lastWarmUpShooter = warmUpShooter;
+
+        if(warmUpShooter) {
+            shooterSetpoint = 2000;
         }
 
         //Control shooter
