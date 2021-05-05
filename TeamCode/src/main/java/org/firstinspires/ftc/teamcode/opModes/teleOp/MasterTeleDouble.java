@@ -180,7 +180,7 @@ public class MasterTeleDouble extends OpMode {
             shooterSetpoint = -500;
         }
         else {
-            shooterSetpoint = 0;
+            if(!warmUpShooter) shooterSetpoint = 0;
             shooterRunning = false;
             conveyerRunning = false;
         }
